@@ -53,6 +53,7 @@ export function AuthForm({
   const {
     step,
     email,
+    devOtp,
     isDisabled,
     error,
     changeEmail,
@@ -140,6 +141,7 @@ export function AuthForm({
       {step === "otp" && (
         <OtpStep
           email={email}
+          devOtp={devOtp}
           isDisabled={isDisabled}
           onSuccess={onAuthSuccess}
           onError={setError}
@@ -302,6 +304,7 @@ function EmailInput({
 // Step 3: OTP Verification
 interface OtpStepProps {
   email: string;
+  devOtp?: string;
   isDisabled: boolean;
   onSuccess: () => void;
   onError: (error: string | null) => void;
@@ -312,6 +315,7 @@ interface OtpStepProps {
 
 function OtpStep({
   email,
+  devOtp,
   isDisabled,
   onSuccess,
   onError,
@@ -330,6 +334,7 @@ function OtpStep({
 
       <OtpVerification
         email={email}
+        devOtp={devOtp}
         onSuccess={onSuccess}
         onError={onError}
         onLoadingChange={onLoadingChange}

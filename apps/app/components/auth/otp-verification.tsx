@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import { Button, Input } from "@repo/ui";
 import type { FormEvent } from "react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const RESEND_COOLDOWN_SECONDS = 30;
 
@@ -14,6 +14,8 @@ const OTP_ERROR_CODES = {
 
 interface OtpVerificationProps {
   email: string;
+  /** Dev-only: OTP from API response for automated QA auto-fill */
+  devOtp?: string;
   onSuccess: () => void;
   onError: (error: string | null) => void;
   onLoadingChange?: (loading: boolean) => void;
@@ -23,15 +25,17 @@ interface OtpVerificationProps {
 
 export function OtpVerification({
   email,
+  devOtp,
   onSuccess,
   onError,
   onLoadingChange,
   onCancel,
   isDisabled,
 }: OtpVerificationProps) {
-  const [otp, setOtp] = useState("");
+  const [otp, setOtp] = useState(devOtp ?? "");
   const [isLoading, setIsLoading] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(0);
+  const autoSubmittedRef = useRef(false);
 
   const setLoading = useCallback(
     (loading: boolean) => {
@@ -84,6 +88,14 @@ export function OtpVerification({
       setLoading(false);
     }
   };
+
+  // Dev-only: auto-submit when devOtp is provided (for automated QA)
+  useEffect(() => {
+    if (devOtp && !autoSubmittedRef.current && !isLoading) {
+      autoSubmittedRef.current = true;
+      handleOtpVerification(new Event("submit") as unknown as FormEvent);
+    }
+  }, [devOtp, isLoading, handleOtpVerification]);
 
   const handleResendOtp = async () => {
     if (resendCooldown > 0) return;

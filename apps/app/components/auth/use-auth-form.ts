@@ -35,6 +35,7 @@ export function useAuthForm({
 }: UseAuthFormOptions) {
   const [step, setStep] = useState<AuthStep>("method");
   const [email, setEmail] = useState("");
+  const [devOtp, setDevOtp] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   // Counter-based to handle overlapping child operations (e.g., rapid double-click)
   const [pendingOps, setPendingOps] = useState(0);
@@ -110,6 +111,9 @@ export function useAuthForm({
       });
 
       if (result.data) {
+        // Dev-only: API returns OTP in response for automated QA
+        const otp = (result.data as Record<string, unknown>)?.devOtp;
+        if (typeof otp === "string") setDevOtp(otp);
         transitionTo("otp");
       } else if (result.error) {
         setError(result.error.message || "Failed to send OTP");
@@ -130,6 +134,7 @@ export function useAuthForm({
     // State
     step,
     email,
+    devOtp,
     isLoading,
     isDisabled,
     error,

@@ -174,8 +174,10 @@ export async function sendOTP(
     type: "sign-in" | "email-verification" | "forget-password" | "change-email";
   },
 ) {
-  if (env.ENVIRONMENT === "development") {
-    console.log(`OTP code for ${options.email}: ${options.otp}`);
+  const isDev = env.ENVIRONMENT === "development";
+
+  if (isDev) {
+    console.log(`[DEV] OTP code for ${options.email}: ${options.otp}`);
   }
 
   const component = OTPEmail({
@@ -195,10 +197,20 @@ export async function sendOTP(
     "change-email": "Change Email",
   };
 
-  return sendEmail(env, {
-    to: options.email,
-    subject: `Your ${typeLabels[options.type]} code`,
-    html,
-    text,
-  });
+  try {
+    return await sendEmail(env, {
+      to: options.email,
+      subject: `Your ${typeLabels[options.type]} code`,
+      html,
+      text,
+    });
+  } catch (error) {
+    if (isDev) {
+      console.log(
+        `[DEV] Email send failed, but OTP is still valid. Use code: ${options.otp}`,
+      );
+      return;
+    }
+    throw error;
+  }
 }

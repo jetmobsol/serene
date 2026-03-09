@@ -121,6 +121,11 @@ function stripePlugin(db: DB, env: AuthEnv) {
  * ```
  */
 export function createAuth(db: DB, env: AuthEnv) {
+  const isDev = env.ENVIRONMENT === "development";
+  // Dev-only: temporarily holds the last OTP so the after-hook can
+  // inject it into the send-verification-otp response for automated QA.
+  let lastDevOtp: string | undefined;
+
   // Extract domain from APP_ORIGIN for passkey rpID
   const appUrl = new URL(env.APP_ORIGIN);
   const rpID = appUrl.hostname;
@@ -189,6 +194,7 @@ export function createAuth(db: DB, env: AuthEnv) {
       }),
       emailOTP({
         async sendVerificationOTP({ email, otp, type }) {
+          if (isDev) lastDevOtp = otp;
           await sendOTP(env, { email, otp, type });
         },
         otpLength: 6,
@@ -207,6 +213,17 @@ export function createAuth(db: DB, env: AuthEnv) {
     // Set/clear auth hint cookie for edge routing
     hooks: {
       after: createAuthMiddleware(async (ctx) => {
+        // Dev-only: return OTP in response so automated QA can auto-fill
+        if (
+          isDev &&
+          ctx.path === "/email-otp/send-verification-otp" &&
+          lastDevOtp
+        ) {
+          const otp = lastDevOtp;
+          lastDevOtp = undefined;
+          return ctx.json({ success: true, devOtp: otp });
+        }
+
         const isSecure = new URL(env.APP_ORIGIN).protocol === "https:";
         // __Host- prefix requires Secure; browsers reject it over HTTP
         const cookieName = isSecure ? "__Host-auth" : "auth";
