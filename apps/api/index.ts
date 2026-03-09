@@ -5,7 +5,6 @@
  */
 
 // Core utilities and services
-export { getOpenAI } from "./lib/ai.js";
 export { createAuth } from "./lib/auth.js";
 export { createDb } from "./lib/db.js";
 

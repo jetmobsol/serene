@@ -1,29 +1,25 @@
 // AI-generated vibe check responses for journal entries
 
 import { relations } from "drizzle-orm";
-import { boolean, index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { generateId } from "./id";
 import { journalEntry } from "./journal";
 
-export const aiResponse = pgTable(
-  "ai_response",
-  {
-    id: text()
-      .primaryKey()
-      .$defaultFn(() => generateId("air")),
-    entryId: text()
-      .notNull()
-      .unique()
-      .references(() => journalEntry.id, { onDelete: "cascade" }),
-    response: text().notNull(),
-    hasCrisisContent: boolean().default(false).notNull(),
-    model: text().notNull(),
-    createdAt: timestamp({ withTimezone: true, mode: "date" })
-      .defaultNow()
-      .notNull(),
-  },
-  (table) => [index("ai_response_entry_id_idx").on(table.entryId)],
-);
+export const aiResponse = pgTable("ai_response", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => generateId("air")),
+  entryId: text()
+    .notNull()
+    .unique()
+    .references(() => journalEntry.id, { onDelete: "cascade" }),
+  response: text().notNull(),
+  hasCrisisContent: boolean().default(false).notNull(),
+  model: text().notNull(),
+  createdAt: timestamp({ withTimezone: true, mode: "date" })
+    .defaultNow()
+    .notNull(),
+});
 
 export type AiResponse = typeof aiResponse.$inferSelect;
 export type NewAiResponse = typeof aiResponse.$inferInsert;

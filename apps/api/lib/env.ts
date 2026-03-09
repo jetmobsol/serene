@@ -14,7 +14,7 @@ export const envSchema = z.object({
   BETTER_AUTH_SECRET: z.string().min(32),
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
-  OPENAI_API_KEY: z.string(),
+  ANTHROPIC_API_KEY: z.string().optional(),
   RESEND_API_KEY: z.string(),
   RESEND_EMAIL_FROM: z.email(),
   // Stripe billing (optional — app works without these, billing features disabled)

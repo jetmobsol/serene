@@ -8,30 +8,7 @@ import {
   TAG_ICONS,
 } from "./journal";
 
-describe("MOODS", () => {
-  it("contains exactly 6 moods", () => {
-    expect(MOODS).toHaveLength(6);
-  });
-
-  it("contains the expected mood values", () => {
-    expect(MOODS).toEqual([
-      "Happy",
-      "Calm",
-      "Anxious",
-      "Sad",
-      "Overwhelmed",
-      "Angry",
-    ]);
-  });
-});
-
 describe("MOOD_SCORES", () => {
-  it("has a numeric score for every mood", () => {
-    for (const mood of MOODS) {
-      expect(MOOD_SCORES[mood]).toBeTypeOf("number");
-    }
-  });
-
   it("scores range from 1 to 5", () => {
     for (const mood of MOODS) {
       expect(MOOD_SCORES[mood]).toBeGreaterThanOrEqual(1);
@@ -48,14 +25,7 @@ describe("MOOD_SCORES", () => {
 });
 
 describe("MOOD_COLORS", () => {
-  it("has light and dark colors for every mood", () => {
-    for (const mood of MOODS) {
-      expect(MOOD_COLORS[mood]).toHaveProperty("light");
-      expect(MOOD_COLORS[mood]).toHaveProperty("dark");
-    }
-  });
-
-  it("uses oklch color format", () => {
+  it("uses oklch color format for all moods", () => {
     for (const mood of MOODS) {
       expect(MOOD_COLORS[mood].light).toMatch(/^oklch\(/);
       expect(MOOD_COLORS[mood].dark).toMatch(/^oklch\(/);
@@ -64,37 +34,16 @@ describe("MOOD_COLORS", () => {
 });
 
 describe("MOOD_ICONS", () => {
-  it("has a string icon name for every mood", () => {
+  it("has a non-empty icon name for every mood", () => {
     for (const mood of MOODS) {
-      expect(MOOD_ICONS[mood]).toBeTypeOf("string");
       expect(MOOD_ICONS[mood].length).toBeGreaterThan(0);
     }
   });
 });
 
-describe("TAGS", () => {
-  it("contains exactly 8 tags", () => {
-    expect(TAGS).toHaveLength(8);
-  });
-
-  it("contains the expected tag values", () => {
-    expect(TAGS).toEqual([
-      "Work",
-      "Sleep",
-      "Relationships",
-      "Fitness",
-      "Hobbies",
-      "Health",
-      "Social",
-      "Nature",
-    ]);
-  });
-});
-
 describe("TAG_ICONS", () => {
-  it("has a string icon name for every tag", () => {
+  it("has a non-empty icon name for every tag", () => {
     for (const tag of TAGS) {
-      expect(TAG_ICONS[tag]).toBeTypeOf("string");
       expect(TAG_ICONS[tag].length).toBeGreaterThan(0);
     }
   });

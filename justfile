@@ -31,6 +31,12 @@ docker-start:
 docker-stop:
     docker compose down
 
+# Run all tests, typecheck, and lint
+check-all:
+    bun test --run
+    bun typecheck
+    bun lint
+
 # ============================================
 # COMMIT HELPERS
 # ============================================

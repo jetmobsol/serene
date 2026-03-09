@@ -59,7 +59,7 @@ app.use(async (c, next) => {
     "BETTER_AUTH_SECRET",
     "GOOGLE_CLIENT_ID",
     "GOOGLE_CLIENT_SECRET",
-    "OPENAI_API_KEY",
+    "ANTHROPIC_API_KEY",
     "RESEND_API_KEY",
     "RESEND_EMAIL_FROM",
     "STRIPE_SECRET_KEY",

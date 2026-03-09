@@ -24,6 +24,7 @@ import {
   unique,
 } from "drizzle-orm/pg-core";
 import { generateAuthId } from "./id";
+import { journalEntry } from "./journal";
 
 /**
  * User accounts table.
@@ -170,6 +171,7 @@ export type NewVerification = typeof verification.$inferInsert;
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   identities: many(identity),
+  journalEntries: many(journalEntry),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({

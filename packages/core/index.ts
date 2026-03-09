@@ -1,7 +1,7 @@
 /**
  * @file Core package entrypoint.
  *
- * Placeholder for shared utilities and WebSocket functionality.
+ * Shared constants and types for the Serene wellness journal.
  */
 
-export default {};
+export * from "./journal";
