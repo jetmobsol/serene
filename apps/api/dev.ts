@@ -83,6 +83,10 @@ app.use(async (c, next) => {
       "http://localhost:5173",
   };
 
+  // Expose merged env as Hono bindings so downstream routes (e.g. SSE
+  // endpoint) can access secrets via c.env.ANTHROPIC_API_KEY etc.
+  Object.assign(c.env, env);
+
   c.set("db", db);
   c.set("dbDirect", dbDirect);
   c.set("auth", createAuth(db, env));
