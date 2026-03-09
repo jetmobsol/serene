@@ -206,6 +206,7 @@ A feature is considered DONE when ALL of the following criteria are met:
 
 ### Code Quality
 
+- [ ] `/simplify` has been run on all changed code (after implementation, before tests/QA).
 - [ ] Code follows project style guide (Prettier, ESLint — zero warnings).
 - [ ] TypeScript strict mode passes with no errors (`bun typecheck`).
 - [ ] No `any` types (use precise types or generics).

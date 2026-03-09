@@ -9,24 +9,27 @@
 ## Pipeline Per Deliverable
 
 ```
-┌─────────────────┐    ┌──────────────┐    ┌────────────┐    ┌──────────────────┐    ┌───────────┐
-│ /plan-creator   │───>│  Implement   │───>│  Write     │───>│  /ui-review      │───>│  Manual   │
-│ (this scope)    │    │  (TDD first) │    │  YAML      │    │  (bowser gate)   │    │  Review   │
-└─────────────────┘    └──────────────┘    │  stories   │    └──────────────────┘    └───────────┘
-                                           └────────────┘           │
-                                                                    ▼ FAIL?
-                                                              Fix & re-run
+┌─────────────┐   ┌────────────┐   ┌───────────┐   ┌────────────┐   ┌────────────┐   ┌─────────┐
+│ /plan-creator│──>│ Implement  │──>│ /simplify │──>│  Write     │──>│ /ui-review │──>│ Manual  │
+│ (this scope) │   │ (TDD first)│   │ (cleanup) │   │  YAML      │   │ (bowser)   │   │ Review  │
+└─────────────┘   └────────────┘   └───────────┘   │  stories   │   └────────────┘   └─────────┘
+                                                    └────────────┘         │
+                                                                           ▼ FAIL?
+                                                                     Fix & re-run
 ```
 
 ### Steps for EVERY deliverable:
 
 1. **Plan** — Run `/essentials:plan-creator` with the deliverable scope below
 2. **Implement** — TDD: write failing tests first, then implementation. `bun test --run` must pass.
-3. **Write Bowser YAML** — Create `ai_review/user_stories/<filename>.yaml` with stories covering ALL acceptance criteria
-4. **Bowser QA Gate** — Run `/ui-review <filename>` — ALL stories MUST PASS
-5. **Fix & Re-run** — If any bowser story FAILS, fix and re-run until green
-6. **Manual Pitstop** — You (human) visually review the running app at `http://localhost:5173`
-7. **Commit** — Only after both gates pass. Move to next deliverable.
+3. **Simplify** — Run `/simplify` to review changed code for reuse, quality, and efficiency. Fix any issues found. `bun test --run` must still pass after simplification.
+4. **Write Bowser YAML** — Create `ai_review/user_stories/<filename>.yaml` with stories covering ALL acceptance criteria
+5. **Bowser QA Gate** — Run `/ui-review <filename>` — ALL stories MUST PASS
+6. **Fix & Re-run** — If any bowser story FAILS, fix and re-run until green
+7. **Manual Pitstop** — You (human) visually review the running app at `http://localhost:5173`
+8. **Commit** — Only after all gates pass. Move to next deliverable.
+
+> **`/simplify` placement:** Runs AFTER implementation but BEFORE tests/QA. For backend-only deliverables (no Bowser), `/simplify` runs after implementation and before `bun test --run` verification. For UI deliverables, `/simplify` runs after implementation and before writing Bowser YAML stories. This ensures code quality is addressed before any test execution validates the final state.
 
 ---
 
