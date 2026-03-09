@@ -76,3 +76,8 @@ screenshots/
 .DS_Store
 /.glm.json
 /.playwright-cli/
+/logs/
+
+# Python
+__pycache__/
+*.pyc
