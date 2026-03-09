@@ -31,7 +31,7 @@ just docker-start              # Full Docker stack (all services containerized)
 ### Gotchas
 
 - If dev fails with missing native binaries (rollup, workerd): run `bun install --force`.
-- Local PostgreSQL runs on port **5433** (not 5432) to avoid conflicts with other projects.
+- Local PostgreSQL runs on port **5434** (not 5432) to avoid conflicts with other projects.
 
 ## Git Workflow
 
