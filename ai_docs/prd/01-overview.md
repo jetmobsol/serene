@@ -25,19 +25,19 @@ Serene empowers individuals to build emotional self-awareness through guided jou
 
 ## 2.3 Target Users
 
-| Persona | Description | Primary Need |
-|---------|-------------|--------------|
+| Persona                  | Description                                                | Primary Need                                            |
+| ------------------------ | ---------------------------------------------------------- | ------------------------------------------------------- |
 | **Mindful Professional** | Ages 25-40, high-stress career, limited time for self-care | Quick daily emotional check-in with actionable patterns |
-| **Wellness Seeker** | Ages 18-35, actively interested in mental health practices | Structured journaling with AI-powered reflection |
-| **Therapy Companion** | Any age, currently in or considering therapy | Track moods between sessions, identify triggers |
+| **Wellness Seeker**      | Ages 18-35, actively interested in mental health practices | Structured journaling with AI-powered reflection        |
+| **Therapy Companion**    | Any age, currently in or considering therapy               | Track moods between sessions, identify triggers         |
 
 ## 2.4 Business Goals and Success Metrics
 
-| Metric | Target | Measurement Method |
-|--------|--------|--------------------|
-| **Daily Active Users (DAU)** | 100 within 30 days of launch | Analytics event tracking |
-| **7-Day Retention Rate** | >= 40% | Cohort analysis (users who return within 7 days) |
-| **Entries Per Active User** | >= 3/week average | Database query: entries / active users / week |
+| Metric                       | Target                                | Measurement Method                                      |
+| ---------------------------- | ------------------------------------- | ------------------------------------------------------- |
+| **Daily Active Users (DAU)** | 100 within 30 days of launch          | Analytics event tracking                                |
+| **7-Day Retention Rate**     | >= 40%                                | Cohort analysis (users who return within 7 days)        |
+| **Entries Per Active User**  | >= 3/week average                     | Database query: entries / active users / week           |
 | **AI Vibe Check Engagement** | >= 80% of entries trigger AI response | Ratio of entries with >= 50 char notes to total entries |
-| **Average Session Duration** | >= 2 minutes | Analytics timing events |
-| **User Satisfaction (NPS)** | >= 50 | In-app survey (post-onboarding, day 7, day 30) |
+| **Average Session Duration** | >= 2 minutes                          | Analytics timing events                                 |
+| **User Satisfaction (NPS)**  | >= 50                                 | In-app survey (post-onboarding, day 7, day 30)          |

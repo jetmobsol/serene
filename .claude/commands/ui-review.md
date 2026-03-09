@@ -12,12 +12,12 @@ Discover user stories from YAML files, fan out parallel `bowser-qa-agent` instan
 
 HEADED: $1 (default: "false" — set to "true" or "headed" for visible browser windows)
 VISION: detected from $ARGUMENTS — if the keyword "vision" appears anywhere in the arguments, enable vision mode (screenshots returned as image responses in the agent's context for richer validation; higher token cost). Default: false.
-FILENAME_FILTER: remaining non-keyword arguments after removing "vision" (if present)
+FILENAME*FILTER: remaining non-keyword arguments after removing "vision" (if present)
 STORIES_DIR: "ai_review/user_stories"
-STORIES_GLOB: "ai_review/user_stories/*.yaml"
+STORIES_GLOB: "ai_review/user_stories/\*.yaml"
 AGENT_TIMEOUT: 300000
 SCREENSHOTS_BASE: "screenshots/bowser-qa"
-RUN_DIR: "{SCREENSHOTS_BASE}/{YYYYMMDD_HHMMSS}_{short-uuid}" (generated once at start of run)
+RUN_DIR: "{SCREENSHOTS_BASE}/{YYYYMMDD_HHMMSS}*{short-uuid}" (generated once at start of run)
 
 ## Codebase Structure
 

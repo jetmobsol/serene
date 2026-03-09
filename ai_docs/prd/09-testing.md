@@ -25,22 +25,23 @@ Tests are written BEFORE implementation code. Pull requests that add features wi
 
 ### Unit Tests (Target: >= 90% coverage)
 
-| Module | File | Tests Cover |
-|--------|------|-------------|
-| Safety module | `apps/api/lib/safety.test.ts` | Crisis keyword detection, gibberish detection, edge cases |
-| Prompt builder | `apps/api/lib/prompts.test.ts` | System prompt construction, variable interpolation |
-| Shared types | `packages/core/src/journal.test.ts` | Mood scores, tag values, type guards |
-| Date grouping | `apps/app/lib/utils/date-groups.test.ts` | Timeline date grouping logic |
+| Module         | File                                     | Tests Cover                                               |
+| -------------- | ---------------------------------------- | --------------------------------------------------------- |
+| Safety module  | `apps/api/lib/safety.test.ts`            | Crisis keyword detection, gibberish detection, edge cases |
+| Prompt builder | `apps/api/lib/prompts.test.ts`           | System prompt construction, variable interpolation        |
+| Shared types   | `packages/core/src/journal.test.ts`      | Mood scores, tag values, type guards                      |
+| Date grouping  | `apps/app/lib/utils/date-groups.test.ts` | Timeline date grouping logic                              |
 
 ### Integration Tests (Target: >= 80% coverage)
 
-| Module | File | Tests Cover |
-|--------|------|-------------|
-| Journal router | `apps/api/routers/journal.test.ts` | CRUD operations, ownership validation, pagination, input validation |
-| AI router | `apps/api/routers/ai.test.ts` | Vibe check generation, crisis detection, rate limiting, error handling |
-| Analytics router | `apps/api/routers/analytics.test.ts` | Aggregation queries, empty states, date range handling |
+| Module           | File                                 | Tests Cover                                                            |
+| ---------------- | ------------------------------------ | ---------------------------------------------------------------------- |
+| Journal router   | `apps/api/routers/journal.test.ts`   | CRUD operations, ownership validation, pagination, input validation    |
+| AI router        | `apps/api/routers/ai.test.ts`        | Vibe check generation, crisis detection, rate limiting, error handling |
+| Analytics router | `apps/api/routers/analytics.test.ts` | Aggregation queries, empty states, date range handling                 |
 
 **Integration Test Approach for tRPC Routers:**
+
 ```typescript
 import { createCallerFactory } from "../lib/trpc";
 import { journalRouter } from "./journal";
@@ -73,20 +74,21 @@ describe("journal.create", () => {
 
 ### Component Tests (Target: >= 80% coverage)
 
-| Component | File | Tests Cover |
-|-----------|------|-------------|
-| MoodSelector | `mood-selector.test.tsx` | Selection, deselection, keyboard nav, ARIA attributes |
-| TagChips | `tag-chips.test.tsx` | Multi-select toggle, visual states, accessibility |
-| NoteEditor | `note-editor.test.tsx` | Character counting, threshold indicator, max length enforcement |
-| EntryForm | `entry-form.test.tsx` | Form submission, validation, loading states, error states |
-| Timeline | `timeline.test.tsx` | Date grouping, infinite scroll trigger, empty state |
-| EntryCard | `entry-card.test.tsx` | Mood color coding, note truncation, action buttons |
-| AiResponse | `ai-response.test.tsx` | Streaming display, completion state, crisis banner |
-| MoodBarChart | `mood-bar-chart.test.tsx` | Data rendering, empty state, color coding |
-| MoodTrendChart | `mood-trend-chart.test.tsx` | Trend line rendering, tooltip, date range |
-| SafetyBanner | `safety-banner.test.tsx` | Content presence, non-dismissibility |
+| Component      | File                        | Tests Cover                                                     |
+| -------------- | --------------------------- | --------------------------------------------------------------- |
+| MoodSelector   | `mood-selector.test.tsx`    | Selection, deselection, keyboard nav, ARIA attributes           |
+| TagChips       | `tag-chips.test.tsx`        | Multi-select toggle, visual states, accessibility               |
+| NoteEditor     | `note-editor.test.tsx`      | Character counting, threshold indicator, max length enforcement |
+| EntryForm      | `entry-form.test.tsx`       | Form submission, validation, loading states, error states       |
+| Timeline       | `timeline.test.tsx`         | Date grouping, infinite scroll trigger, empty state             |
+| EntryCard      | `entry-card.test.tsx`       | Mood color coding, note truncation, action buttons              |
+| AiResponse     | `ai-response.test.tsx`      | Streaming display, completion state, crisis banner              |
+| MoodBarChart   | `mood-bar-chart.test.tsx`   | Data rendering, empty state, color coding                       |
+| MoodTrendChart | `mood-trend-chart.test.tsx` | Trend line rendering, tooltip, date range                       |
+| SafetyBanner   | `safety-banner.test.tsx`    | Content presence, non-dismissibility                            |
 
 **Component Test Approach:**
+
 ```typescript
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MoodSelector } from "./mood-selector";

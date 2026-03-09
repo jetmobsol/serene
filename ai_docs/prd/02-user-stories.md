@@ -13,6 +13,7 @@
 **so that** I understand what the product does and feel motivated to sign up.
 
 **Acceptance Criteria:**
+
 - [ ] AC-1: Landing page loads in under 2 seconds on 3G connection (Lighthouse performance >= 90).
 - [ ] AC-2: Hero section displays tagline, USP description, and a prominent "Get Started" CTA button.
 - [ ] AC-3: Visual design uses a calm color palette (muted blues, greens, soft whites) with ample whitespace.
@@ -31,6 +32,7 @@
 **so that** I can access my private journal.
 
 **Acceptance Criteria:**
+
 - [ ] AC-1: Sign-up form accepts name, email, and password (minimum 8 characters).
 - [ ] AC-2: Google OAuth sign-up button is available and functional.
 - [ ] AC-3: Email OTP verification is sent after email/password sign-up.
@@ -48,6 +50,7 @@
 **so that** I can access my journal entries.
 
 **Acceptance Criteria:**
+
 - [ ] AC-1: Login form accepts email and password.
 - [ ] AC-2: Google OAuth login button is available.
 - [ ] AC-3: Email OTP login is available.
@@ -69,6 +72,7 @@
 **so that** I can quickly log how I feel without typing.
 
 **Acceptance Criteria:**
+
 - [ ] AC-1: Mood selector displays exactly 6 mood options as visual cards with icons and labels: Happy, Calm, Anxious, Sad, Overwhelmed, Angry.
 - [ ] AC-2: Each mood card has a distinct color and icon.
 - [ ] AC-3: Exactly one mood can be selected at a time; selecting a new mood deselects the previous.
@@ -83,6 +87,7 @@
 **so that** I can correlate my mood with specific contexts over time.
 
 **Acceptance Criteria:**
+
 - [ ] AC-1: Tag chips are displayed for at least 8 predefined categories: Work, Sleep, Relationships, Fitness, Hobbies, Health, Social, Nature.
 - [ ] AC-2: User can select zero or more tags (multi-select).
 - [ ] AC-3: Selected chips show a filled/active visual state; unselected show an outlined state.
@@ -96,6 +101,7 @@
 **so that** I can process my thoughts and trigger the AI vibe check.
 
 **Acceptance Criteria:**
+
 - [ ] AC-1: Text area is displayed below the tags section with placeholder text: "What's on your mind? Write at least 50 characters to receive an AI insight..."
 - [ ] AC-2: Character count is displayed below the text area (e.g., "42 / 50 characters").
 - [ ] AC-3: When character count reaches 50, a visual indicator confirms AI insight will be generated.
@@ -111,6 +117,7 @@
 **so that** it is persisted and available in my timeline.
 
 **Acceptance Criteria:**
+
 - [ ] AC-1: "Save Entry" button is enabled only when a mood is selected.
 - [ ] AC-2: Saving shows a loading state on the button.
 - [ ] AC-3: Successful save displays a success toast notification.
@@ -127,6 +134,7 @@
 **so that** I can review my emotional history.
 
 **Acceptance Criteria:**
+
 - [ ] AC-1: Timeline displays entries grouped by date sections: "Today", "Yesterday", "This Week", "Earlier".
 - [ ] AC-2: Each entry card shows: mood icon + label, selected tags as chips, note preview (truncated at 150 characters), AI vibe check response (if generated), timestamp.
 - [ ] AC-3: Entry cards are color-coded by mood (e.g., Happy = green tint, Anxious = amber tint, Sad = blue tint).
@@ -143,6 +151,7 @@
 **so that** I can read the complete note and AI response.
 
 **Acceptance Criteria:**
+
 - [ ] AC-1: Clicking an entry card expands it or navigates to a detail view.
 - [ ] AC-2: Detail view shows full note text (not truncated).
 - [ ] AC-3: Detail view shows the complete AI vibe check response.
@@ -156,6 +165,7 @@
 **so that** I can correct or update my reflection.
 
 **Acceptance Criteria:**
+
 - [ ] AC-1: Edit action opens the entry form pre-filled with existing mood, tags, and note.
 - [ ] AC-2: User can modify mood, tags, and note independently.
 - [ ] AC-3: Saving edits updates the entry in the timeline immediately.
@@ -170,6 +180,7 @@
 **so that** I can remove entries I no longer want.
 
 **Acceptance Criteria:**
+
 - [ ] AC-1: Delete action shows a confirmation dialog: "Are you sure you want to delete this entry? This action cannot be undone."
 - [ ] AC-2: Confirmed deletion removes the entry from the timeline immediately (optimistic update).
 - [ ] AC-3: Deletion is a hard delete (not soft delete) for privacy reasons.
@@ -188,6 +199,7 @@
 **so that** I feel acknowledged and supported.
 
 **Acceptance Criteria:**
+
 - [ ] AC-1: AI response is generated only when the note contains >= 50 characters.
 - [ ] AC-2: AI response is 1-2 sentences long, empathetic in tone, and non-clinical.
 - [ ] AC-3: AI response takes into account the selected mood, tags, and note content.
@@ -203,6 +215,7 @@
 **so that** I am directed toward professional help when needed.
 
 **Acceptance Criteria:**
+
 - [ ] AC-1: If note text contains crisis-related keywords (e.g., "suicide", "self-harm", "end my life"), the AI response is prepended with a standard safety disclaimer.
 - [ ] AC-2: Safety disclaimer text: "If you're in crisis, please reach out to the 988 Suicide and Crisis Lifeline by calling or texting 988, or contact the Crisis Text Line by texting HOME to 741741. You're not alone."
 - [ ] AC-3: The disclaimer is displayed in a visually distinct format (warning-style card with a phone icon).
@@ -217,6 +230,7 @@
 **so that** I can revisit the AI's encouragement.
 
 **Acceptance Criteria:**
+
 - [ ] AC-1: Each timeline entry card that has an AI response shows it below the note text.
 - [ ] AC-2: AI response is visually distinguished from user-written content (e.g., different background, AI icon, italic text).
 - [ ] AC-3: Entries without AI responses (note < 50 chars or no note) show no AI section.
@@ -232,6 +246,7 @@
 **so that** I can identify emotional patterns.
 
 **Acceptance Criteria:**
+
 - [ ] AC-1: A bar chart displays mood distribution for the current week (Monday-Sunday).
 - [ ] AC-2: Each bar represents a mood type, with height proportional to the number of entries.
 - [ ] AC-3: Bars are color-coded to match the mood colors used in timeline cards.
@@ -247,6 +262,7 @@
 **so that** I can understand my emotional trajectory.
 
 **Acceptance Criteria:**
+
 - [ ] AC-1: A line or area chart shows average mood score per day for the past 30 days.
 - [ ] AC-2: Moods are mapped to numerical scores for averaging: Happy=5, Calm=4, Anxious=2, Sad=2, Overwhelmed=1, Angry=1.
 - [ ] AC-3: Days without entries are shown as gaps in the line (not interpolated).
@@ -260,6 +276,7 @@
 **so that** I can make informed lifestyle choices.
 
 **Acceptance Criteria:**
+
 - [ ] AC-1: A summary section shows each tag's average mood score based on all entries with that tag.
 - [ ] AC-2: Tags are sorted by average mood score (highest to lowest).
 - [ ] AC-3: Each tag row shows: tag name, number of entries with this tag, average mood score, a visual indicator (green for positive, amber for neutral, red for negative).

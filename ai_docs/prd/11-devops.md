@@ -23,6 +23,7 @@ api:
 ## 12.2 `.env.example` Updates
 
 Add to `.env.example`:
+
 ```
 # Anthropic Claude API (required for AI Vibe Check feature)
 # https://console.anthropic.com/
@@ -34,6 +35,7 @@ ANTHROPIC_API_KEY=sk-ant-xxxxx
 **File:** `db/seed.ts` (extend existing)
 
 Add journal entry seed data for the development user:
+
 - 15-20 sample entries across the past 14 days.
 - Mix of all mood types and tag combinations.
 - Notes of varying lengths (some < 50 chars, some > 50 chars).
@@ -49,8 +51,8 @@ app.get("/health", async (c) => {
     status: "healthy",
     timestamp: new Date().toISOString(),
     services: {
-      database: "ok",    // existing
-      anthropic: "ok",   // new: ping Anthropic API
+      database: "ok", // existing
+      anthropic: "ok", // new: ping Anthropic API
     },
   };
   return c.json(checks);

@@ -7,20 +7,24 @@
 ## 9.1 Route Structure Updates
 
 **Remove (replace with journal-focused routes):**
+
 - `apps/app/routes/(app)/analytics.tsx` — replace with new analytics content
 - `apps/app/routes/(app)/reports.tsx` — remove (not applicable)
 - `apps/app/routes/(app)/users.tsx` — remove (not applicable)
 - `apps/app/routes/(app)/about.tsx` — remove (not applicable)
 
 **Add:**
+
 - `apps/app/routes/(app)/journal/index.tsx` — Main journal page (entry form + timeline)
 - `apps/app/routes/(app)/journal/$entryId.tsx` — Entry detail/edit view
 
 **Modify:**
+
 - `apps/app/routes/(app)/index.tsx` — Redirect to `/journal` or serve as journal page
 - `apps/app/routes/(app)/analytics.tsx` — Replace with mood analytics charts
 
 **Keep:**
+
 - `apps/app/routes/(app)/settings.tsx` — User settings
 - `apps/app/routes/(app)/route.tsx` — Auth guard layout (unchanged)
 
@@ -45,13 +49,16 @@ export const sidebarItems = [
 
 **File:** `apps/app/components/journal/mood-selector.tsx`
 **Props:**
+
 ```typescript
 interface MoodSelectorProps {
   value: MoodType | null;
   onChange: (mood: MoodType) => void;
 }
 ```
+
 **Behavior:**
+
 - Renders a 3x2 grid of mood cards (2 columns on mobile, 3 on tablet+).
 - Each card: icon (48px), label text, colored background.
 - Selected card: elevated shadow, thicker border, slight scale transform.
@@ -64,13 +71,16 @@ interface MoodSelectorProps {
 
 **File:** `apps/app/components/journal/tag-chips.tsx`
 **Props:**
+
 ```typescript
 interface TagChipsProps {
   value: TagType[];
   onChange: (tags: TagType[]) => void;
 }
 ```
+
 **Behavior:**
+
 - Renders a flex-wrap row of chip buttons.
 - Unselected: outlined border, muted text.
 - Selected: filled background (using tag's associated color), white text, check icon.
@@ -81,6 +91,7 @@ interface TagChipsProps {
 
 **File:** `apps/app/components/journal/note-editor.tsx`
 **Props:**
+
 ```typescript
 interface NoteEditorProps {
   value: string;
@@ -88,7 +99,9 @@ interface NoteEditorProps {
   maxLength?: number;
 }
 ```
+
 **Behavior:**
+
 - Renders a `Textarea` (from `@repo/ui`) with auto-expand.
 - Below the textarea: character count display ("42 / 50 min for AI insight").
 - When count >= 50: green checkmark icon next to count, text changes to "AI insight will be generated".
@@ -99,6 +112,7 @@ interface NoteEditorProps {
 
 **File:** `apps/app/components/journal/entry-form.tsx`
 **Composition:**
+
 ```
 EntryForm
   MoodSelector
@@ -106,6 +120,7 @@ EntryForm
   NoteEditor
   Button ("Save Entry")
 ```
+
 **State Management:** Local React state for form values. On save, calls `journal.create` mutation.
 
 ### Timeline Component
@@ -113,6 +128,7 @@ EntryForm
 **File:** `apps/app/components/journal/timeline.tsx`
 **Data Source:** `journal.list` infinite query via TanStack Query.
 **Rendering:**
+
 ```
 Timeline
   DateGroup ("Today")
@@ -130,6 +146,7 @@ Timeline
 
 **File:** `apps/app/components/journal/entry-card.tsx`
 **Props:**
+
 ```typescript
 interface EntryCardProps {
   entry: JournalEntryWithAiResponse;
@@ -137,7 +154,9 @@ interface EntryCardProps {
   onDelete: (id: string) => void;
 }
 ```
+
 **Rendering:**
+
 - Uses `Card` from `@repo/ui`.
 - Left colored border based on mood.
 - Header: mood icon + label, timestamp (relative: "2 hours ago").
@@ -149,6 +168,7 @@ interface EntryCardProps {
 
 **File:** `apps/app/components/journal/ai-response.tsx`
 **Props:**
+
 ```typescript
 interface AiResponseProps {
   entryId: string;
@@ -158,7 +178,9 @@ interface AiResponseProps {
   hasCrisisContent: boolean;
 }
 ```
+
 **Rendering:**
+
 - If streaming: show pulsing dots, then render text character by character as it arrives.
 - If complete: show full response with a small AI icon.
 - If crisis content: show `SafetyBanner` above the response.
@@ -169,6 +191,7 @@ interface AiResponseProps {
 **File:** `apps/app/components/journal/safety-banner.tsx`
 **Props:** None (static content).
 **Rendering:**
+
 - Warning-style card with phone icon.
 - Text: crisis lifeline numbers (988 Suicide and Crisis Lifeline, Crisis Text Line).
 - Always displayed when `hasCrisisContent` is true.
@@ -178,12 +201,12 @@ interface AiResponseProps {
 
 Add to `packages/ui/` via `bun ui:add`:
 
-| Component | Purpose |
-|-----------|---------|
-| `badge` | Tag chips display |
+| Component          | Purpose                          |
+| ------------------ | -------------------------------- |
+| `badge`            | Tag chips display                |
 | `toast` / `sonner` | Save success/error notifications |
-| `tooltip` | Hover info on charts and icons |
-| `dropdown-menu` | Entry card actions (edit/delete) |
-| `alert-dialog` | Delete confirmation |
-| `tabs` | Analytics page tab navigation |
-| `progress` | Character count visual indicator |
+| `tooltip`          | Hover info on charts and icons   |
+| `dropdown-menu`    | Entry card actions (edit/delete) |
+| `alert-dialog`     | Delete confirmation              |
+| `tabs`             | Analytics page tab navigation    |
+| `progress`         | Character count visual indicator |

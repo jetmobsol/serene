@@ -4,9 +4,11 @@ argument-hint: [decision description]
 ---
 
 ## Your Role
+
 You are strategic-cto-mentor helping a CTO make a strategic technology decision.
 
 ## Decision to Evaluate
+
 $ARGUMENTS
 
 ## Decision Process

@@ -12,15 +12,15 @@ The project template includes a complete Cloudflare deployment pipeline (Terrafo
 
 The following are already in place and must be leveraged (not rebuilt):
 
-| Asset | Location | Purpose |
-|-------|----------|---------|
-| **Terraform edge stack** | `infra/stacks/edge/main.tf` | Provisions 3 Workers (web, app, api) + Hyperdrive + DNS |
-| **Terraform modules** | `infra/modules/cloudflare/` | Atomic resources: `worker`, `hyperdrive`, `dns`, `r2-bucket` |
-| **Environment configs** | `infra/envs/{dev,preview,staging,prod}/edge/` | Per-environment Terraform roots with `terraform.tfvars.example` |
-| **Wrangler configs** | `apps/{web,app,api}/wrangler.jsonc` | Per-worker deployment config with service bindings |
-| **Existing deployment docs** | `docs/deployment/cloudflare.md` | Template-level Cloudflare deployment guide |
-| **Production database docs** | `docs/deployment/production-database.md` | Neon + Hyperdrive setup guide |
-| **CI/CD docs** | `docs/deployment/ci-cd.md` | CI/CD pipeline documentation |
+| Asset                        | Location                                      | Purpose                                                         |
+| ---------------------------- | --------------------------------------------- | --------------------------------------------------------------- |
+| **Terraform edge stack**     | `infra/stacks/edge/main.tf`                   | Provisions 3 Workers (web, app, api) + Hyperdrive + DNS         |
+| **Terraform modules**        | `infra/modules/cloudflare/`                   | Atomic resources: `worker`, `hyperdrive`, `dns`, `r2-bucket`    |
+| **Environment configs**      | `infra/envs/{dev,preview,staging,prod}/edge/` | Per-environment Terraform roots with `terraform.tfvars.example` |
+| **Wrangler configs**         | `apps/{web,app,api}/wrangler.jsonc`           | Per-worker deployment config with service bindings              |
+| **Existing deployment docs** | `docs/deployment/cloudflare.md`               | Template-level Cloudflare deployment guide                      |
+| **Production database docs** | `docs/deployment/production-database.md`      | Neon + Hyperdrive setup guide                                   |
+| **CI/CD docs**               | `docs/deployment/ci-cd.md`                    | CI/CD pipeline documentation                                    |
 
 ## 17.3 New Documentation Requirements
 
@@ -39,6 +39,7 @@ The following are already in place and must be leveraged (not rebuilt):
    - Domain name (optional but recommended)
 
 2. **Infrastructure Provisioning (Terraform)**
+
    ```bash
    # Step 1: Configure environment variables
    cp infra/envs/prod/edge/terraform.tfvars.example infra/envs/prod/edge/terraform.tfvars
@@ -56,6 +57,7 @@ The following are already in place and must be leveraged (not rebuilt):
    ```
 
 3. **Worker Secrets Configuration**
+
    ```bash
    # Required secrets for the API worker
    cd apps/api
@@ -87,6 +89,7 @@ The following are already in place and must be leveraged (not rebuilt):
    - Update `ALLOWED_ORIGINS` to include production domain
 
 5. **Database Migration**
+
    ```bash
    # Generate migrations for Serene schema (journal_entry, ai_response tables)
    bun db:generate
@@ -97,6 +100,7 @@ The following are already in place and must be leveraged (not rebuilt):
    ```
 
 6. **Build and Deploy**
+
    ```bash
    # Build in dependency order
    bun email:build    # Email templates
@@ -126,26 +130,28 @@ The following are already in place and must be leveraged (not rebuilt):
    - Redeploy web worker
 
 9. **Multi-Environment Strategy**
+
    ```
    infra/envs/
      dev/edge/       → serene-{web,app,api}-dev       (local/preview)
      staging/edge/   → serene-{web,app,api}-staging    (pre-production)
      prod/edge/      → serene-{web,app,api}            (production)
    ```
+
    - Each environment has isolated Terraform state
    - Staging mirrors prod config but with test API keys
    - Preview environments auto-created per PR (if CI/CD configured)
 
 10. **Cost Estimation (Cloudflare + Neon + Anthropic)**
 
-    | Service | Free Tier | Estimated Monthly (100 DAU) |
-    |---------|-----------|----------------------------|
-    | Cloudflare Workers | 100K requests/day free | $0 (well within free tier) |
-    | Cloudflare Hyperdrive | Included with Workers | $0 |
-    | Neon PostgreSQL | 0.5 GB storage, 190 compute hours free | $0-19 (Free or Launch tier) |
-    | Anthropic Claude API | Pay per token | $7-12 (see `07-ai-integration.md` Section 8.6) |
-    | Custom domain (optional) | N/A | $10-15/year |
-    | **Total** | | **$7-31/month** |
+    | Service                  | Free Tier                              | Estimated Monthly (100 DAU)                    |
+    | ------------------------ | -------------------------------------- | ---------------------------------------------- |
+    | Cloudflare Workers       | 100K requests/day free                 | $0 (well within free tier)                     |
+    | Cloudflare Hyperdrive    | Included with Workers                  | $0                                             |
+    | Neon PostgreSQL          | 0.5 GB storage, 190 compute hours free | $0-19 (Free or Launch tier)                    |
+    | Anthropic Claude API     | Pay per token                          | $7-12 (see `07-ai-integration.md` Section 8.6) |
+    | Custom domain (optional) | N/A                                    | $10-15/year                                    |
+    | **Total**                |                                        | **$7-31/month**                                |
 
 11. **Troubleshooting**
     - Worker not found: verify Terraform applied and worker names match `wrangler.jsonc`
@@ -161,6 +167,7 @@ The following are already in place and must be leveraged (not rebuilt):
 **Required Sections:**
 
 1. **Architecture Diagram**
+
    ```
    ┌─────────────────────────────────────────────────────┐
    │                    Cloudflare Edge                    │
@@ -194,21 +201,22 @@ The following are already in place and must be leveraged (not rebuilt):
 
 2. **Terraform Variable Reference**
 
-   | Variable | Required | Description |
-   |----------|----------|-------------|
-   | `cloudflare_api_token` | Yes | Cloudflare API token with Workers + DNS permissions |
-   | `cloudflare_account_id` | Yes | Cloudflare account ID |
-   | `project_slug` | Yes | Base name for workers (use `serene`) |
-   | `environment` | Yes | `dev`, `staging`, or `prod` |
-   | `neon_database_url` | Yes | Neon PostgreSQL connection string |
-   | `cloudflare_zone_id` | No | Required for custom domain |
-   | `hostname` | No | Custom domain hostname |
+   | Variable                | Required | Description                                         |
+   | ----------------------- | -------- | --------------------------------------------------- |
+   | `cloudflare_api_token`  | Yes      | Cloudflare API token with Workers + DNS permissions |
+   | `cloudflare_account_id` | Yes      | Cloudflare account ID                               |
+   | `project_slug`          | Yes      | Base name for workers (use `serene`)                |
+   | `environment`           | Yes      | `dev`, `staging`, or `prod`                         |
+   | `neon_database_url`     | Yes      | Neon PostgreSQL connection string                   |
+   | `cloudflare_zone_id`    | No       | Required for custom domain                          |
+   | `hostname`              | No       | Custom domain hostname                              |
 
 3. **Cloudflare API Token Permissions**
    - Terraform token: Zone:DNS:Edit, Zone:Zone:Read, Account:Workers Scripts:Edit, Account:Cloudflare Hyperdrive:Edit
    - Wrangler token: Zone:Workers Routes:Edit, Account:Workers Scripts:Edit
 
 4. **Worker Naming Convention**
+
    ```
    Production:  serene-web, serene-app, serene-api
    Staging:     serene-web-staging, serene-app-staging, serene-api-staging
@@ -217,18 +225,18 @@ The following are already in place and must be leveraged (not rebuilt):
 
 5. **Wrangler Environment Variable Reference (API Worker)**
 
-   | Variable | Type | Per-Env | Description |
-   |----------|------|---------|-------------|
-   | `ENVIRONMENT` | var | Yes | `development` / `staging` / `production` |
-   | `APP_NAME` | var | No | `Serene` |
-   | `APP_ORIGIN` | var | Yes | Full origin URL |
-   | `ALLOWED_ORIGINS` | var | Yes | Comma-separated CORS origins |
-   | `RESEND_EMAIL_FROM` | var | Yes | Sender email address |
-   | `BETTER_AUTH_SECRET` | secret | Yes | Auth session signing key |
-   | `ANTHROPIC_API_KEY` | secret | Yes | Claude API key for vibe check |
-   | `GOOGLE_CLIENT_ID` | secret | Yes | Google OAuth client ID |
-   | `GOOGLE_CLIENT_SECRET` | secret | Yes | Google OAuth client secret |
-   | `RESEND_API_KEY` | secret | Yes | Resend email service key |
+   | Variable               | Type   | Per-Env | Description                              |
+   | ---------------------- | ------ | ------- | ---------------------------------------- |
+   | `ENVIRONMENT`          | var    | Yes     | `development` / `staging` / `production` |
+   | `APP_NAME`             | var    | No      | `Serene`                                 |
+   | `APP_ORIGIN`           | var    | Yes     | Full origin URL                          |
+   | `ALLOWED_ORIGINS`      | var    | Yes     | Comma-separated CORS origins             |
+   | `RESEND_EMAIL_FROM`    | var    | Yes     | Sender email address                     |
+   | `BETTER_AUTH_SECRET`   | secret | Yes     | Auth session signing key                 |
+   | `ANTHROPIC_API_KEY`    | secret | Yes     | Claude API key for vibe check            |
+   | `GOOGLE_CLIENT_ID`     | secret | Yes     | Google OAuth client ID                   |
+   | `GOOGLE_CLIENT_SECRET` | secret | Yes     | Google OAuth client secret               |
+   | `RESEND_API_KEY`       | secret | Yes     | Resend email service key                 |
 
 6. **Remote State Configuration**
    - R2 backend for Terraform state (recommended for team use)

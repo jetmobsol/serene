@@ -11,6 +11,7 @@ The current `README.md` is the unmodified React Starter Kit template README. It 
 ## 16.2 Current State (to be replaced entirely)
 
 The existing README contains:
+
 - React Starter Kit branding, badges, and sponsor images
 - Generic template "Highlights" section
 - Links to `reactstarter.com` documentation
@@ -30,6 +31,7 @@ The existing README contains:
 Brief 2-3 sentence description of Serene and its core value proposition.
 
 ## Features
+
 - Mood journaling with visual mood selector and contextual tags
 - AI-powered "Vibe Check" — empathetic responses via Claude API
 - Weekly mood analytics and trend visualization
@@ -37,46 +39,60 @@ Brief 2-3 sentence description of Serene and its core value proposition.
 - Calm, accessible UI designed for daily wellbeing
 
 ## Tech Stack
+
 [Table: Runtime, Frontend, Backend, Database, AI, Deployment layers]
 
 ## Architecture
+
 [ASCII diagram of the 3-worker model: web → app/api, service bindings]
 Brief explanation of monorepo structure.
 
 ## Quick Start
 
 ### Prerequisites
+
 - Bun v1.3+
 - Docker & Docker Compose (for local DB)
 - Anthropic API key (https://console.anthropic.com/)
 
 ### Local Development
-  cp .env .env.local
-  # Edit .env.local with real credentials
-  just start           # DB + dev servers
-  # or: bun install && bun dev
+
+cp .env .env.local
+
+# Edit .env.local with real credentials
+
+just start # DB + dev servers
+
+# or: bun install && bun dev
 
 ### Docker (Full Stack)
-  docker-compose up    # Everything including DB
+
+docker-compose up # Everything including DB
 
 ### Environment Variables
+
 Table of required variables with descriptions.
 Reference to .env.example for full list.
 
 ## Development
+
 - bun dev / bun test / bun lint / bun typecheck
 - bun db:push / bun db:seed / bun db:studio
 
 ## Deployment
+
 Brief overview pointing to docs/deployment/ for detailed guides.
+
 - Cloudflare Workers (edge deployment)
 - Terraform for infrastructure provisioning
 - Neon PostgreSQL with Hyperdrive connection pooling
 
 ## Project Structure
+
 Annotated tree of apps/, packages/, db/, infra/, docs/
 
 ## License
+
 [Project license]
 ```
 

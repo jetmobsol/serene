@@ -19,6 +19,7 @@ Parse `$ARGUMENTS` to extract these variables:
 - **PROMPT:** all remaining non-keyword text after WORKFLOW
 
 **Keyword detection rules (case-insensitive, applied to $ARGUMENTS after extracting WORKFLOW):**
+
 - `claude` → SKILL = `claude-bowser`
 - `playwright` → SKILL = `playwright-bowser`
 - `headless` → MODE = `headless`

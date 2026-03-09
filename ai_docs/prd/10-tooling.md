@@ -34,17 +34,17 @@ All library documentation lookups during implementation MUST use Context7 MCP to
 - **When to Use:** When implementing any feature that uses an external library, to verify API signatures, configuration options, and best practices.
 - **Mandatory Lookups by Feature:**
 
-| Feature | Libraries to Query |
-|---------|-------------------|
-| Database schema | `drizzle-orm` (pgTable, relations, indexes) |
-| tRPC routers | `trpc` (router, procedure, error codes), `zod` (validation) |
-| Journal page routing | `tanstack-router` (createFileRoute, dynamic routes) |
-| Timeline infinite scroll | `tanstack-query` (useInfiniteQuery, getNextPageParam) |
-| AI streaming | `anthropic-sdk` (messages.stream, events) |
-| SSE endpoint | `hono` (streaming response, SSE) |
-| Charts | `recharts` (BarChart, LineChart, ResponsiveContainer) |
-| UI components | `shadcn-ui` (Badge, Toast, AlertDialog) |
-| Mood selector a11y | MDN ARIA radiogroup pattern (web search) |
+| Feature                  | Libraries to Query                                          |
+| ------------------------ | ----------------------------------------------------------- |
+| Database schema          | `drizzle-orm` (pgTable, relations, indexes)                 |
+| tRPC routers             | `trpc` (router, procedure, error codes), `zod` (validation) |
+| Journal page routing     | `tanstack-router` (createFileRoute, dynamic routes)         |
+| Timeline infinite scroll | `tanstack-query` (useInfiniteQuery, getNextPageParam)       |
+| AI streaming             | `anthropic-sdk` (messages.stream, events)                   |
+| SSE endpoint             | `hono` (streaming response, SSE)                            |
+| Charts                   | `recharts` (BarChart, LineChart, ResponsiveContainer)       |
+| UI components            | `shadcn-ui` (Badge, Toast, AlertDialog)                     |
+| Mood selector a11y       | MDN ARIA radiogroup pattern (web search)                    |
 
 ## 11.2 Claude API Skill (`/claude-api`)
 
@@ -113,9 +113,11 @@ The `/frontend-design` skill MUST be invoked for the following implementation ta
 ## 11.4 Browser Automation Tools (Visual QA)
 
 **Available MCP Tools:**
+
 - `mcp__claude-in-chrome__*` — Browser automation tools for end-to-end testing and visual quality assurance.
 
 **Use Cases:**
+
 - Visual regression testing of the calm UI aesthetic across viewport sizes.
 - Verifying mood selector interaction states in a real browser.
 - Testing SSE streaming UI behavior end-to-end.
