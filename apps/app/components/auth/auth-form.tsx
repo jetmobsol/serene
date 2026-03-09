@@ -7,8 +7,6 @@ import { OtpVerification } from "./otp-verification";
 import { PasskeyLogin } from "./passkey-login";
 import { useAuthForm } from "./use-auth-form";
 
-const APP_NAME = import.meta.env.VITE_APP_NAME || "Serene";
-
 function SignupTerms() {
   return (
     <p className="text-xs text-muted-foreground text-center text-balance">
@@ -91,7 +89,10 @@ export function AuthForm({
       {/* Brand Mark */}
       <div className="flex flex-col items-center gap-1">
         <Link to="/" aria-label="Go to homepage">
-          <span className="text-2xl font-semibold tracking-tight text-primary font-[Lora,serif]">
+          <span
+            className="text-2xl font-semibold tracking-tight text-primary"
+            style={{ fontFamily: "Lora, serif" }}
+          >
             Serene
           </span>
         </Link>
@@ -171,7 +172,7 @@ function MethodSelection({
   onLoadingChange,
   returnTo,
 }: MethodSelectionProps) {
-  const heading = isSignup ? "Create your account" : `Log in to ${APP_NAME}`;
+  const heading = isSignup ? "Create your account" : "Welcome back";
 
   return (
     <div className="flex flex-col gap-6">

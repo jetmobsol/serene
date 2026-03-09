@@ -81,3 +81,5 @@ screenshots/
 # Python
 __pycache__/
 *.pyc
+/db/logs/
+.claude/plans/
