@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { NoteEditor } from "./note-editor";
 
@@ -53,10 +53,20 @@ describe("NoteEditor", () => {
   it("debounces onChange calls", () => {
     const handleChange = vi.fn();
     render(<NoteEditor value="" onChange={handleChange} />);
+    const textarea = screen.getByPlaceholderText(/50 characters/i);
 
-    // The debounce delay is 300ms - this is verified by the component logic
-    // and would be tested in integration tests
+    // Two rapid changes — each resets the 300ms debounce timer
+    fireEvent.change(textarea, { target: { value: "H" } });
+    fireEvent.change(textarea, { target: { value: "Hi" } });
+
+    // Not called yet — debounce is still pending
     expect(handleChange).not.toHaveBeenCalled();
+
+    // Advance past the debounce window — only the last value fires
+    vi.advanceTimersByTime(300);
+
+    expect(handleChange).toHaveBeenCalledTimes(1);
+    expect(handleChange).toHaveBeenCalledWith("Hi");
   });
 
   it("respects maxLength prop", () => {
@@ -66,10 +76,13 @@ describe("NoteEditor", () => {
   });
 
   it("shows destructive color at maxLength", () => {
+    // Use maxLength > AI_INSIGHT_THRESHOLD so both atLimit and meetsThreshold
+    // are true — the count span shows the "meets threshold" text and is styled
+    // as destructive, making the intent of each condition unambiguous.
     render(
-      <NoteEditor value={"a".repeat(10)} onChange={() => {}} maxLength={10} />,
+      <NoteEditor value={"a".repeat(51)} onChange={() => {}} maxLength={51} />,
     );
-    const countText = screen.getByText(/10 \/ 50 min for AI insight/);
+    const countText = screen.getByText(/51 \/ AI insight will be generated/);
     expect(countText).toHaveClass("text-destructive");
   });
 });

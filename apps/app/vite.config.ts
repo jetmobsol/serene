@@ -94,10 +94,5 @@ export default defineProject(({ mode }) => {
         },
       },
     },
-
-    test: {
-      environment: "happy-dom",
-      setupFiles: ["./vitest.setup.ts"],
-    },
   };
 });

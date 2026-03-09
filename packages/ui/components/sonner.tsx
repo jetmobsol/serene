@@ -1,3 +1,5 @@
+// TODO: wrap app root with <ThemeProvider> from "next-themes" when wiring up
+// dark mode — until then, useTheme() falls back to theme="system".
 import { useTheme } from "next-themes";
 import { Toaster as Sonner } from "sonner";
 

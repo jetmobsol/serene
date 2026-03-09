@@ -26,9 +26,12 @@ export function NoteEditor({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(null);
 
-  // Sync external value changes - when value prop changes, update local state
-  // This is a controlled component pattern; the rule prefers alternative patterns but this is clear and correct
+  // Sync external value changes (e.g. parent reset). Cancel any pending debounce
+  // first so a stale timeout doesn't call onChange with the pre-reset value.
   useLayoutEffect(() => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
     // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
     setLocalValue(value);
   }, [value]);
