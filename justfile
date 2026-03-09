@@ -34,6 +34,9 @@ docker-stop:
 # ============================================
 # COMMIT HELPERS
 # ============================================
+commit:
+    MAX_THINKING_TOKENS=0 glm -p "/commit-commands:commit" --model=haiku --tools "Bash" --allowedTools 'Bash(git add:*),Bash(git status:*),Bash(git commit:*),Bash(git diff:*),Bash(git branch:*),Bash(git log:*)' --setting-sources='project' --strict-mcp-config --mcp-config '{"mcpServers":{}}' --no-session-persistence
+    @just notify commit
 
 commit-pi:
     pi -p "/commit-commands-commit" --model zai/glm-5 --tools "bash" --no-extensions --no-skills --no-session
@@ -49,3 +52,8 @@ ui-review *args:
 # Run user stories with visible browser
 ui-review-headed *args:
     claude "/ui-review headed {{args}}"
+
+
+# Notification helper (plays TTS + prints message)
+notify type:
+    @uv run .claude/hooks/utils/notifications.py {{ type }}

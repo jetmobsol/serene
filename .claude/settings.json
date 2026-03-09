@@ -1,0 +1,127 @@
+{
+  "permissions": {
+    "allow": [
+      "Write",
+
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(eza:*)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(find:*)",
+
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(cp:*)",
+      "Bash(rm:*)",
+      "Bash(chmod:*)",
+      "Bash(touch:*)",
+
+      "Bash(./gradlew:*)",
+      "Bash(uv:*)",
+      "Bash(uv run:*)",
+      "Bash(python:*)",
+      "Bash(npx:*)",
+      "Bash(node:*)",
+      "Bash(pnpm:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+
+      "Bash(git add:*)",
+      "Bash(git rm:*)",
+      "Bash(git mv:*)",
+      "Bash(git fetch:*)",
+      "Bash(git log:*)",
+      "Bash(git stash:*)",
+      "Bash(git checkout:*)",
+      "Bash(git reset:*)",
+      "Bash(git clean:*)",
+      "Bash(git merge-base:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(gh:*)",
+      "Bash(bd sync:*)",
+
+      "Bash(curl:*)",
+      "Bash(psql:*)",
+      "Bash(docker-compose:*)",
+      "Bash(docker exec:*)",
+      "Bash(docker system prune:*)",
+      "Bash(kill:*)",
+      "Bash(pkill:*)",
+      "Bash(open:*)",
+      "Bash(osascript:*)",
+      "Bash(test:*)",
+      "Bash(timeout:*)",
+      "Bash(gtimeout:*)",
+
+      "Bash(./scripts/*:*)",
+
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:mvnrepository.com)",
+
+      "mcp__linear-linktalents__get_team",
+      "mcp__linear-linktalents__get_issue",
+      "mcp__linear-linktalents__update_issue",
+      "mcp__linear-linktalents__create_document",
+      "mcp__plugin_context7_context7__resolve-library-id",
+      "mcp__plugin_context7_context7__query-docs"
+    ],
+    "deny": [
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(rm -rf:*)"
+    ],
+    "defaultMode": "acceptEdits",
+    "additionalDirectories": ["/Users/garden/projects"]
+  },
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ \"$ON_MY_MAC\" = \"true\" ] && uv run \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/notification.py --notify || true"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ \"$ON_MY_MAC\" = \"true\" ] && uv run \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/stop.py --chat || true"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/subagent_stop.py || true"
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "beads@beads-marketplace": false,
+    "commit-commands@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "cto-team@cto-team-marketplace": true,
+    "essentials@essentials-claude-code": true,
+    "frontend-design@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "plugin-dev@claude-plugins-official": true,
+    "claude-mem@thedotmack": false
+  }
+}
