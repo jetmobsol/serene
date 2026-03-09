@@ -372,9 +372,55 @@ PLAN=$(ls -t .claude/plans/ | head -1)
 
 This works because nothing else writes to `.claude/plans/` between step 1 (plan creation) and step 2 (plan execution).
 
+### Running serene-workflow.yaml
+
+The workflow file is committed at the project root. Run it from the Serene directory:
+
+```bash
+cd /Users/garden/projects/PinkElephant/serene
+
+# 1. Validate — check syntax and dependencies without executing
+ruflo workflow run -f ./serene-workflow.yaml --dry-run
+
+# 2. Run the full workflow (all 3 tracks, parallel B+C)
+ruflo workflow run -f ./serene-workflow.yaml --parallel --max-agents 8
+
+# 3. Run a single step (e.g. only D6 planning)
+ruflo workflow run -f ./serene-workflow.yaml --step d6-plan
+
+# 4. Resume from a specific step (e.g. after fixing a failure)
+ruflo workflow run -f ./serene-workflow.yaml --from d7-plan
+```
+
+> **Before running:** ensure the daemon is running (`ruflo daemon start`) and memory is initialized (`ruflo memory list`).
+
+**Step IDs for `--step` / `--from`:**
+
+| Step ID           | Description                   |
+| ----------------- | ----------------------------- |
+| `d6-plan`         | D6: Create plan               |
+| `d6-implement`    | D6: Execute plan              |
+| `d6-qa`           | D6: Simplify + QA gate        |
+| `d7-plan`         | D7: Create plan               |
+| `d7-implement`    | D7: Execute plan              |
+| `d7-qa`           | D7: Simplify + QA gate        |
+| `d8-plan`         | D8: Create plan               |
+| `d8-implement`    | D8: Execute plan              |
+| `d8-qa`           | D8: Simplify + QA gate        |
+| `d9-plan`         | D9: Analytics (parallel)      |
+| `d9-implement`    | D9: Analytics execute         |
+| `d9-qa`           | D9: Analytics QA              |
+| `d12-plan`        | D12: Docs + deploy (parallel) |
+| `d12-implement`   | D12: Docs + deploy execute    |
+| `d12-qa`          | D12: Docs + deploy QA         |
+| `merge-worktrees` | Merge parallel tracks         |
+| `final-qa`        | Full E2E QA                   |
+
+---
+
 ### Workflow YAML: serene-workflow.yaml
 
-Save this in the Serene project root:
+The full YAML is at `./serene-workflow.yaml` in the project root. Contents for reference:
 
 ```yaml
 name: "Serene PRD Completion"
@@ -722,22 +768,6 @@ steps:
         Full walkthrough: landing → signup → journal → AI → analytics.
 ```
 
-### Execution Commands
-
-```bash
-# Validate workflow without executing
-npx ruflo@latest workflow run -f ./serene-workflow.yaml --dry-run
-
-# Execute full workflow with parallel tracks
-npx ruflo@latest workflow run -f ./serene-workflow.yaml --parallel --max-agents 8
-
-# Execute a specific step only
-npx ruflo@latest workflow run -f ./serene-workflow.yaml --step d6-plan
-
-# Execute from a specific step onward
-npx ruflo@latest workflow run -f ./serene-workflow.yaml --from d7-plan
-```
-
 ### Execution Flow Diagram
 
 ```
@@ -960,9 +990,9 @@ ruflo daemon start
 npx ruflo@latest swarm init --topology hierarchical --max-agents 8
 
 # === WORKFLOW ===
-npx ruflo@latest workflow run -f serene-workflow.yaml --parallel
-npx ruflo@latest workflow run -f serene-workflow.yaml --step d6-plan
-npx ruflo@latest workflow run -f serene-workflow.yaml --dry-run
+ruflo workflow run -f serene-workflow.yaml --parallel --max-agents 8
+ruflo workflow run -f serene-workflow.yaml --step d6-plan
+ruflo workflow run -f serene-workflow.yaml --dry-run
 
 # === MEMORY ===
 npx ruflo@latest memory search --query "..."
