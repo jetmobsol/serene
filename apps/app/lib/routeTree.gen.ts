@@ -20,6 +20,7 @@ import { Route as appDashboardRouteImport } from './../routes/(app)/dashboard'
 import { Route as appAnalyticsRouteImport } from './../routes/(app)/analytics'
 import { Route as appAboutRouteImport } from './../routes/(app)/about'
 import { Route as appJournalIndexRouteImport } from './../routes/(app)/journal/index'
+import { Route as appJournalEntryIdRouteImport } from './../routes/(app)/journal/$entryId'
 
 const appRouteRoute = appRouteRouteImport.update({
   id: '/(app)',
@@ -75,6 +76,11 @@ const appJournalIndexRoute = appJournalIndexRouteImport.update({
   path: '/journal/',
   getParentRoute: () => appRouteRoute,
 } as any)
+const appJournalEntryIdRoute = appJournalEntryIdRouteImport.update({
+  id: '/journal/$entryId',
+  path: '/journal/$entryId',
+  getParentRoute: () => appRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/about': typeof appAboutRoute
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof authLoginRoute
   '/signup': typeof authSignupRoute
   '/': typeof appIndexRoute
+  '/journal/$entryId': typeof appJournalEntryIdRoute
   '/journal/': typeof appJournalIndexRoute
 }
 export interface FileRoutesByTo {
@@ -98,6 +105,7 @@ export interface FileRoutesByTo {
   '/login': typeof authLoginRoute
   '/signup': typeof authSignupRoute
   '/': typeof appIndexRoute
+  '/journal/$entryId': typeof appJournalEntryIdRoute
   '/journal': typeof appJournalIndexRoute
 }
 export interface FileRoutesById {
@@ -112,6 +120,7 @@ export interface FileRoutesById {
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/signup': typeof authSignupRoute
   '/(app)/': typeof appIndexRoute
+  '/(app)/journal/$entryId': typeof appJournalEntryIdRoute
   '/(app)/journal/': typeof appJournalIndexRoute
 }
 export interface FileRouteTypes {
@@ -126,6 +135,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/'
+    | '/journal/$entryId'
     | '/journal/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -138,6 +148,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/'
+    | '/journal/$entryId'
     | '/journal'
   id:
     | '__root__'
@@ -151,6 +162,7 @@ export interface FileRouteTypes {
     | '/(auth)/login'
     | '/(auth)/signup'
     | '/(app)/'
+    | '/(app)/journal/$entryId'
     | '/(app)/journal/'
   fileRoutesById: FileRoutesById
 }
@@ -239,6 +251,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appJournalIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
+    '/(app)/journal/$entryId': {
+      id: '/(app)/journal/$entryId'
+      path: '/journal/$entryId'
+      fullPath: '/journal/$entryId'
+      preLoaderRoute: typeof appJournalEntryIdRouteImport
+      parentRoute: typeof appRouteRoute
+    }
   }
 }
 
@@ -250,6 +269,7 @@ interface appRouteRouteChildren {
   appSettingsRoute: typeof appSettingsRoute
   appUsersRoute: typeof appUsersRoute
   appIndexRoute: typeof appIndexRoute
+  appJournalEntryIdRoute: typeof appJournalEntryIdRoute
   appJournalIndexRoute: typeof appJournalIndexRoute
 }
 
@@ -261,6 +281,7 @@ const appRouteRouteChildren: appRouteRouteChildren = {
   appSettingsRoute: appSettingsRoute,
   appUsersRoute: appUsersRoute,
   appIndexRoute: appIndexRoute,
+  appJournalEntryIdRoute: appJournalEntryIdRoute,
   appJournalIndexRoute: appJournalIndexRoute,
 }
 
