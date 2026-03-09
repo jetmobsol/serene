@@ -24,7 +24,10 @@
     { "binding": "HYPERDRIVE_CACHED", "id": "your-hyperdrive-cached-id-here" },
     { "binding": "HYPERDRIVE_DIRECT", "id": "your-hyperdrive-direct-id-here" }
   ],
-  "kv_namespaces": [],
+  // prettier-ignore
+  "kv_namespaces": [
+    { "binding": "AI_RATE_LIMIT", "id": "your-ai-rate-limit-kv-id-here" }
+  ],
 
   "env": {
     // [ENV:DEVELOPMENT]
@@ -42,7 +45,10 @@
         { "binding": "HYPERDRIVE_CACHED", "id": "your-dev-hyperdrive-cached-id-here" },
         { "binding": "HYPERDRIVE_DIRECT", "id": "your-dev-hyperdrive-direct-id-here" }
       ],
-      "kv_namespaces": []
+      // prettier-ignore
+      "kv_namespaces": [
+        { "binding": "AI_RATE_LIMIT", "id": "your-dev-ai-rate-limit-kv-id-here" }
+      ]
     },
 
     // [ENV:STAGING]
@@ -60,7 +66,10 @@
         { "binding": "HYPERDRIVE_CACHED", "id": "your-staging-hyperdrive-cached-id-here" },
         { "binding": "HYPERDRIVE_DIRECT", "id": "your-staging-hyperdrive-direct-id-here" }
       ],
-      "kv_namespaces": []
+      // prettier-ignore
+      "kv_namespaces": [
+        { "binding": "AI_RATE_LIMIT", "id": "your-staging-ai-rate-limit-kv-id-here" }
+      ]
     },
 
     // [ENV:PREVIEW]
@@ -78,7 +87,10 @@
         { "binding": "HYPERDRIVE_CACHED", "id": "your-preview-hyperdrive-cached-id-here" },
         { "binding": "HYPERDRIVE_DIRECT", "id": "your-preview-hyperdrive-direct-id-here" }
       ],
-      "kv_namespaces": []
+      // prettier-ignore
+      "kv_namespaces": [
+        { "binding": "AI_RATE_LIMIT", "id": "your-preview-ai-rate-limit-kv-id-here" }
+      ]
     }
   }
 }

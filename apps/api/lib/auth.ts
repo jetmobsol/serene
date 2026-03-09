@@ -118,10 +118,7 @@ function stripePlugin(db: DB, env: AuthEnv) {
  * });
  * ```
  */
-export function createAuth(
-  db: DB,
-  env: AuthEnv,
-): ReturnType<typeof betterAuth> {
+export function createAuth(db: DB, env: AuthEnv) {
   // Extract domain from APP_ORIGIN for passkey rpID
   const appUrl = new URL(env.APP_ORIGIN);
   const rpID = appUrl.hostname;

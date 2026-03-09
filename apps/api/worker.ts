@@ -22,6 +22,7 @@ import {
 type CloudflareEnv = {
   HYPERDRIVE_CACHED: Hyperdrive;
   HYPERDRIVE_DIRECT: Hyperdrive;
+  AI_RATE_LIMIT: KVNamespace;
 } & Env;
 
 const worker = new Hono<{

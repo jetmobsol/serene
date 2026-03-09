@@ -14,7 +14,7 @@ export const envSchema = z.object({
   BETTER_AUTH_SECRET: z.string().min(32),
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
-  ANTHROPIC_API_KEY: z.string().optional(),
+  ANTHROPIC_API_KEY: z.string().startsWith("sk-ant-").optional(),
   RESEND_API_KEY: z.string(),
   RESEND_EMAIL_FROM: z.email(),
   // Stripe billing (optional — app works without these, billing features disabled)
@@ -23,6 +23,8 @@ export const envSchema = z.object({
   STRIPE_STARTER_PRICE_ID: z.string().startsWith("price_").optional(),
   STRIPE_PRO_PRICE_ID: z.string().startsWith("price_").optional(),
   STRIPE_PRO_ANNUAL_PRICE_ID: z.string().startsWith("price_").optional(),
+  // Cloudflare KV namespace for AI rate limiting (injected by Workers runtime)
+  AI_RATE_LIMIT: z.custom<KVNamespace>().optional(),
 });
 
 /**

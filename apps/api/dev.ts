@@ -27,6 +27,7 @@ const { values: args } = parseArgs({
 type CloudflareEnv = {
   HYPERDRIVE_CACHED: Hyperdrive;
   HYPERDRIVE_DIRECT: Hyperdrive;
+  AI_RATE_LIMIT: KVNamespace;
 } & Env;
 
 const app = new Hono<AppContext>();
