@@ -84,4 +84,70 @@ describe("EntryForm", () => {
       screen.getByRole("button", { name: /update entry/i }),
     ).toBeInTheDocument();
   });
+
+  it("pre-fills mood selection in edit mode", () => {
+    render(
+      <EntryForm
+        entryId="jrn_123"
+        defaultValues={{ mood: "Happy", tags: [], note: "" }}
+      />,
+      { wrapper: createWrapper() },
+    );
+    const happyRadio = screen.getByLabelText("Happy");
+    expect(happyRadio).toBeChecked();
+  });
+
+  it("pre-fills note text in edit mode", () => {
+    render(
+      <EntryForm
+        entryId="jrn_123"
+        defaultValues={{
+          mood: "Calm",
+          tags: [],
+          note: "My existing note",
+        }}
+      />,
+      { wrapper: createWrapper() },
+    );
+    const noteArea = screen.getByPlaceholderText(/write about your day/i);
+    expect(noteArea).toHaveValue("My existing note");
+  });
+
+  it("calls update mutation with entry id on save in edit mode", async () => {
+    const user = userEvent.setup();
+    render(
+      <EntryForm
+        entryId="jrn_456"
+        defaultValues={{ mood: "Happy", tags: ["Work"], note: "old note" }}
+      />,
+      { wrapper: createWrapper() },
+    );
+
+    await user.click(screen.getByRole("button", { name: /update entry/i }));
+
+    expect(mockUpdateMutate).toHaveBeenCalledWith(
+      { id: "jrn_456", mood: "Happy", tags: ["Work"], note: "old note" },
+      expect.objectContaining({ onSuccess: expect.any(Function) }),
+    );
+    expect(mockCreateMutate).not.toHaveBeenCalled();
+  });
+
+  it("allows changing mood in edit mode and saves updated value", async () => {
+    const user = userEvent.setup();
+    render(
+      <EntryForm
+        entryId="jrn_789"
+        defaultValues={{ mood: "Happy", tags: [], note: "" }}
+      />,
+      { wrapper: createWrapper() },
+    );
+
+    await user.click(screen.getByLabelText("Sad"));
+    await user.click(screen.getByRole("button", { name: /update entry/i }));
+
+    expect(mockUpdateMutate).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "jrn_789", mood: "Sad" }),
+      expect.any(Object),
+    );
+  });
 });

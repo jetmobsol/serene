@@ -1,0 +1,38 @@
+stories:
+  - name: "Edit an existing journal entry"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Enter "test@test.com" in the email input field
+      Click the continue/submit button
+      Wait for auto-login to complete (OTP auto-fills and submits)
+      Wait for redirect to /journal
+      Verify the timeline has at least one entry card visible
+      Click on the first entry card to open the detail view
+      Verify the URL changes to /journal/ followed by an entry ID
+      Click the "Edit" button
+      Verify the entry form opens with a mood already selected (pre-filled)
+      Verify the "Update Entry" button is visible (not "Save Entry")
+      Click a different mood option to change the mood selection
+      Click the "Update Entry" button
+      Verify a success toast notification appears with text "Entry updated"
+      Verify the detail view returns to read-only mode showing the updated mood
+
+  - name: "Delete a journal entry with confirmation"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Enter "test@test.com" in the email input field
+      Click the continue/submit button
+      Wait for auto-login to complete (OTP auto-fills and submits)
+      Wait for redirect to /journal
+      Verify the timeline has at least one entry card visible
+      Note the number of entry cards visible in the timeline
+      Click the three-dot menu (more actions) button on the first entry card
+      Verify a dropdown menu appears with "Edit" and "Delete" options
+      Click the "Delete" option in the dropdown menu
+      Verify a confirmation dialog appears with title "Delete entry?"
+      Verify the dialog text mentions this action cannot be undone
+      Click the "Delete" button in the confirmation dialog
+      Verify a success toast notification appears with text "Entry deleted"
+      Verify the entry is removed from the timeline

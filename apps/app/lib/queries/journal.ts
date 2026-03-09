@@ -74,16 +74,90 @@ export function useUpdateJournalMutation() {
       tags?: TagType[];
       note?: string;
     }) => trpcClient.journal.update.mutate(input),
-    onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: journalQueryKeys.lists() });
-      queryClient.invalidateQueries({
+    onMutate: async (variables) => {
+      await queryClient.cancelQueries({
+        queryKey: journalQueryKeys.lists(),
+      });
+      await queryClient.cancelQueries({
         queryKey: journalQueryKeys.detail(variables.id),
       });
+
+      const previousLists = queryClient.getQueryData<
+        InfiniteData<JournalListPage>
+      >(journalQueryKeys.lists());
+
+      const previousDetail = queryClient.getQueryData(
+        journalQueryKeys.detail(variables.id),
+      );
+
+      queryClient.setQueryData<InfiniteData<JournalListPage>>(
+        journalQueryKeys.lists(),
+        (old): InfiniteData<JournalListPage> | undefined => {
+          if (!old) return old;
+          return {
+            ...old,
+            pages: old.pages.map((page) => ({
+              ...page,
+              entries: page.entries.map((entry) =>
+                entry.id === variables.id
+                  ? {
+                      ...entry,
+                      ...(variables.mood && { mood: variables.mood }),
+                      ...(variables.tags && { tags: variables.tags }),
+                      ...(variables.note !== undefined && {
+                        note: variables.note,
+                      }),
+                      updatedAt: new Date().toISOString(),
+                    }
+                  : entry,
+              ),
+            })),
+          };
+        },
+      );
+
+      queryClient.setQueryData<JournalListPage["entries"][number] | undefined>(
+        journalQueryKeys.detail(variables.id),
+        (old): JournalListPage["entries"][number] | undefined => {
+          if (!old) return old;
+          return {
+            ...old,
+            ...(variables.mood && { mood: variables.mood }),
+            ...(variables.tags && { tags: variables.tags }),
+            ...(variables.note !== undefined && { note: variables.note }),
+            updatedAt: new Date().toISOString(),
+          };
+        },
+      );
+
+      return { previousLists, previousDetail };
+    },
+    onSuccess: () => {
       toast.success("Entry updated");
     },
-    onError: (error) => {
+    onError: (error, variables, context) => {
+      if (context?.previousLists) {
+        queryClient.setQueryData(
+          journalQueryKeys.lists(),
+          context.previousLists,
+        );
+      }
+      if (context?.previousDetail) {
+        queryClient.setQueryData(
+          journalQueryKeys.detail(variables.id),
+          context.previousDetail,
+        );
+      }
       toast.error("Failed to update entry", {
         description: error.message,
+      });
+    },
+    onSettled: (_data, _error, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: journalQueryKeys.lists(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: journalQueryKeys.detail(variables.id),
       });
     },
   });
@@ -94,13 +168,52 @@ export function useDeleteJournalMutation() {
 
   return useMutation({
     mutationFn: (id: string) => trpcClient.journal.delete.mutate({ id }),
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({
+        queryKey: journalQueryKeys.lists(),
+      });
+
+      const previousLists = queryClient.getQueryData<
+        InfiniteData<JournalListPage>
+      >(journalQueryKeys.lists());
+
+      queryClient.setQueryData<InfiniteData<JournalListPage>>(
+        journalQueryKeys.lists(),
+        (old): InfiniteData<JournalListPage> | undefined => {
+          if (!old) return old;
+          return {
+            ...old,
+            pages: old.pages.map((page) => ({
+              ...page,
+              entries: page.entries.filter((entry) => entry.id !== id),
+            })),
+          };
+        },
+      );
+
+      queryClient.removeQueries({
+        queryKey: journalQueryKeys.detail(id),
+      });
+
+      return { previousLists };
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: journalQueryKeys.lists() });
       toast.success("Entry deleted");
     },
-    onError: (error) => {
+    onError: (error, id, context) => {
+      if (context?.previousLists) {
+        queryClient.setQueryData(
+          journalQueryKeys.lists(),
+          context.previousLists,
+        );
+      }
       toast.error("Failed to delete entry", {
         description: error.message,
+      });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: journalQueryKeys.lists(),
       });
     },
   });
