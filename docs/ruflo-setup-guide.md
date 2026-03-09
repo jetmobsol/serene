@@ -380,16 +380,16 @@ The workflow file is committed at the project root. Run it from the Serene direc
 cd /Users/garden/projects/PinkElephant/serene
 
 # 1. Validate — check syntax and dependencies without executing
-ruflo workflow run -f ./serene-workflow.yaml --dry-run
+ruflo workflow run --file ./serene-workflow.yaml --dry-run
 
 # 2. Run the full workflow (all 3 tracks, parallel B+C)
-ruflo workflow run -f ./serene-workflow.yaml --parallel --max-agents 8
+ruflo workflow run --file ./serene-workflow.yaml --parallel --max-agents 8
 
 # 3. Run a single step (e.g. only D6 planning)
-ruflo workflow run -f ./serene-workflow.yaml --step d6-plan
+ruflo workflow run --file ./serene-workflow.yaml --step d6-plan
 
 # 4. Resume from a specific step (e.g. after fixing a failure)
-ruflo workflow run -f ./serene-workflow.yaml --from d7-plan
+ruflo workflow run --file ./serene-workflow.yaml --from d7-plan
 ```
 
 > **Before running:** ensure the daemon is running (`ruflo daemon start`) and memory is initialized (`ruflo memory list`).
@@ -990,9 +990,9 @@ ruflo daemon start
 npx ruflo@latest swarm init --topology hierarchical --max-agents 8
 
 # === WORKFLOW ===
-ruflo workflow run -f serene-workflow.yaml --parallel --max-agents 8
-ruflo workflow run -f serene-workflow.yaml --step d6-plan
-ruflo workflow run -f serene-workflow.yaml --dry-run
+ruflo workflow run --file serene-workflow.yaml --parallel --max-agents 8
+ruflo workflow run --file serene-workflow.yaml --step d6-plan
+ruflo workflow run --file serene-workflow.yaml --dry-run
 
 # === MEMORY ===
 npx ruflo@latest memory search --query "..."
