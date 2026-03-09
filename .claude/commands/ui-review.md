@@ -92,11 +92,19 @@ Execute this user story and report results:
 **Workflow:**
 {story.workflow}
 
+**Dev Auth (Auto-Login):**
+In development mode, email OTP login is fully automatic — no manual code entry needed:
+- Any email address works (e.g., test@test.com) — the email OTP flow auto-creates accounts for unknown addresses.
+- After clicking "Continue with email" and submitting an email address, WAIT up to 10 seconds for the auto-login to complete. The OTP screen will appear briefly then auto-submit and redirect to the dashboard.
+- Do NOT try to manually enter an OTP code — it happens automatically.
+- If a workflow step involves logging in or authenticating, just enter the email and wait for the redirect. Do not interact with the OTP input field.
+
 Instructions:
 - Follow each step in the workflow sequentially
 - Take a screenshot after each significant step
 - Save ALL screenshots to: {SCREENSHOT_PATH}
 - Report each step as PASS or FAIL with a brief explanation
+- When a step involves authentication, enter the email address and then wait up to 10 seconds for the auto-login redirect before proceeding to the next step
 - At the end, provide a summary: total steps, passed, failed
 - Use this exact format for your final summary line:
   RESULT: {PASS|FAIL} | Steps: {passed}/{total}
