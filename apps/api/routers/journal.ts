@@ -44,10 +44,15 @@ export const journalRouter = router({
       let cursorFilter: ReturnType<typeof and> | undefined = undefined;
 
       if (cursor) {
-        const parsed = JSON.parse(atob(cursor)) as {
-          createdAt: string;
-          id: string;
-        };
+        let parsed: { createdAt: string; id: string };
+        try {
+          parsed = JSON.parse(atob(cursor));
+        } catch {
+          throw new TRPCError({ code: "BAD_REQUEST" });
+        }
+        if (!parsed.createdAt || !parsed.id) {
+          throw new TRPCError({ code: "BAD_REQUEST" });
+        }
         const cursorDate = new Date(parsed.createdAt);
 
         cursorFilter = or(
@@ -123,6 +128,10 @@ export const journalRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       const { id, ...updates } = input;
+
+      if (Object.keys(updates).length === 0) {
+        throw new TRPCError({ code: "BAD_REQUEST" });
+      }
 
       const existing = await ctx.db.query.journalEntry.findFirst({
         where: (table, { eq: whereEq, and: whereAnd }) =>
