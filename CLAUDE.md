@@ -28,6 +28,15 @@ just stop                      # Stop everything
 just docker-start              # Full Docker stack (all services containerized)
 ```
 
+### Local Ports
+
+| Port | Service                     | URL                   |
+| ---- | --------------------------- | --------------------- |
+| 5173 | App (SPA) — Vite dev server | http://localhost:5173 |
+| 8787 | API — Hono server           | http://localhost:8787 |
+| 4321 | Web — Astro edge router     | http://localhost:4321 |
+| 5434 | PostgreSQL (Docker)         | —                     |
+
 ### Gotchas
 
 - If dev fails with missing native binaries (rollup, workerd): run `bun install --force`.

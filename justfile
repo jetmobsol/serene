@@ -3,12 +3,19 @@ default:
     @just --list
 
 
-# Start PostgreSQL in Docker, then run dev servers natively via Bun
-start:
+# One-time idempotent setup: deps, DB container, schema push, seed
+install:
+    bun install --force
     docker compose up -d db
     @echo "Waiting for PostgreSQL..."
     @until docker compose exec db pg_isready -U postgres > /dev/null 2>&1; do sleep 1; done
-    bun install --force
+    bun db:push
+    @echo "Setup complete. Run 'just start' to launch dev servers."
+
+# Start PostgreSQL in Docker, then run dev servers natively via Bun
+start:
+    docker compose up -d db
+    @until docker compose exec db pg_isready -U postgres > /dev/null 2>&1; do sleep 1; done
     bun dev
 
 # Stop dev servers and the database container
