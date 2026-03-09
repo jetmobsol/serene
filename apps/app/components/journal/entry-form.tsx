@@ -8,10 +8,12 @@ import {
   useCreateJournalMutation,
   useUpdateJournalMutation,
 } from "@/lib/queries/journal";
+import { streamingEntryIdAtom } from "@/lib/hooks/use-sse-stream";
 import type { MoodType, TagType } from "@repo/core";
 import { Button } from "@repo/ui";
 import { Loader2, Save } from "lucide-react";
 import { useRef, useState } from "react";
+import { useSetAtom } from "jotai";
 
 interface EntryFormProps {
   defaultValues?: {
@@ -35,6 +37,8 @@ export function EntryForm({
   );
   const [tags, setTags] = useState<TagType[]>(defaultValues?.tags ?? []);
   const [note, setNote] = useState(defaultValues?.note ?? "");
+
+  const setStreamingEntryId = useSetAtom(streamingEntryIdAtom);
 
   const createMutation = useCreateJournalMutation();
   const updateMutation = useUpdateJournalMutation();
@@ -61,7 +65,10 @@ export function EntryForm({
       createMutation.mutate(
         { mood, tags, note },
         {
-          onSuccess: () => {
+          onSuccess: (data) => {
+            if (note.length >= 50 && data?.id) {
+              setStreamingEntryId(data.id);
+            }
             setMood(null);
             setTags([]);
             setNote("");

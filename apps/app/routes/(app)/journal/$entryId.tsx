@@ -1,3 +1,4 @@
+import { AiResponse } from "@/components/journal/ai-response";
 import { DeleteEntryDialog } from "@/components/journal/delete-entry-dialog";
 import { EntryForm } from "@/components/journal/entry-form";
 import {
@@ -18,7 +19,7 @@ import {
   Skeleton,
 } from "@repo/ui";
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { ArrowLeft, Pencil, Sparkles, Trash2 } from "lucide-react";
+import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/(app)/journal/$entryId")({
@@ -157,15 +158,11 @@ function EntryDetail() {
 
         {entry.aiResponse && (
           <CardFooter>
-            <div className="flex items-start gap-3 rounded-lg bg-muted/50 p-4 w-full">
-              <Sparkles className="h-5 w-5 text-muted-foreground mt-0.5 shrink-0" />
-              <div>
-                <p className="text-sm font-medium mb-1">AI Insight</p>
-                <p className="text-sm text-muted-foreground italic">
-                  {entry.aiResponse.response}
-                </p>
-              </div>
-            </div>
+            <AiResponse
+              response={entry.aiResponse.response}
+              hasCrisisContent={entry.aiResponse.hasCrisisContent}
+              variant="full"
+            />
           </CardFooter>
         )}
       </Card>

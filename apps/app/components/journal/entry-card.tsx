@@ -14,7 +14,8 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui";
 import { Link } from "@tanstack/react-router";
-import { MoreVertical, Pencil, Sparkles, Trash2 } from "lucide-react";
+import { MoreVertical, Pencil, Trash2 } from "lucide-react";
+import { AiResponse } from "./ai-response";
 
 export interface JournalEntryWithAi {
   id: string;
@@ -34,6 +35,9 @@ interface EntryCardProps {
   entry: JournalEntryWithAi;
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
+  isStreaming?: boolean;
+  streamedText?: string;
+  streamHasCrisisContent?: boolean;
 }
 
 function truncate(text: string, maxLength: number): string {
@@ -41,7 +45,14 @@ function truncate(text: string, maxLength: number): string {
   return text.slice(0, maxLength).trimEnd() + "...";
 }
 
-export function EntryCard({ entry, onEdit, onDelete }: EntryCardProps) {
+export function EntryCard({
+  entry,
+  onEdit,
+  onDelete,
+  isStreaming = false,
+  streamedText = "",
+  streamHasCrisisContent = false,
+}: EntryCardProps) {
   const mood = entry.mood as MoodType;
   const MoodIcon = getMoodIcon(mood);
   const moodColor = MOOD_COLORS[mood]?.light;
@@ -83,14 +94,17 @@ export function EntryCard({ entry, onEdit, onDelete }: EntryCardProps) {
           )}
         </CardContent>
 
-        {entry.aiResponse && (
+        {(entry.aiResponse || isStreaming) && (
           <CardFooter className="pt-0">
-            <div className="flex items-start gap-2 rounded-md bg-muted/50 p-2 w-full">
-              <Sparkles className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-              <p className="text-xs text-muted-foreground italic">
-                {truncate(entry.aiResponse.response, 100)}
-              </p>
-            </div>
+            <AiResponse
+              response={entry.aiResponse?.response ?? null}
+              hasCrisisContent={
+                entry.aiResponse?.hasCrisisContent ?? streamHasCrisisContent
+              }
+              isStreaming={isStreaming}
+              streamedText={streamedText}
+              variant="compact"
+            />
           </CardFooter>
         )}
       </Link>

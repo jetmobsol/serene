@@ -4,12 +4,16 @@ import type { JournalEntryWithAi } from "@/components/journal/entry-card";
 import {
   useDeleteJournalMutation,
   useJournalListQuery,
+  journalQueryKeys,
 } from "@/lib/queries/journal";
 import { groupEntriesByDate } from "@/lib/utils/date-groups";
 import { Button, Skeleton } from "@repo/ui";
 import { useNavigate } from "@tanstack/react-router";
+import { useAtom } from "jotai";
+import { streamingEntryIdAtom, useSseStream } from "@/lib/hooks/use-sse-stream";
+import { useQueryClient } from "@tanstack/react-query";
 import { BookHeart, Loader2 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export function Timeline() {
   const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
@@ -18,6 +22,9 @@ export function Timeline() {
   const deleteMutation = useDeleteJournalMutation();
 
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [streamingEntryId, setStreamingEntryId] = useAtom(streamingEntryIdAtom);
+  const streamState = useSseStream(streamingEntryId);
+  const queryClient = useQueryClient();
 
   const entries: JournalEntryWithAi[] = useMemo(
     () =>
@@ -30,6 +37,23 @@ export function Timeline() {
   );
 
   const groups = useMemo(() => groupEntriesByDate(entries), [entries]);
+
+  useEffect(() => {
+    if (streamState.isComplete && streamingEntryId) {
+      setStreamingEntryId(null);
+      queryClient.invalidateQueries({
+        queryKey: journalQueryKeys.lists(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: journalQueryKeys.detail(streamingEntryId),
+      });
+    }
+  }, [
+    streamState.isComplete,
+    streamingEntryId,
+    setStreamingEntryId,
+    queryClient,
+  ]);
 
   function handleEdit(id: string) {
     navigate({ to: "/journal/$entryId", params: { entryId: id } });
@@ -46,6 +70,9 @@ export function Timeline() {
       });
     }
   }
+
+  const isEntryStreaming = (entryId: string) =>
+    entryId === streamingEntryId && streamState.isStreaming;
 
   if (isLoading) {
     return (
@@ -85,6 +112,17 @@ export function Timeline() {
                   entry={entry}
                   onEdit={handleEdit}
                   onDelete={handleDelete}
+                  isStreaming={isEntryStreaming(entry.id)}
+                  streamedText={
+                    entry.id === streamingEntryId
+                      ? streamState.streamedText
+                      : undefined
+                  }
+                  streamHasCrisisContent={
+                    entry.id === streamingEntryId
+                      ? streamState.hasCrisisContent
+                      : undefined
+                  }
                 />
               ))}
             </div>
