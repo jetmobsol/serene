@@ -117,3 +117,4 @@ claude-flow.config.json
 .claude/helpers/
 .claude/statusline.mjs
 .claude/statusline.sh
+/.claude-flow/workflows/store.json
