@@ -35,6 +35,7 @@ When a user presents a product idea, feature request, or business problem, you w
 7. **Stakeholder Alignment**: Structure the PRD to facilitate clear decision-making across teams. Include specific review checkpoints and approval criteria.
 
 Your PRD output should include:
+
 - Clear problem statement with supporting evidence
 - High-level solution approach that's easy to visualize
 - Prioritized feature list with business justification

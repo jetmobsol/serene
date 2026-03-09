@@ -43,19 +43,25 @@ Phase 3: Advanced (Optimization)
 ## Epic/Story/Task Hierarchy
 
 ### Epic
+
 High-level capability that delivers business value.
+
 - **Duration**: 2-6 weeks
 - **Format**: "Enable [user] to [capability]"
 - **Example**: "Enable customers to receive real-time order notifications"
 
 ### Story
+
 User-facing functionality within an epic.
+
 - **Duration**: 2-5 days
 - **Format**: "As a [user], I want to [action] so that [benefit]"
 - **Example**: "As a customer, I want push notifications so I know when my order ships"
 
 ### Task
+
 Technical work to complete a story.
+
 - **Duration**: 2-8 hours
 - **Format**: "[Verb] [object] [context]"
 - **Example**: "Implement WebSocket connection handler for notification service"
@@ -66,14 +72,14 @@ Technical work to complete a story.
 
 ### T-Shirt Sizing
 
-| Size | Story Points | Typical Duration | Characteristics |
-|------|-------------|------------------|-----------------|
-| XS | 1 | 2-4 hours | Trivial change, no unknowns |
-| S | 2 | 0.5-1 day | Simple, well-understood |
-| M | 3 | 1-2 days | Some complexity, minor unknowns |
-| L | 5 | 3-5 days | Complex, some research needed |
-| XL | 8 | 1-2 weeks | Very complex, significant unknowns |
-| XXL | 13+ | > 2 weeks | Should be broken down |
+| Size | Story Points | Typical Duration | Characteristics                    |
+| ---- | ------------ | ---------------- | ---------------------------------- |
+| XS   | 1            | 2-4 hours        | Trivial change, no unknowns        |
+| S    | 2            | 0.5-1 day        | Simple, well-understood            |
+| M    | 3            | 1-2 days         | Some complexity, minor unknowns    |
+| L    | 5            | 3-5 days         | Complex, some research needed      |
+| XL   | 8            | 1-2 weeks        | Very complex, significant unknowns |
+| XXL  | 13+          | > 2 weeks        | Should be broken down              |
 
 ### Estimation Guidelines
 
@@ -110,6 +116,7 @@ Each phase ends with a validation gate:
 ## Phase 1 Exit Gate
 
 ### Go Criteria
+
 - [ ] Core features functional in staging
 - [ ] Unit test coverage > 70%
 - [ ] Integration tests passing
@@ -117,12 +124,14 @@ Each phase ends with a validation gate:
 - [ ] Security review completed
 
 ### No-Go Signals
+
 - Critical bugs unresolved
 - Core functionality missing
 - Team capacity insufficient for Phase 2
 - Business requirements changed significantly
 
 ### Decision
+
 [ ] GO - Proceed to Phase 2
 [ ] CONDITIONAL GO - Proceed with identified risks
 [ ] NO-GO - Address blockers first
@@ -141,12 +150,12 @@ Each phase ends with a validation gate:
 
 ### Dependency Types
 
-| Type | Description | Mitigation |
-|------|-------------|------------|
-| **Technical** | Service A needs Service B | Start B early, use mocks |
-| **Team** | Need DevOps for deployment | Reserve capacity early |
-| **External** | Third-party API integration | Validate early, have fallback |
-| **Data** | Need production data for testing | Create synthetic data |
+| Type          | Description                      | Mitigation                    |
+| ------------- | -------------------------------- | ----------------------------- |
+| **Technical** | Service A needs Service B        | Start B early, use mocks      |
+| **Team**      | Need DevOps for deployment       | Reserve capacity early        |
+| **External**  | Third-party API integration      | Validate early, have fallback |
+| **Data**      | Need production data for testing | Create synthetic data         |
 
 ### Critical Path Identification
 
@@ -170,49 +179,58 @@ Each phase ends with a validation gate:
 **Architecture Reference**: [Link to architecture doc]
 
 ## Executive Summary
+
 [2-3 sentences on approach and timeline]
 
 ## Timeline Overview
+
 [Visual timeline or Gantt representation]
 
 ## Phase 1: MVP (Weeks 1-8)
 
 ### Phase Goals
+
 - [Goal 1]
 - [Goal 2]
 
 ### Epics
 
 #### Epic 1.1: [Name]
+
 **Duration**: [X weeks]
 **Dependencies**: [List]
 
-| Story | Points | Owner | Dependencies |
-|-------|--------|-------|--------------|
-| [Story 1] | M | [Team] | None |
-| [Story 2] | L | [Team] | Story 1 |
+| Story     | Points | Owner  | Dependencies |
+| --------- | ------ | ------ | ------------ |
+| [Story 1] | M      | [Team] | None         |
+| [Story 2] | L      | [Team] | Story 1      |
 
 **Tasks for Story 1**:
+
 - [ ] [Task 1] (S)
 - [ ] [Task 2] (M)
 
 ### Phase 1 Exit Criteria
+
 - [ ] [Criterion 1]
 - [ ] [Criterion 2]
 
 ### Phase 1 Risks
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
-| [Risk] | High/Med/Low | High/Med/Low | [Action] |
+
+| Risk   | Probability  | Impact       | Mitigation |
+| ------ | ------------ | ------------ | ---------- |
+| [Risk] | High/Med/Low | High/Med/Low | [Action]   |
 
 ---
 
 ## Phase 2: Scale (Weeks 9-16)
+
 [Same structure as Phase 1]
 
 ---
 
 ## Phase 3: Advanced (Weeks 17+)
+
 [Same structure as Phase 1]
 
 ---
@@ -220,37 +238,41 @@ Each phase ends with a validation gate:
 ## Resource Requirements
 
 ### Team Composition
-| Role | Phase 1 | Phase 2 | Phase 3 |
-|------|---------|---------|---------|
-| Backend | 2 FTE | 3 FTE | 2 FTE |
-| Frontend | 1 FTE | 2 FTE | 1 FTE |
-| DevOps | 0.5 FTE | 1 FTE | 0.5 FTE |
+
+| Role     | Phase 1 | Phase 2 | Phase 3 |
+| -------- | ------- | ------- | ------- |
+| Backend  | 2 FTE   | 3 FTE   | 2 FTE   |
+| Frontend | 1 FTE   | 2 FTE   | 1 FTE   |
+| DevOps   | 0.5 FTE | 1 FTE   | 0.5 FTE |
 
 ### Infrastructure Costs
-| Phase | Monthly Cost | Notes |
-|-------|-------------|-------|
-| Phase 1 | $X | Development environment |
-| Phase 2 | $Y | Staging + production |
-| Phase 3 | $Z | Full scale |
+
+| Phase   | Monthly Cost | Notes                   |
+| ------- | ------------ | ----------------------- |
+| Phase 1 | $X           | Development environment |
+| Phase 2 | $Y           | Staging + production    |
+| Phase 3 | $Z           | Full scale              |
 
 ---
 
 ## Success Metrics
 
-| Metric | Phase 1 Target | Phase 2 Target | Phase 3 Target |
-|--------|---------------|----------------|----------------|
-| [Metric 1] | [Value] | [Value] | [Value] |
-| [Metric 2] | [Value] | [Value] | [Value] |
+| Metric     | Phase 1 Target | Phase 2 Target | Phase 3 Target |
+| ---------- | -------------- | -------------- | -------------- |
+| [Metric 1] | [Value]        | [Value]        | [Value]        |
+| [Metric 2] | [Value]        | [Value]        | [Value]        |
 
 ---
 
 ## Appendix
 
 ### Assumptions
+
 - [Assumption 1]
 - [Assumption 2]
 
 ### Open Questions
+
 - [Question 1]
 - [Question 2]
 ```
@@ -260,18 +282,22 @@ Each phase ends with a validation gate:
 ## Anti-Patterns to Avoid
 
 ### The Big Bang
+
 Planning everything in detail upfront without iteration.
 **Fix**: Plan Phase 1 in detail, Phase 2 at epic level, Phase 3 at theme level.
 
 ### The Feature Factory
+
 Listing features without connecting to business outcomes.
 **Fix**: Every epic must connect to a measurable business goal.
 
 ### The Happy Path
+
 No buffer, no risk mitigation, assumes everything goes perfectly.
 **Fix**: Add 25-30% buffer, identify top 5 risks with mitigations.
 
 ### The Kitchen Sink
+
 Including every possible feature in MVP.
 **Fix**: Ruthlessly cut to core value proposition only.
 

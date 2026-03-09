@@ -27,12 +27,12 @@ The web worker is the public-facing edge router:
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | Astro |
-| Server | Hono (middleware) |
-| Deployment | Cloudflare Workers |
-| Assets | Cloudflare Assets (static) |
+| Layer      | Technology                 |
+| ---------- | -------------------------- |
+| Framework  | Astro                      |
+| Server     | Hono (middleware)          |
+| Deployment | Cloudflare Workers         |
+| Assets     | Cloudflare Assets (static) |
 
 ## Project Structure
 
@@ -60,6 +60,7 @@ apps/web/
 ### Routing
 
 The web worker coordinates all three workers:
+
 ```
 Client Request
   ├── /api/*                      → API worker (service binding)
@@ -80,6 +81,7 @@ Cache control on `/`: `Cache-Control: private, no-store` + `Vary: Cookie`.
 ### Service Bindings
 
 Configured in `wrangler.jsonc`:
+
 - `APP_SERVICE` — binds to the app worker
 - `API_SERVICE` — binds to the api worker
 - No public cross-worker URLs — all internal via service bindings

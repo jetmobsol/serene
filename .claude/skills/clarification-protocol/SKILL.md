@@ -19,6 +19,7 @@ Generates focused, challenging questions to extract missing context and clarify 
 ### 1. Maximum 2-3 Questions Per Round
 
 Users lose patience with long questionnaires. Prioritize ruthlessly:
+
 - Ask only what's blocking progress
 - Combine related questions
 - Defer nice-to-have information
@@ -26,12 +27,14 @@ Users lose patience with long questionnaires. Prioritize ruthlessly:
 ### 2. Challenge Mode, Not Interview Mode
 
 Don't just ask—challenge assumptions:
+
 - Bad: "What scale do you need?"
 - Good: "You mentioned 'scalable'—are we designing for 10K users or 10M? That changes the architecture significantly."
 
 ### 3. Provide Example Answers
 
 Help users understand what you're looking for:
+
 - Bad: "What's your timeline?"
 - Good: "What's your timeline? For context, a robust MVP typically takes 8-12 weeks with a team of 4."
 
@@ -41,34 +44,34 @@ Help users understand what you're looking for:
 
 Rank by impact on routing and design:
 
-| Priority | Category | Examples |
-|----------|----------|----------|
-| **P0** | Blocking | Can't proceed without this (e.g., "What problem does AI solve here?") |
-| **P1** | High Impact | Significantly changes approach (e.g., "1K or 100K users?") |
-| **P2** | Medium Impact | Affects details but not direction (e.g., "Budget range?") |
-| **P3** | Nice to Have | Can be discovered later (e.g., "Preferred cloud provider?") |
+| Priority | Category      | Examples                                                              |
+| -------- | ------------- | --------------------------------------------------------------------- |
+| **P0**   | Blocking      | Can't proceed without this (e.g., "What problem does AI solve here?") |
+| **P1**   | High Impact   | Significantly changes approach (e.g., "1K or 100K users?")            |
+| **P2**   | Medium Impact | Affects details but not direction (e.g., "Budget range?")             |
+| **P3**   | Nice to Have  | Can be discovered later (e.g., "Preferred cloud provider?")           |
 
 **Ask P0 first, then P1. Defer P2/P3.**
 
 ### Step 2: Select Question Type
 
-| Type | When to Use | Template |
-|------|-------------|----------|
-| **Scope** | Vague feature description | "When you say [X], do you mean [A] or [B]?" |
-| **Scale** | Missing numbers | "What scale are we designing for? [X] users? [Y] requests/second?" |
-| **Timeline** | Vague deadlines | "What's the actual deadline? Is there flexibility if scope changes?" |
-| **Constraint** | Unknown limitations | "Are there constraints I should know about? Budget, team size, existing systems?" |
-| **Success** | Unclear goals | "How will we know this succeeded? What metrics matter?" |
+| Type           | When to Use               | Template                                                                          |
+| -------------- | ------------------------- | --------------------------------------------------------------------------------- |
+| **Scope**      | Vague feature description | "When you say [X], do you mean [A] or [B]?"                                       |
+| **Scale**      | Missing numbers           | "What scale are we designing for? [X] users? [Y] requests/second?"                |
+| **Timeline**   | Vague deadlines           | "What's the actual deadline? Is there flexibility if scope changes?"              |
+| **Constraint** | Unknown limitations       | "Are there constraints I should know about? Budget, team size, existing systems?" |
+| **Success**    | Unclear goals             | "How will we know this succeeded? What metrics matter?"                           |
 
 ### Step 3: Frame as Challenge
 
 Transform neutral questions into challenging ones:
 
-| Neutral (Weak) | Challenge (Strong) |
-|----------------|-------------------|
+| Neutral (Weak)                    | Challenge (Strong)                                                                                                                                 |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | "What do you mean by AI-powered?" | "'AI-powered' can mean many things—are you trying to classify data, generate content, or make predictions? What specific problem are you solving?" |
-| "What's your budget?" | "Knowing budget helps me avoid over-engineering. Are we optimizing for < $5K/month or is $50K/month acceptable for the right solution?" |
-| "How many users?" | "You mentioned 'scale'—I want to avoid designing for problems you don't have. How many users today, and what's realistic in 12 months?" |
+| "What's your budget?"             | "Knowing budget helps me avoid over-engineering. Are we optimizing for < $5K/month or is $50K/month acceptable for the right solution?"            |
+| "How many users?"                 | "You mentioned 'scale'—I want to avoid designing for problems you don't have. How many users today, and what's realistic in 12 months?"            |
 
 ## Output Format
 
@@ -171,18 +174,22 @@ Once I understand the specific bottleneck, I'll route to the appropriate special
 ## Anti-Patterns to Avoid
 
 ### 1. The Interrogation
+
 **Bad**: Asking 10 questions at once
 **Good**: Max 2-3 targeted questions
 
 ### 2. The Open-Ended Trap
+
 **Bad**: "Tell me more about your requirements"
 **Good**: "Is this for internal users (hundreds) or external customers (thousands+)?"
 
 ### 3. The Assumption Question
+
 **Bad**: "What microservices architecture do you want?" (assumes microservices)
 **Good**: "What's your current architecture, and what's driving the need to change?"
 
 ### 4. The Jargon Barrier
+
 **Bad**: "What's your CAP theorem preference for the distributed system?"
 **Good**: "If the system goes offline briefly, should it prioritize consistency (everyone sees the same data) or availability (the system stays up)?"
 

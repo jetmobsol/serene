@@ -31,19 +31,19 @@ START
 
 ## Agent Routing Matrix
 
-| Request Pattern | Primary Agent | Secondary Agents |
-|-----------------|---------------|------------------|
-| New system architecture | cto-architect | - |
-| Technology selection | cto-architect | - |
-| Implementation roadmap | cto-architect | strategic-cto-mentor (validation) |
-| Plan validation | strategic-cto-mentor | cto-architect (if redesign needed) |
-| Build vs buy decision | strategic-cto-mentor | cto-architect (if build selected) |
-| Timeline stress-test | strategic-cto-mentor | - |
-| ML/AI specific design | cv-ml-architect | cto-architect (integration) |
-| Code review | code-reviewer | - |
-| Test strategy | test-writer | - |
-| Bug investigation | debug-helper | code-reviewer |
-| Documentation | docs-writer | - |
+| Request Pattern         | Primary Agent        | Secondary Agents                   |
+| ----------------------- | -------------------- | ---------------------------------- |
+| New system architecture | cto-architect        | -                                  |
+| Technology selection    | cto-architect        | -                                  |
+| Implementation roadmap  | cto-architect        | strategic-cto-mentor (validation)  |
+| Plan validation         | strategic-cto-mentor | cto-architect (if redesign needed) |
+| Build vs buy decision   | strategic-cto-mentor | cto-architect (if build selected)  |
+| Timeline stress-test    | strategic-cto-mentor | -                                  |
+| ML/AI specific design   | cv-ml-architect      | cto-architect (integration)        |
+| Code review             | code-reviewer        | -                                  |
+| Test strategy           | test-writer          | -                                  |
+| Bug investigation       | debug-helper         | code-reviewer                      |
+| Documentation           | docs-writer          | -                                  |
 
 ## Complexity Assessment Criteria
 
@@ -55,6 +55,7 @@ START
 - No dependencies on other agent outputs
 
 **Examples:**
+
 - "Design a REST API for user management"
 - "Review this authentication code"
 - "Is my database schema solid?"
@@ -68,6 +69,7 @@ START
 **Pattern:** Agent A → Agent B → [Optional: Agent C]
 
 **Examples:**
+
 - "Design and then validate our new architecture"
 - "Create roadmap, then stress-test the timeline"
 - "Build test strategy after reviewing the code"
@@ -81,6 +83,7 @@ START
 **Pattern:** [Agent A, Agent B, Agent C] → Synthesize
 
 **Examples:**
+
 - "Full system design: backend, ML pipeline, and mobile app"
 - "Review security, performance, and maintainability"
 
@@ -89,12 +92,14 @@ START
 ### Strategic Intent
 
 **Indicators:**
+
 - Future-focused language
 - Resource allocation discussions
 - Prioritization questions
 - Long-term planning
 
 **Key phrases:**
+
 - "Our roadmap for..."
 - "Should we prioritize..."
 - "What's the strategy for..."
@@ -103,12 +108,14 @@ START
 ### Implementation Intent
 
 **Indicators:**
+
 - Building something new
 - Technical specifications
 - Architecture questions
 - Stack selection
 
 **Key phrases:**
+
 - "How do we build..."
 - "What's the best way to implement..."
 - "Design a system that..."
@@ -117,12 +124,14 @@ START
 ### Debugging Intent
 
 **Indicators:**
+
 - Something is broken
 - Performance issues
 - Unexpected behavior
 - Error messages
 
 **Key phrases:**
+
 - "Why is X not working..."
 - "How do I fix..."
 - "Getting this error..."
@@ -131,12 +140,14 @@ START
 ### Documentation Intent
 
 **Indicators:**
+
 - Explaining existing systems
 - Creating references
 - Onboarding materials
 - API documentation
 
 **Key phrases:**
+
 - "Document how X works..."
 - "Write a guide for..."
 - "Explain the architecture of..."

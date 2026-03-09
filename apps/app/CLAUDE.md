@@ -27,17 +27,17 @@ The app is the main user-facing SPA:
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | React 19 |
-| Routing | TanStack Router (file-based) |
-| Server State | TanStack Query + tRPC |
-| Client State | Jotai |
-| UI | shadcn/ui (new-york), Tailwind CSS v4 |
-| Auth | Better Auth client (passkey, Stripe) |
-| Build | Vite (SWC, code splitting: react, tanstack, ui chunks) |
-| Testing | Vitest, Happy DOM |
-| Deployment | Cloudflare Workers (static assets) |
+| Layer        | Technology                                             |
+| ------------ | ------------------------------------------------------ |
+| Framework    | React 19                                               |
+| Routing      | TanStack Router (file-based)                           |
+| Server State | TanStack Query + tRPC                                  |
+| Client State | Jotai                                                  |
+| UI           | shadcn/ui (new-york), Tailwind CSS v4                  |
+| Auth         | Better Auth client (passkey, Stripe)                   |
+| Build        | Vite (SWC, code splitting: react, tanstack, ui chunks) |
+| Testing      | Vitest, Happy DOM                                      |
+| Deployment   | Cloudflare Workers (static assets)                     |
 
 ## Project Structure
 
@@ -104,6 +104,7 @@ bun app:test               # Run tests (Vitest)
 ## Path Aliases
 
 Use `~/` prefix for imports within the app:
+
 ```typescript
 import { Button } from "~/components/ui/button";
 import { useSessionQuery } from "~/lib/queries/session";

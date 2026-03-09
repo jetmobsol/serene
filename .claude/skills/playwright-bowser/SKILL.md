@@ -34,6 +34,7 @@ playwright-cli -s=mystore-checkout click e12
 ```
 
 Managing sessions:
+
 ```bash
 playwright-cli list                                     # list all sessions
 playwright-cli close-all                                # close all sessions
@@ -60,6 +61,7 @@ Config:     open --headed, open --browser=chrome, resize <w> <h>
 ## Workflow
 
 1. Derive a session name from the user's prompt and open with `--persistent` to preserve cookies/state. Always set the viewport via env var at launch:
+
 ```bash
 PLAYWRIGHT_MCP_VIEWPORT_SIZE=1440x900 playwright-cli -s=<session-name> open <url> --persistent
 # or headed:
@@ -69,11 +71,13 @@ PLAYWRIGHT_MCP_VIEWPORT_SIZE=1440x900 PLAYWRIGHT_MCP_CAPS=vision playwright-cli 
 ```
 
 3. Get element references via snapshot:
+
 ```bash
 playwright-cli snapshot
 ```
 
 4. Interact using refs from snapshot:
+
 ```bash
 playwright-cli click <ref>
 playwright-cli fill <ref> "text"
@@ -82,12 +86,14 @@ playwright-cli press Enter
 ```
 
 5. Capture results:
+
 ```bash
 playwright-cli screenshot
 playwright-cli screenshot --filename=output.png
 ```
 
 6. **Always close the session when done.** This is not optional — close the named session after finishing your task:
+
 ```bash
 playwright-cli -s=<session-name> close
 ```

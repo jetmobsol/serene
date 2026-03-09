@@ -19,35 +19,43 @@ Transforms validation analysis into structured, actionable reports that provide 
 Every validation report follows the **8-Section Format**:
 
 ### Section 1: Verdict
+
 **Purpose**: Unambiguous assessment with confidence level
 
 **Options**:
+
 - **GOOD**: Ready for implementation (may have minor suggestions)
 - **NEEDS MAJOR WORK**: Fundamentally sound but has significant gaps
 - **BAD**: Should not proceed without fundamental rethinking
 
 **Include**:
+
 - Clear verdict (one of the three options)
 - Confidence level (High/Medium/Low)
 - One-sentence summary of why
 
 ### Section 2: What You Got Right
+
 **Purpose**: Acknowledge genuine strengths (builds trust for criticism)
 
 **Include**:
+
 - 2-3 specific things done well
 - Why each matters
 - What to preserve in revisions
 
 **Avoid**:
+
 - Generic praise ("good work!")
 - Inflating minor positives
 - Praising the obvious
 
 ### Section 3: Critical Flaws
+
 **Purpose**: Expose fatal or near-fatal weaknesses
 
 **Format for each flaw**:
+
 ```
 **Flaw**: [What's wrong]
 **Why It Matters**: [Business/technical impact]
@@ -55,14 +63,17 @@ Every validation report follows the **8-Section Format**:
 ```
 
 **Include**:
+
 - Prioritized list (most critical first)
 - Specific evidence, not vague concerns
 - Impact quantification where possible
 
 ### Section 4: What You're Not Considering
+
 **Purpose**: Surface blindspots and hidden assumptions
 
 **Types of blindspots**:
+
 - Unstated assumptions (treated as facts)
 - Ignored failure modes
 - Missing stakeholders
@@ -70,33 +81,40 @@ Every validation report follows the **8-Section Format**:
 - Scale implications not considered
 
 **Include**:
+
 - What was assumed vs. what should be validated
 - Questions that should have been asked
 - Scenarios that weren't explored
 
 ### Section 5: The Real Question
+
 **Purpose**: Reframe if solving wrong problem
 
 **When to use**:
+
 - Problem definition is too narrow/broad
 - Symptoms treated instead of root cause
 - Constraint accepted that should be challenged
 - Solution in search of a problem
 
 **Format**:
+
 > "You're asking [stated question], but the real question might be [reframed question]."
 
 **Skip if**: The problem is correctly framed (state this explicitly)
 
 ### Section 6: What Bulletproof Looks Like
+
 **Purpose**: Define success criteria for revision
 
 **Include**:
+
 - Specific criteria for acceptable solution
 - Measurable outcomes
 - What evidence would prove the concerns addressed
 
 **Format**:
+
 ```
 For this to be ready for implementation:
 - [ ] [Criterion 1]
@@ -105,27 +123,33 @@ For this to be ready for implementation:
 ```
 
 ### Section 7: Recommended Path Forward
+
 **Purpose**: Concrete next steps
 
 **If GOOD**:
+
 - Any minor improvements before proceeding
 - What to monitor during implementation
 - Validation checkpoints
 
 **If NEEDS MAJOR WORK**:
+
 - Specific areas to revise
 - Suggested approach for each
 - Whether to route back to architect
 
 **If BAD**:
+
 - Alternative approaches to consider
 - What fundamental rethinking is needed
 - Whether to restart with different framing
 
 ### Section 8: Questions You Need to Answer First
+
 **Purpose**: Information gaps blocking progress
 
 **Include**:
+
 - Questions that must be answered before proceeding
 - Who can answer each question
 - What decisions are blocked until answered
@@ -135,7 +159,9 @@ For this to be ready for implementation:
 ## Generating the Report
 
 ### Step 1: Gather Analysis
+
 Before generating report, ensure you have completed:
+
 - [ ] Assumption identification
 - [ ] Risk assessment (7 dimensions)
 - [ ] Anti-pattern detection
@@ -143,9 +169,11 @@ Before generating report, ensure you have completed:
 - [ ] Team capacity evaluation
 
 ### Step 2: Determine Verdict
+
 Use the [Verdict Criteria](verdict-criteria.md) to classify:
 
 **GOOD if**:
+
 - Core assumptions are valid
 - Timeline is realistic
 - Budget is appropriate
@@ -154,12 +182,14 @@ Use the [Verdict Criteria](verdict-criteria.md) to classify:
 - No fundamental anti-patterns
 
 **NEEDS MAJOR WORK if**:
+
 - Core approach is sound but...
 - Significant gaps exist in 2+ areas
 - Timeline/budget needs adjustment
 - Some assumptions need validation
 
 **BAD if**:
+
 - Core assumptions are invalid
 - Fundamental anti-pattern detected
 - Timeline is fantasy
@@ -168,22 +198,26 @@ Use the [Verdict Criteria](verdict-criteria.md) to classify:
 - Wrong problem being solved
 
 ### Step 3: Gather Evidence
+
 For each section, cite specific evidence:
+
 - Quote from the proposal
 - Data points that contradict claims
 - Industry benchmarks
 - Historical precedent
 
 ### Step 4: Calibrate Tone
+
 Match tone to verdict:
 
-| Verdict | Tone |
-|---------|------|
-| GOOD | Affirming with minor suggestions |
-| NEEDS MAJOR WORK | Constructive but direct |
-| BAD | Brutally honest but respectful |
+| Verdict          | Tone                             |
+| ---------------- | -------------------------------- |
+| GOOD             | Affirming with minor suggestions |
+| NEEDS MAJOR WORK | Constructive but direct          |
+| BAD              | Brutally honest but respectful   |
 
 ### Step 5: Write Report
+
 Use the [Report Template](report-template.md) to structure output.
 
 ---
@@ -202,6 +236,7 @@ Use the [Report Template](report-template.md) to structure output.
 ## 1. Verdict
 
 ### VERDICT: [GOOD / NEEDS MAJOR WORK / BAD]
+
 **Confidence**: [High / Medium / Low]
 
 [One-sentence summary of why this verdict]
@@ -217,10 +252,12 @@ Use the [Report Template](report-template.md) to structure output.
 ## 3. Critical Flaws
 
 ### Flaw 1: [Title]
+
 **Why It Matters**: [Impact]
 **Consequence**: [What happens if not addressed]
 
 ### Flaw 2: [Title]
+
 ...
 
 ---
@@ -240,6 +277,7 @@ Use the [Report Template](report-template.md) to structure output.
 ## 6. What Bulletproof Looks Like
 
 For this to be ready for implementation:
+
 - [ ] [Criterion 1]
 - [ ] [Criterion 2]
 - [ ] [Criterion 3]
@@ -254,13 +292,13 @@ For this to be ready for implementation:
 
 ## 8. Questions You Need to Answer First
 
-| Question | Who Can Answer | Blocks |
-|----------|---------------|--------|
-| [Question 1] | [Person/Team] | [Decision blocked] |
+| Question     | Who Can Answer | Blocks             |
+| ------------ | -------------- | ------------------ |
+| [Question 1] | [Person/Team]  | [Decision blocked] |
 
 ---
 
-*This validation was conducted by strategic-cto-mentor using standard validation protocol.*
+_This validation was conducted by strategic-cto-mentor using standard validation protocol._
 ```
 
 ---
