@@ -1,0 +1,18 @@
+stories:
+  - name: "Login page has working navigation to signup"
+    url: "http://localhost:5173/login"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Verify the login page loads
+      Find and click the link to the signup page
+      Verify the URL changes to /signup
+      Verify the signup form is visible
+
+  - name: "Signup page has working navigation to login"
+    url: "http://localhost:5173/signup"
+    workflow: |
+      Navigate to http://localhost:5173/signup
+      Verify the signup page loads
+      Find and click the link to the login page
+      Verify the URL changes to /login
+      Verify the login form is visible

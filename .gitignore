@@ -68,6 +68,9 @@ srcpack.config.ts
 *.local.jsonc
 *.local.ts
 
+# Browser automation screenshots
+screenshots/
+
 # macOS
 # https://github.com/github/gitignore/blob/master/Global/macOS.gitignore
 .DS_Store

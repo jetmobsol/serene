@@ -30,3 +30,15 @@ docker-stop:
 
 commit-pi:
     pi -p "/commit-commands-commit" --model zai/glm-5 --tools "bash" --no-extensions --no-skills --no-session
+
+# ============================================
+# BROWSER AUTOMATION (BOWSER)
+# ============================================
+
+# Run all user stories in parallel via bowser QA agents
+ui-review *args:
+    claude "/ui-review {{args}}"
+
+# Run user stories with visible browser
+ui-review-headed *args:
+    claude "/ui-review headed {{args}}"

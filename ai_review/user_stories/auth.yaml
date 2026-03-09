@@ -1,0 +1,25 @@
+stories:
+  - name: "Login page loads correctly"
+    url: "http://localhost:5173/login"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Verify the login page loads successfully
+      Verify an email input field is visible
+      Verify a submit/continue button exists
+      Verify a "Continue with Google" or social login option is present
+
+  - name: "Signup page loads correctly"
+    url: "http://localhost:5173/signup"
+    workflow: |
+      Navigate to http://localhost:5173/signup
+      Verify the signup page loads successfully
+      Verify an email input field is visible
+      Verify a submit/continue button exists
+      Verify a link to switch to login is present
+
+  - name: "Unauthenticated user redirected to login"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Verify the page redirects to the login page
+      Verify the URL contains /login
