@@ -25,8 +25,8 @@ export const journalEntry = pgTable(
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
     mood: text().notNull(),
-    // Stored as JSON array string: '["Work","Sleep"]'
-    tags: text().notNull().default("[]"),
+    // PostgreSQL text array — enables SQL-level aggregation for analytics queries
+    tags: text().array().notNull().default([]),
     note: text().default(""),
     createdAt: timestamp({ withTimezone: true, mode: "date" })
       .defaultNow()
@@ -73,9 +73,7 @@ export const aiResponse = pgTable(
       .defaultNow()
       .notNull(),
   },
-  (table) => [
-    index("ai_response_entry_id_idx").on(table.entryId),
-  ],
+  (table) => [index("ai_response_entry_id_idx").on(table.entryId)],
 );
 
 export type AiResponse = typeof aiResponse.$inferSelect;
@@ -114,6 +112,7 @@ export const aiResponseRelations = relations(aiResponse, ({ one }) => ({
 ## 6.4 Schema Export
 
 Update `db/schema/index.ts`:
+
 ```typescript
 export * from "./journal";
 export * from "./ai-response";

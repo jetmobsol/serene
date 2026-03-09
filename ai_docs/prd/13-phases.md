@@ -9,6 +9,7 @@
 **Goal:** Database schema, shared types, and core API infrastructure.
 
 **Tasks:**
+
 1. Create `db/schema/journal.ts` and `db/schema/ai-response.ts`.
 2. Update `db/schema/index.ts` with new exports.
 3. Create `packages/core/src/journal.ts` with mood types, tag types, mood scores, and color mappings.
@@ -16,8 +17,10 @@
 5. Run `bun db:push` to sync schema.
 6. Update `.env.example` with `ANTHROPIC_API_KEY`.
 7. Update `docker-compose.yml` with new environment variable.
+8. Remove existing OpenAI integration: delete `apps/api/lib/ai.ts`, uninstall `@ai-sdk/openai`.
 
 **Definition of Done for Phase 1:**
+
 - [ ] Database tables `journal_entry` and `ai_response` exist and accept inserts.
 - [ ] Shared types compile and pass unit tests.
 - [ ] `bun db:push` succeeds.
@@ -30,18 +33,25 @@
 **Goal:** Complete tRPC journal router with full test coverage.
 
 **Tasks:**
+
 1. Write failing tests for `journal.create`, `journal.list`, `journal.getById`, `journal.update`, `journal.delete`.
 2. Implement `apps/api/routers/journal.ts`.
 3. Register journal router in `apps/api/lib/app.ts`.
 4. Write integration tests verifying ownership enforcement.
 5. Write tests for pagination (cursor-based).
 6. Write tests for input validation (invalid moods, oversized notes).
+7. Implement `user.exportData` procedure — exports all journal entries + AI responses as JSON (GDPR Article 20).
+8. Implement `user.deleteAccount` procedure — deletes user account with cascade to all journal data (GDPR Article 17).
+9. Add explicit consent checkbox to signup flow (data storage + Anthropic API processing consent).
 
 **Definition of Done for Phase 2:**
+
 - [ ] All 5 journal CRUD procedures pass tests.
 - [ ] Ownership enforcement tested (user A cannot read user B's entries).
 - [ ] Cursor pagination tested with 50+ fixture entries.
 - [ ] Input validation rejects invalid moods, tags, and notes > 5000 chars.
+- [ ] Data export returns complete JSON of user's entries + AI responses.
+- [ ] Account deletion cascades to all journal data (verified in tests).
 
 ---
 
@@ -50,6 +60,7 @@
 **Goal:** Anthropic integration with streaming and safety guardrails.
 
 **Tasks:**
+
 1. Create `apps/api/lib/anthropic.ts` (request-scoped client).
 2. Create `apps/api/lib/safety.ts` (crisis detection, gibberish detection).
 3. Write tests for safety module.
@@ -58,14 +69,18 @@
 6. Implement `apps/api/routers/ai.ts` (non-streaming mutation).
 7. Implement SSE streaming endpoint in `apps/api/lib/app.ts`.
 8. Write integration tests for AI router (mocking Anthropic API).
-9. Implement rate limiting.
+9. Implement rate limiting via Cloudflare KV (`AI_RATE_LIMIT` namespace binding).
+10. Add `AI_RATE_LIMIT` KV namespace to `apps/api/wrangler.jsonc`.
+11. Implement SSE timeout handling (10s abort) and client disconnect detection.
 
 **Definition of Done for Phase 3:**
+
 - [ ] AI vibe check generates appropriate responses for test fixtures.
 - [ ] Crisis content detection catches all defined keywords.
 - [ ] Gibberish detection returns generic response for nonsensical input.
 - [ ] Streaming endpoint sends SSE events correctly.
-- [ ] Rate limiting returns 429 after 20 requests/hour.
+- [ ] Rate limiting via Cloudflare KV returns 429 after 20 requests/hour.
+- [ ] SSE streaming aborts after 10s timeout with user-friendly error event.
 - [ ] Anthropic API errors are handled gracefully (retry, fallback message).
 
 ---
@@ -75,6 +90,7 @@
 **Goal:** Complete journal UI with entry form, timeline, and AI response display.
 
 **Tasks:**
+
 1. Add new shadcn/ui components: `badge`, `toast`, `dropdown-menu`, `alert-dialog`.
 2. Write component tests for `MoodSelector`, `TagChips`, `NoteEditor`.
 3. Implement `MoodSelector`, `TagChips`, `NoteEditor` components.
@@ -89,6 +105,7 @@
 12. Create TanStack Query hooks in `apps/app/lib/queries/journal.ts`.
 
 **Definition of Done for Phase 4:**
+
 - [ ] User can create a journal entry with mood, tags, and note.
 - [ ] Timeline displays entries grouped by date with color-coded cards.
 - [ ] AI response streams into the entry card after save.
@@ -103,6 +120,7 @@
 **Goal:** Mood analytics charts and insights page.
 
 **Tasks:**
+
 1. Implement `apps/api/routers/analytics.ts` (write tests first).
 2. Install `recharts` in `apps/app`.
 3. Write component tests for chart components.
@@ -111,6 +129,7 @@
 6. Create TanStack Query hooks in `apps/app/lib/queries/analytics.ts`.
 
 **Definition of Done for Phase 5:**
+
 - [ ] Weekly mood distribution bar chart renders with correct data.
 - [ ] 30-day mood trend line chart renders with daily averages.
 - [ ] Tag correlation table shows correct average mood scores.
@@ -125,6 +144,7 @@
 **Goal:** Calm landing page, Serene README, Cloudflare deployment docs, branding updates, and final polish.
 
 **Tasks:**
+
 1. Replace `apps/web/pages/index.astro` content with Serene landing page.
 2. Update `apps/web/pages/features.astro` with Serene features.
 3. Update `apps/web/pages/pricing.astro` (or remove if not applicable).
@@ -142,6 +162,7 @@
 15. Final cross-browser testing.
 
 **Definition of Done for Phase 6:**
+
 - [ ] Landing page achieves Lighthouse performance score >= 90.
 - [ ] Landing page achieves Lighthouse accessibility score >= 95.
 - [ ] Calm aesthetic is consistent across landing page and app.
@@ -161,6 +182,7 @@
 **Goal:** End-to-end validation and bug fixes.
 
 **Tasks:**
+
 1. Full user flow walkthrough: sign up, create entries, view timeline, view analytics.
 2. Cross-browser testing (Chrome, Firefox, Safari).
 3. Mobile responsive testing (375px, 768px, 1024px, 1440px).
@@ -169,6 +191,7 @@
 6. Fix all identified issues.
 
 **Definition of Done for Phase 7:**
+
 - [ ] Complete user flow works without errors.
 - [ ] No console errors in production build.
 - [ ] All tests pass (`bun test --run`).
@@ -182,6 +205,7 @@
 A feature is considered DONE when ALL of the following criteria are met:
 
 ### Code Quality
+
 - [ ] Code follows project style guide (Prettier, ESLint — zero warnings).
 - [ ] TypeScript strict mode passes with no errors (`bun typecheck`).
 - [ ] No `any` types (use precise types or generics).
@@ -189,6 +213,7 @@ A feature is considered DONE when ALL of the following criteria are met:
 - [ ] Imports use workspace aliases (`@repo/ui`, `@repo/core`, `~/lib/...`).
 
 ### Testing
+
 - [ ] Unit tests written BEFORE implementation (TDD).
 - [ ] All tests pass (`bun test --run`).
 - [ ] Unit test coverage >= 90% for utility modules.
@@ -197,6 +222,7 @@ A feature is considered DONE when ALL of the following criteria are met:
 - [ ] Edge cases tested (empty states, error states, boundary values).
 
 ### Functionality
+
 - [ ] Feature works as described in acceptance criteria.
 - [ ] Data isolation enforced (users can only access their own data).
 - [ ] Error states are handled gracefully (toast notifications, error boundaries).
@@ -204,6 +230,7 @@ A feature is considered DONE when ALL of the following criteria are met:
 - [ ] Optimistic updates are used where appropriate (create, delete).
 
 ### Accessibility
+
 - [ ] Keyboard navigation works for all interactive elements.
 - [ ] Screen reader announces relevant state changes.
 - [ ] Color contrast meets WCAG 2.1 AA (4.5:1 for normal text).
@@ -211,23 +238,27 @@ A feature is considered DONE when ALL of the following criteria are met:
 - [ ] `prefers-reduced-motion` is respected.
 
 ### Performance
+
 - [ ] No unnecessary re-renders (React DevTools Profiler).
 - [ ] Images and assets are optimized.
 - [ ] Bundle size impact is reasonable (< 50KB gzipped for new feature code).
 - [ ] Database queries use appropriate indexes.
 
 ### Documentation
+
 - [ ] Complex logic has explanatory comments (why, not what).
 - [ ] New environment variables are documented in `.env.example`.
 - [ ] API changes are reflected in tRPC type exports.
 - [ ] ADR created for significant architectural decisions.
 
 ### DevOps
+
 - [ ] `docker-compose up` starts clean and runs all services.
 - [ ] Seed script includes relevant test data.
 - [ ] No hardcoded secrets or environment-specific values in code.
 
 ### Documentation (Phase 6 specific)
+
 - [ ] README.md is fully rewritten for Serene (no template references remain).
 - [ ] Cloudflare deployment guide exists in `docs/deployment/`.
 - [ ] Infrastructure setup guide exists in `docs/deployment/`.

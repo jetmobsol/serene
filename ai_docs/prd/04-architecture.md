@@ -20,20 +20,28 @@ No architectural changes to the worker topology or service binding pattern. New 
 
 ## 5.2 Monorepo Module Mapping
 
-| Feature Domain | API Module | App Module | Shared Types |
-|----------------|-----------|------------|--------------|
-| Mood Journaling | `apps/api/routers/journal.ts` | `apps/app/routes/(app)/journal/` | `packages/core/src/journal.ts` |
-| AI Vibe Check | `apps/api/routers/ai.ts` | (consumed via journal components) | `packages/core/src/ai.ts` |
+| Feature Domain   | API Module                      | App Module                            | Shared Types                     |
+| ---------------- | ------------------------------- | ------------------------------------- | -------------------------------- |
+| Mood Journaling  | `apps/api/routers/journal.ts`   | `apps/app/routes/(app)/journal/`      | `packages/core/src/journal.ts`   |
+| AI Vibe Check    | `apps/api/routers/ai.ts`        | (consumed via journal components)     | `packages/core/src/ai.ts`        |
 | Visual Analytics | `apps/api/routers/analytics.ts` | `apps/app/routes/(app)/analytics.tsx` | `packages/core/src/analytics.ts` |
-| Landing Page | N/A | N/A | N/A (Astro pages in `apps/web/`) |
+| Landing Page     | N/A                             | N/A                                   | N/A (Astro pages in `apps/web/`) |
 
-## 5.3 New Dependencies
+## 5.3 Dependency Changes
 
-| Package | Purpose | Install Location |
-|---------|---------|-----------------|
-| `@anthropic-ai/sdk` | Claude API client | `apps/api` |
-| `recharts` | Chart visualization | `apps/app` |
-| `date-fns` | Date manipulation and formatting | `packages/core` |
+**Add:**
+
+| Package             | Purpose                          | Install Location |
+| ------------------- | -------------------------------- | ---------------- |
+| `@anthropic-ai/sdk` | Claude API client                | `apps/api`       |
+| `recharts`          | Chart visualization              | `apps/app`       |
+| `date-fns`          | Date manipulation and formatting | `packages/core`  |
+
+**Remove:**
+
+| Package          | Reason                                                              | Location   |
+| ---------------- | ------------------------------------------------------------------- | ---------- |
+| `@ai-sdk/openai` | Replaced by `@anthropic-ai/sdk` — Serene uses Anthropic exclusively | `apps/api` |
 
 ## 5.4 API Module Structure (Detailed)
 
@@ -47,7 +55,7 @@ apps/api/
     analytics.ts          # tRPC router: mood analytics queries
     analytics.test.ts     # Tests for analytics router
   lib/
-    anthropic.ts          # Request-scoped Anthropic client (Symbol + ctx.cache pattern)
+    anthropic.ts          # Request-scoped Anthropic client (replaces ai.ts OpenAI provider)
     safety.ts             # Crisis keyword detection + gibberish detection
     safety.test.ts        # Tests for safety module
     prompts.ts            # System prompt builder for AI vibe check

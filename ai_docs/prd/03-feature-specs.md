@@ -11,6 +11,7 @@
 **Location:** `apps/web/pages/index.astro` (replace existing starter kit content)
 
 **Design Requirements:**
+
 - Color palette: Soft sage green (`oklch(0.85 0.05 155)`), warm ivory background, muted lavender accents.
 - Typography: Large, breathable headings with generous letter-spacing. Body text at comfortable reading size (18px).
 - Hero image or illustration: Abstract, calming graphic (waves, gradients, or minimalist nature motifs). No photographs of people.
@@ -18,6 +19,7 @@
 - Animation: Subtle fade-in on scroll (CSS-only, no heavy JS animation libraries).
 
 **Content Structure:**
+
 1. **Headline:** "Find Your Calm. One Entry at a Time."
 2. **Subheadline:** "Serene is your private AI-powered wellness journal. Log your mood, write your thoughts, and receive gentle encouragement — all in under 60 seconds."
 3. **Primary CTA:** "Start Journaling" (links to `/signup`)
@@ -31,6 +33,7 @@
 ### 4A.2 Authentication
 
 **Existing Infrastructure (no new development needed):**
+
 - Better Auth server config in `apps/api/lib/auth.ts`
 - Email/password with OTP verification
 - Google OAuth
@@ -40,6 +43,7 @@
 - Auth-hint cookie for edge routing (ADR-001)
 
 **Adaptation Required:**
+
 - Update `APP_NAME` from "Acme Co." to "Serene" in environment variables.
 - Update sidebar branding from "Console" to "Serene" in `apps/app/components/layout/sidebar.tsx`.
 - Update sidebar navigation items to reflect journal-specific routes.
@@ -59,33 +63,34 @@
 
 **Mood Values and Metadata:**
 
-| Mood | Score | Color (light) | Color (dark) | Icon (lucide-react) |
-|------|-------|----------------|--------------|---------------------|
-| Happy | 5 | `oklch(0.85 0.15 145)` (green) | `oklch(0.45 0.15 145)` | `Smile` |
-| Calm | 4 | `oklch(0.85 0.10 220)` (blue) | `oklch(0.45 0.10 220)` | `CloudSun` |
-| Anxious | 2 | `oklch(0.85 0.15 75)` (amber) | `oklch(0.45 0.15 75)` | `Zap` |
-| Sad | 2 | `oklch(0.85 0.10 260)` (indigo) | `oklch(0.45 0.10 260)` | `CloudRain` |
-| Overwhelmed | 1 | `oklch(0.85 0.15 30)` (orange) | `oklch(0.45 0.15 30)` | `Waves` |
-| Angry | 1 | `oklch(0.85 0.18 25)` (red) | `oklch(0.45 0.18 25)` | `Flame` |
+| Mood        | Score | Color (light)                   | Color (dark)           | Icon (lucide-react) |
+| ----------- | ----- | ------------------------------- | ---------------------- | ------------------- |
+| Happy       | 5     | `oklch(0.85 0.15 145)` (green)  | `oklch(0.45 0.15 145)` | `Smile`             |
+| Calm        | 4     | `oklch(0.85 0.10 220)` (blue)   | `oklch(0.45 0.10 220)` | `CloudSun`          |
+| Anxious     | 2     | `oklch(0.85 0.15 75)` (amber)   | `oklch(0.45 0.15 75)`  | `Zap`               |
+| Sad         | 2     | `oklch(0.85 0.10 260)` (indigo) | `oklch(0.45 0.10 260)` | `CloudRain`         |
+| Overwhelmed | 1     | `oklch(0.85 0.15 30)` (orange)  | `oklch(0.45 0.15 30)`  | `Waves`             |
+| Angry       | 1     | `oklch(0.85 0.18 25)` (red)     | `oklch(0.45 0.18 25)`  | `Flame`             |
 
 **Tag Values:**
 
-| Tag | Icon (lucide-react) |
-|-----|---------------------|
-| Work | `Briefcase` |
-| Sleep | `Moon` |
-| Relationships | `Heart` |
-| Fitness | `Dumbbell` |
-| Hobbies | `Palette` |
-| Health | `Stethoscope` |
-| Social | `Users` |
-| Nature | `TreePine` |
+| Tag           | Icon (lucide-react) |
+| ------------- | ------------------- |
+| Work          | `Briefcase`         |
+| Sleep         | `Moon`              |
+| Relationships | `Heart`             |
+| Fitness       | `Dumbbell`          |
+| Hobbies       | `Palette`           |
+| Health        | `Stethoscope`       |
+| Social        | `Users`             |
+| Nature        | `TreePine`          |
 
 These values are defined as TypeScript constants in `packages/core/src/journal.ts` and shared between API validation (Zod enums) and frontend rendering.
 
 ### 4B.2 Dynamic Timeline
 
 **Grouping Logic:**
+
 - "Today": entries where `createdAt` is today in user's local timezone.
 - "Yesterday": entries where `createdAt` is yesterday.
 - "This Week": entries from the current Monday-Sunday period (excluding today/yesterday).
@@ -94,6 +99,7 @@ These values are defined as TypeScript constants in `packages/core/src/journal.t
 **NOTE:** Date grouping is performed client-side using the entry's UTC `createdAt` timestamp converted to the user's local timezone via `Intl.DateTimeFormat`. The server provides entries in reverse chronological order; the client groups them.
 
 **Pagination:**
+
 - Cursor-based pagination using `createdAt` + `id` as cursor.
 - Page size: 20 entries.
 - TanStack Query infinite query pattern with `getNextPageParam`.
@@ -103,6 +109,7 @@ These values are defined as TypeScript constants in `packages/core/src/journal.t
 **Chart Library:** Recharts (React-native charting, already compatible with the stack).
 
 **Charts:**
+
 1. **Weekly Mood Distribution Bar Chart** (US-AN-001): Horizontal bar chart grouped by mood type.
 2. **30-Day Mood Trend Line Chart** (US-AN-002): Area chart with daily average mood scores.
 3. **Tag Correlation Summary** (US-AN-003): Simple table/list view (no chart library dependency).
@@ -126,6 +133,7 @@ Rules:
 6. If the user expresses a positive mood, celebrate with them.
 7. If the user expresses a negative mood, acknowledge the difficulty and normalize the feeling.
 8. Do not ask questions. Your response is a statement of support, not a conversation opener.
+9. If the user's note expresses genuine suicidal ideation, self-harm intent, or a desire to end their life, begin your response with the exact marker [CRISIS_DETECTED]. Only flag genuine distress — do not flag casual expressions like "that killed me" or "I'm dying of laughter."
 
 Context provided:
 - Mood: {mood}
@@ -143,23 +151,58 @@ Context provided:
 
 ### 4C.3 Safety Guardrails Implementation
 
-**Trigger Word Detection (server-side, pre-AI-call):**
+**Dual-Layer Crisis Detection:**
+
+Crisis detection uses two complementary layers to minimize both false negatives (missing real crises) and false positives (flagging benign content):
+
+**Layer 1: Keyword Pre-Screen (server-side, pre-AI-call)**
+
+A fast keyword check flags _potential_ crisis content before calling the AI. This layer errs on the side of caution — false positives are refined by Layer 2.
 
 ```typescript
 const CRISIS_KEYWORDS = [
-  "suicide", "suicidal", "kill myself", "end my life",
-  "self-harm", "self harm", "cutting myself", "hurt myself",
-  "want to die", "don't want to live", "no reason to live",
+  "suicide",
+  "suicidal",
+  "kill myself",
+  "end my life",
+  "self-harm",
+  "self harm",
+  "cutting myself",
+  "hurt myself",
+  "want to die",
+  "don't want to live",
+  "no reason to live",
+  "end it all",
+  "better off dead",
+  "can't go on",
+  "not worth living",
+  "kms",
+  "kys",
 ];
 ```
 
-**Logic:**
+**Layer 2: AI Context Detection (via Claude system prompt)**
+
+The system prompt includes an instruction to assess crisis content contextually:
+
+> Rule 9: If the user's note expresses genuine suicidal ideation, self-harm intent, or a desire to end their life, begin your response with the exact marker `[CRISIS_DETECTED]`. Only flag genuine distress — do not flag casual expressions like "that killed me" or "I'm dying of laughter."
+
+The server parses the AI response for the `[CRISIS_DETECTED]` marker, strips it before displaying, and sets `hasCrisisContent: true` on the AI response record.
+
+**Combined Logic:**
+
 1. Normalize note text (lowercase, trim).
-2. Check for any crisis keyword match.
-3. If matched, set `hasCrisisContent: true` flag on the AI response record.
-4. Prepend safety disclaimer to the AI response before sending to client.
-5. Still send the note to the AI for an empathetic response (do not refuse).
+2. Run keyword pre-screen (Layer 1).
+3. Send note to Claude API with crisis detection instruction (Layer 2).
+4. Parse AI response for `[CRISIS_DETECTED]` marker.
+5. Final `hasCrisisContent = keywordCrisisFlag || aiCrisisFlag`.
+6. If `hasCrisisContent`, prepend safety disclaimer to the AI response.
+7. Still deliver the empathetic response — never refuse to respond.
+
+**Prominent Disclaimer:**
+A persistent, non-dismissible notice is displayed on first use of the journal feature: "Serene is not a substitute for professional mental health care. If you are in crisis, please contact the 988 Suicide and Crisis Lifeline." This disclaimer also appears in the app footer.
 
 **Gibberish Detection:**
+
 - If note text has fewer than 3 dictionary words (simple heuristic: words > 2 chars), return a generic response without calling the AI.
 - Generic response: "Thanks for checking in today. Even showing up to journal is a positive step."

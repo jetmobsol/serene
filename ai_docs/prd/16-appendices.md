@@ -95,6 +95,8 @@ export const CRISIS_KEYWORDS = [
   "better off dead",
   "can't go on",
   "not worth living",
+  "kms",
+  "kys",
 ] as const;
 
 export const SAFETY_DISCLAIMER =
@@ -105,9 +107,31 @@ export const SAFETY_DISCLAIMER =
 export const GENERIC_RESPONSE =
   "Thanks for checking in today. Even showing up to journal is a positive step.";
 
-export function detectCrisisContent(text: string): boolean {
+/**
+ * Layer 1: Fast keyword pre-screen for potential crisis content.
+ * Errs on the side of caution — false positives are refined by Layer 2 (AI detection).
+ */
+export function detectCrisisKeywords(text: string): boolean {
   const normalized = text.toLowerCase().trim();
   return CRISIS_KEYWORDS.some((keyword) => normalized.includes(keyword));
+}
+
+/**
+ * Layer 2: Parse AI response for the [CRISIS_DETECTED] marker.
+ * Returns the cleaned response text and whether crisis was detected.
+ */
+export function parseAiCrisisFlag(aiResponse: string): {
+  hasCrisisContent: boolean;
+  cleanedResponse: string;
+} {
+  const marker = "[CRISIS_DETECTED]";
+  if (aiResponse.startsWith(marker)) {
+    return {
+      hasCrisisContent: true,
+      cleanedResponse: aiResponse.slice(marker.length).trim(),
+    };
+  }
+  return { hasCrisisContent: false, cleanedResponse: aiResponse };
 }
 
 export function isGibberish(text: string): boolean {
@@ -120,8 +144,8 @@ export function isGibberish(text: string): boolean {
 
 ## Appendix C: Environment Variable Summary
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `ANTHROPIC_API_KEY` | Yes | (none) | Anthropic Claude API key for AI vibe check |
-| `APP_NAME` | Yes | "Serene" | Application display name |
-| All existing env vars | Yes | (unchanged) | See `.env.example` for full list |
+| Variable              | Required | Default     | Description                                |
+| --------------------- | -------- | ----------- | ------------------------------------------ |
+| `ANTHROPIC_API_KEY`   | Yes      | (none)      | Anthropic Claude API key for AI vibe check |
+| `APP_NAME`            | Yes      | "Serene"    | Application display name                   |
+| All existing env vars | Yes      | (unchanged) | See `.env.example` for full list           |

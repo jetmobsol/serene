@@ -56,6 +56,7 @@
 - Create `packages/core/src/journal.ts` — mood types, tag types, mood scores, color mappings as TypeScript constants
 - Unit tests for shared types and utilities
 - Update `.env.example` with `ANTHROPIC_API_KEY`
+- Remove existing OpenAI integration: delete `apps/api/lib/ai.ts`, uninstall `@ai-sdk/openai`
 - `bun db:push` to sync schema
 
 **PRD References:** `05-database.md` (full schema), `03-feature-specs.md` §4B.1 (mood/tag constants), `16-appendices.md` (mood constants reference)
@@ -85,8 +86,11 @@
 - TDD: Write failing tests first for all 5 procedures
 - Integration tests: ownership enforcement (user A ≠ user B), cursor pagination, input validation
 - Zod schemas for input validation (mood enum, tag enum, note max 5000 chars)
+- Implement `user.exportData` procedure — exports all journal entries + AI responses as JSON (GDPR Article 20)
+- Implement `user.deleteAccount` procedure — deletes user account with cascade to all journal data (GDPR Article 17)
+- Add explicit consent checkbox to signup flow (data storage + Anthropic API processing consent)
 
-**PRD References:** `06-api-design.md` §7.1 (full API contracts), `09-testing.md` §10.3 (integration test approach)
+**PRD References:** `06-api-design.md` §7.1 (full API contracts), `09-testing.md` §10.3 (integration test approach), `12-nonfunctional.md` §13.5 (GDPR requirements)
 
 **User Stories Covered:** US-MJ-004 (save), US-MJ-005 (list), US-MJ-006 (getById), US-MJ-007 (update), US-MJ-008 (delete) — backend portion only
 
@@ -96,6 +100,8 @@
 - [ ] Ownership enforcement tested (user A cannot access user B's entries)
 - [ ] Cursor pagination tested with 50+ fixture entries
 - [ ] Input validation rejects invalid moods, tags, notes > 5000 chars
+- [ ] Data export returns complete JSON of user's entries + AI responses
+- [ ] Account deletion cascades to all journal data (verified in tests)
 - [ ] `bun test --run` passes
 
 **Verification (no bowser):**
@@ -111,11 +117,12 @@
 **Scope:**
 
 - Create `apps/api/lib/anthropic.ts` — request-scoped Anthropic client
-- Create `apps/api/lib/safety.ts` — crisis keyword detection + gibberish detection
+- Create `apps/api/lib/safety.ts` — dual-layer crisis detection (keyword pre-screen + AI context detection via `[CRISIS_DETECTED]` marker) + gibberish detection
 - Create `apps/api/lib/prompts.ts` — system prompt builder
 - Implement `apps/api/routers/ai.ts` — `generateVibeCheck` mutation
 - Implement SSE streaming endpoint `GET /api/ai/stream/:entryId` in `apps/api/lib/app.ts`
-- Rate limiting (20 requests/hour)
+- Rate limiting via Cloudflare KV (20 requests/hour) — add `AI_RATE_LIMIT` KV namespace to `wrangler.jsonc`
+- SSE timeout handling (10s abort via `AbortController`) and client disconnect detection
 - TDD: Unit tests for safety module, prompt builder. Integration tests for AI router (mock Anthropic API).
 
 **PRD References:** `07-ai-integration.md` (full spec), `06-api-design.md` §7.2 (API contracts), `03-feature-specs.md` §4C (safety guardrails)
@@ -125,10 +132,12 @@
 **Definition of Done:**
 
 - [ ] AI vibe check generates appropriate responses for test fixtures
-- [ ] Crisis keyword detection catches all defined keywords
+- [ ] Crisis keyword detection (Layer 1) catches all defined keywords
+- [ ] AI crisis detection (Layer 2) correctly parses `[CRISIS_DETECTED]` marker from AI response
 - [ ] Gibberish detection returns generic response for nonsensical input
 - [ ] SSE endpoint sends events in correct format (`token`, `done`, `error`)
-- [ ] Rate limiting returns 429 after threshold
+- [ ] Rate limiting via Cloudflare KV returns 429 after threshold
+- [ ] SSE streaming aborts after 10s timeout with error event
 - [ ] Anthropic API errors handled gracefully
 - [ ] `bun test --run` passes
 
