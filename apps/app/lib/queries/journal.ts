@@ -52,7 +52,9 @@ export function useCreateJournalMutation() {
       trpcClient.journal.create.mutate(input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: journalQueryKeys.lists() });
-      toast.success("Entry saved");
+      toast.success("Entry saved", {
+        description: "Your journal entry has been recorded.",
+      });
     },
     onError: (error) => {
       toast.error("Failed to save entry", {

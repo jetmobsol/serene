@@ -160,8 +160,8 @@ function EntryDetail() {
             <div className="flex items-start gap-3 rounded-lg bg-muted/50 p-4 w-full">
               <Sparkles className="h-5 w-5 text-muted-foreground mt-0.5 shrink-0" />
               <div>
-                <p className="text-sm font-medium mb-1">AI Response</p>
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <p className="text-sm font-medium mb-1">AI Insight</p>
+                <p className="text-sm text-muted-foreground italic">
                   {entry.aiResponse.response}
                 </p>
               </div>

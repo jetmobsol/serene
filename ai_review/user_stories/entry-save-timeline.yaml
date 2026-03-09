@@ -1,0 +1,147 @@
+stories:
+  - name: "Create journal entry with mood, tags, and note"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Enter "test@test.com" in the email input field
+      Click the continue/submit button
+      Wait for auto-login to complete (OTP auto-fills and submits)
+      Wait for redirect to /journal
+      Verify the journal page loads with a "New Entry" card
+      Click the "Happy" mood option
+      Click the "Work" tag chip
+      Click the "Fitness" tag chip
+      Type "Feeling productive today after a great workout" in the notes text area
+      Click the "Save Entry" button
+      Verify a success toast notification appears with text "Entry saved"
+      Verify the form resets (no mood selected, no tags selected, notes cleared)
+
+  - name: "New entry appears at top of timeline after save"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Enter "test@test.com" in the email input field
+      Click the continue/submit button
+      Wait for auto-login to complete (OTP auto-fills and submits)
+      Wait for redirect to /journal
+      Click the "Calm" mood option
+      Type "A peaceful morning" in the notes text area
+      Click the "Save Entry" button
+      Wait for the success toast to appear
+      Verify the timeline section titled "Your Entries" is visible below the form
+      Verify the most recent entry card shows "Calm" as the mood label
+      Verify the most recent entry card shows the note text "A peaceful morning"
+
+  - name: "Timeline groups entries by date"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Enter "test@test.com" in the email input field
+      Click the continue/submit button
+      Wait for auto-login to complete (OTP auto-fills and submits)
+      Wait for redirect to /journal
+      Verify the "Your Entries" section is visible
+      Verify date group headers are visible (e.g. "Today", "Yesterday", "This Week", or "Earlier")
+      Verify the group headers use uppercase styling
+
+  - name: "Entry cards show mood icon, tags, note preview, and timestamp"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Enter "test@test.com" in the email input field
+      Click the continue/submit button
+      Wait for auto-login to complete (OTP auto-fills and submits)
+      Wait for redirect to /journal
+      Verify at least one entry card is visible in the timeline
+      Verify the first entry card shows a mood icon and mood label text
+      Verify the first entry card shows a relative timestamp (e.g. "just now", "2 hours ago", "yesterday")
+      Verify the first entry card has a colored left border
+      Verify any entry with tags shows small badge-style tag labels
+
+  - name: "Clicking entry opens detail view"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Enter "test@test.com" in the email input field
+      Click the continue/submit button
+      Wait for auto-login to complete (OTP auto-fills and submits)
+      Wait for redirect to /journal
+      Verify at least one entry card is visible
+      Click on the first entry card (the card body, not the actions menu)
+      Verify the URL changes to /journal/ followed by an entry ID
+      Verify the detail view shows the full mood icon and label
+      Verify the detail view shows the full note text (not truncated)
+      Verify an "Edit" button is visible
+      Verify a "Delete" button is visible
+      Verify a back navigation button or link to /journal is visible
+
+  - name: "Empty state when no entries"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Enter "newuser-empty@test.com" in the email input field
+      Click the continue/submit button
+      Wait for auto-login to complete (OTP auto-fills and submits)
+      Wait for redirect to /journal
+      Verify the "Your Entries" section is visible
+      Verify an empty state message is displayed with text "No entries yet"
+      Verify there is encouraging text about starting a wellness journey
+
+  - name: "Edit entry from detail view"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Enter "test@test.com" in the email input field
+      Click the continue/submit button
+      Wait for auto-login to complete (OTP auto-fills and submits)
+      Wait for redirect to /journal
+      Click on the first entry card
+      Wait for the detail view to load
+      Click the "Edit" button
+      Verify the edit form appears with the mood selector, tag chips, and note editor
+      Verify the form is pre-filled with the entry's existing mood selection
+      Verify the "Update Entry" button text is shown (not "Save Entry")
+      Click "Cancel editing" or the back button to exit edit mode
+      Verify the read-only detail view is shown again
+
+  - name: "Delete entry with confirmation dialog"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Enter "test@test.com" in the email input field
+      Click the continue/submit button
+      Wait for auto-login to complete (OTP auto-fills and submits)
+      Wait for redirect to /journal
+      Verify at least one entry card is visible in the timeline
+      Click the three-dot menu (more actions) on the first entry card
+      Verify a dropdown menu appears with "Edit" and "Delete" options
+      Click the "Delete" option
+      Verify a confirmation dialog appears with title "Delete entry?"
+      Verify the dialog warns that this action cannot be undone
+      Click "Cancel" in the dialog
+      Verify the dialog closes and the entry is still visible
+
+  - name: "Dashboard redirects to journal"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Enter "test@test.com" in the email input field
+      Click the continue/submit button
+      Wait for auto-login to complete (OTP auto-fills and submits)
+      Wait for navigation to complete
+      Navigate to http://localhost:5173/
+      Verify the URL is redirected to /journal
+      Verify the journal page content is displayed with the "New Entry" card
+
+  - name: "Save button disabled when no mood selected"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Enter "test@test.com" in the email input field
+      Click the continue/submit button
+      Wait for auto-login to complete (OTP auto-fills and submits)
+      Wait for redirect to /journal
+      Verify the "Save Entry" button is visible
+      Verify the "Save Entry" button is disabled (no mood selected yet)
+      Click the "Anxious" mood option
+      Verify the "Save Entry" button is now enabled
