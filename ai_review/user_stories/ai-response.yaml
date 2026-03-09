@@ -1,0 +1,43 @@
+stories:
+  - name: "AI response appears after saving entry with 50+ char note"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Select the "Calm" mood
+      Click the "Nature" tag
+      Type a note with at least 50 characters: "Spent the morning in the park reading a book. The fresh air and birdsong really helped me feel centered and peaceful today."
+      Click "Save Entry"
+      Verify the entry is saved successfully
+      Verify a loading indicator appears (pulsing dots or shimmer) for the AI response
+      Wait up to 15 seconds for the AI response to appear
+      Verify an AI response text appears below the entry, visually distinct from the user's note
+
+  - name: "Entries without long notes show no AI section"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Select the "Happy" mood
+      Type a short note under 50 characters: "Good day"
+      Click "Save Entry"
+      Verify the entry is saved
+      Verify no AI response section or loading indicator appears for this entry
+
+  - name: "AI response history visible on timeline entries"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Verify the timeline has entries
+      Look for entries that have AI response sections
+      Verify AI responses are visually distinguished from user notes (different background, icon, or styling)
+
+  - name: "Safety banner appears for crisis content"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Select any mood
+      Type a note containing crisis language (at least 50 chars): "I have been feeling really hopeless lately and sometimes I think about wanting to end my life and I dont know what to do anymore"
+      Click "Save Entry"
+      Verify a safety/crisis banner appears with crisis helpline information
+      Verify the banner mentions 988 or a crisis lifeline number
+      Verify the banner is not dismissible
+      Verify an AI response still appears after the safety banner
