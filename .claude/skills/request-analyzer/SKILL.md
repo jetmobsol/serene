@@ -20,36 +20,37 @@ Classifies incoming requests to enable intelligent routing and identify clarific
 
 Classify the primary intent:
 
-| Intent | Indicators | Route |
-|--------|------------|-------|
-| **Strategic** | "roadmap", "strategy", "plan", "prioritize", "decide" | May need validation |
-| **Implementation** | "build", "create", "implement", "design", "architect" | Design work |
-| **Debugging** | "fix", "broken", "error", "slow", "not working" | Debug/investigate |
-| **Documentation** | "document", "explain", "describe", "write docs" | Documentation |
+| Intent             | Indicators                                            | Route               |
+| ------------------ | ----------------------------------------------------- | ------------------- |
+| **Strategic**      | "roadmap", "strategy", "plan", "prioritize", "decide" | May need validation |
+| **Implementation** | "build", "create", "implement", "design", "architect" | Design work         |
+| **Debugging**      | "fix", "broken", "error", "slow", "not working"       | Debug/investigate   |
+| **Documentation**  | "document", "explain", "describe", "write docs"       | Documentation       |
 
 ### Step 2: Classify Request Type
 
-| Type | Key Phrases | Primary Agent |
-|------|-------------|---------------|
-| **Design** | "How should I build...", "What architecture...", "Design a system..." | cto-architect |
-| **Validate** | "Is this plan solid?", "Thoughts on...", "Review my roadmap..." | strategic-cto-mentor |
-| **Debug** | "Why is X slow?", "Fix this error...", "Troubleshoot..." | debug-helper |
-| **Document** | "Write documentation for...", "Explain how..." | docs-writer |
-| **Review** | "Review this code...", "Check for issues..." | code-reviewer |
+| Type         | Key Phrases                                                           | Primary Agent        |
+| ------------ | --------------------------------------------------------------------- | -------------------- |
+| **Design**   | "How should I build...", "What architecture...", "Design a system..." | cto-architect        |
+| **Validate** | "Is this plan solid?", "Thoughts on...", "Review my roadmap..."       | strategic-cto-mentor |
+| **Debug**    | "Why is X slow?", "Fix this error...", "Troubleshoot..."              | debug-helper         |
+| **Document** | "Write documentation for...", "Explain how..."                        | docs-writer          |
+| **Review**   | "Review this code...", "Check for issues..."                          | code-reviewer        |
 
 ### Step 3: Assess Complexity
 
-| Complexity | Characteristics | Execution Pattern |
-|------------|-----------------|-------------------|
-| **Single** | Clear scope, one domain, obvious routing | Direct to one agent |
-| **Sequential** | Multiple phases, depends on previous output | Agent chain |
-| **Parallel** | Independent domains, can run simultaneously | Multiple agents in parallel |
+| Complexity     | Characteristics                             | Execution Pattern           |
+| -------------- | ------------------------------------------- | --------------------------- |
+| **Single**     | Clear scope, one domain, obvious routing    | Direct to one agent         |
+| **Sequential** | Multiple phases, depends on previous output | Agent chain                 |
+| **Parallel**   | Independent domains, can run simultaneously | Multiple agents in parallel |
 
 ### Step 4: Identify Vague Terms
 
 Scan for buzzwords that require clarification. See [buzzword-dictionary.md](buzzword-dictionary.md) for the complete list.
 
 **Common red flags:**
+
 - "AI-powered" - What specific AI capability?
 - "scale" - What numbers? From what to what?
 - "fast" / "soon" - What timeline exactly?
@@ -61,6 +62,7 @@ Scan for buzzwords that require clarification. See [buzzword-dictionary.md](buzz
 Check for required context based on request type:
 
 **For Design Requests:**
+
 - [ ] Expected user/traffic scale
 - [ ] Budget constraints
 - [ ] Timeline requirements
@@ -68,6 +70,7 @@ Check for required context based on request type:
 - [ ] Existing infrastructure
 
 **For Validation Requests:**
+
 - [ ] Current state or existing plan
 - [ ] Business goals and constraints
 - [ ] Timeline and resources
@@ -108,6 +111,7 @@ Provide analysis in this structure:
 **User**: "I want to add AI capabilities to my app"
 
 **Analysis**:
+
 - **Intent**: Implementation
 - **Type**: Design
 - **Complexity**: Unknown (needs clarification)
@@ -121,6 +125,7 @@ Provide analysis in this structure:
 **User**: "Design a real-time notification system for 100K users, using our existing PostgreSQL database and Node.js backend"
 
 **Analysis**:
+
 - **Intent**: Implementation
 - **Type**: Design
 - **Complexity**: Single
@@ -134,6 +139,7 @@ Provide analysis in this structure:
 **User**: "Here's my Q2 roadmap - migrate to microservices, add real-time features, and launch mobile app. Thoughts?"
 
 **Analysis**:
+
 - **Intent**: Strategic
 - **Type**: Validate
 - **Complexity**: Single

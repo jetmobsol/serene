@@ -5,6 +5,7 @@ Detailed techniques for accurate effort estimation in technical roadmaps.
 ## The Estimation Problem
 
 Humans are notoriously bad at estimation, especially for:
+
 - Novel work (never done before)
 - Complex work (many unknowns)
 - Long-duration work (> 2 weeks)
@@ -17,44 +18,50 @@ This guide provides techniques to improve accuracy.
 
 ### Size Definitions
 
-| Size | Points | Duration | Characteristics | Example |
-|------|--------|----------|-----------------|---------|
-| **XS** | 1 | 2-4 hours | Config change, copy update, trivial fix | Change environment variable |
-| **S** | 2 | 0.5-1 day | Simple, well-understood, no dependencies | Add new API field |
-| **M** | 3 | 1-2 days | Some complexity, minor unknowns | Build CRUD endpoint |
-| **L** | 5 | 3-5 days | Complex, research needed | Implement authentication |
-| **XL** | 8 | 1-2 weeks | Very complex, significant unknowns | Build recommendation engine |
-| **XXL** | 13+ | > 2 weeks | Must be broken down | Full microservice |
+| Size    | Points | Duration  | Characteristics                          | Example                     |
+| ------- | ------ | --------- | ---------------------------------------- | --------------------------- |
+| **XS**  | 1      | 2-4 hours | Config change, copy update, trivial fix  | Change environment variable |
+| **S**   | 2      | 0.5-1 day | Simple, well-understood, no dependencies | Add new API field           |
+| **M**   | 3      | 1-2 days  | Some complexity, minor unknowns          | Build CRUD endpoint         |
+| **L**   | 5      | 3-5 days  | Complex, research needed                 | Implement authentication    |
+| **XL**  | 8      | 1-2 weeks | Very complex, significant unknowns       | Build recommendation engine |
+| **XXL** | 13+    | > 2 weeks | Must be broken down                      | Full microservice           |
 
 ### When to Use Each Size
 
 **XS - Trivial**
+
 - You've done this exact thing before
 - No code review concerns
 - Can be done and deployed in one sitting
 
 **S - Simple**
+
 - Clear implementation path
 - Single component affected
 - Standard patterns apply
 
 **M - Standard**
+
 - Normal feature work
 - May need some research
 - Touches 2-3 files/components
 
 **L - Complex**
+
 - Multiple components affected
 - Integration work required
 - Some architectural decisions
 
 **XL - Very Complex**
+
 - Significant unknowns
 - New technology/patterns
 - Cross-team coordination
 - Should consider breaking down
 
 **XXL - Epic-level**
+
 - Too large for single story
 - Must be decomposed
 - Red flag if assigned to single item
@@ -112,6 +119,7 @@ PERT Estimate = (O + 4M + P) / 6
 ### 4. Planning Poker
 
 Team-based estimation:
+
 1. Present story to team
 2. Everyone estimates privately
 3. Reveal estimates simultaneously
@@ -124,14 +132,14 @@ Team-based estimation:
 
 ### Multipliers to Apply
 
-| Factor | Multiplier | When to Apply |
-|--------|------------|---------------|
-| **New technology** | 1.5x | Team hasn't used tech before |
-| **New team member** | 1.3x | < 3 months on project |
-| **External dependency** | 1.2x | Per external team/service |
-| **Legacy code** | 1.4x | Poorly documented old code |
-| **Compliance requirements** | 1.3x | Security/audit requirements |
-| **Cross-timezone** | 1.2x | Team spans > 6 hour difference |
+| Factor                      | Multiplier | When to Apply                  |
+| --------------------------- | ---------- | ------------------------------ |
+| **New technology**          | 1.5x       | Team hasn't used tech before   |
+| **New team member**         | 1.3x       | < 3 months on project          |
+| **External dependency**     | 1.2x       | Per external team/service      |
+| **Legacy code**             | 1.4x       | Poorly documented old code     |
+| **Compliance requirements** | 1.3x       | Security/audit requirements    |
+| **Cross-timezone**          | 1.2x       | Team spans > 6 hour difference |
 
 ### Velocity Adjustments
 
@@ -156,26 +164,32 @@ That's 55% of theoretical!
 ## Common Estimation Mistakes
 
 ### 1. The 90% Done Trap
+
 **Mistake**: "We're 90% done" for weeks.
 **Fix**: Track tasks to completion, not percentage.
 
 ### 2. Ignoring Integration
+
 **Mistake**: Estimate components in isolation.
 **Fix**: Add explicit integration tasks and testing.
 
 ### 3. Happy Path Only
+
 **Mistake**: Estimate assumes no bugs, no blockers.
 **Fix**: Always add 20-30% buffer.
 
 ### 4. Scope Creep Blindness
+
 **Mistake**: Estimate original scope, deliver expanded scope.
 **Fix**: Re-estimate when scope changes.
 
 ### 5. Anchoring
+
 **Mistake**: First estimate biases all subsequent estimates.
 **Fix**: Use planning poker, estimate independently first.
 
 ### 6. Planning Fallacy
+
 **Mistake**: Optimism despite past evidence.
 **Fix**: Compare to actual duration of past similar work.
 
@@ -184,16 +198,19 @@ That's 55% of theoretical!
 ## Estimation for Different Phases
 
 ### Phase 1: MVP
+
 - Estimate in detail (story/task level)
 - Add 25% buffer
 - Expect 20% scope change
 
 ### Phase 2: Scale
+
 - Estimate at epic level
 - Add 30% buffer
 - Expect 30% scope change
 
 ### Phase 3: Advanced
+
 - Estimate at theme level only
 - Add 40% buffer
 - Expect 50% scope change
@@ -254,23 +271,28 @@ Before finalizing estimates, verify:
 ## Story: [Title]
 
 ### Decomposition
-| Task | Estimate | Confidence |
-|------|----------|------------|
-| [Task 1] | 4h | High |
-| [Task 2] | 8h | Medium |
-| [Task 3] | 4h | Low |
+
+| Task     | Estimate | Confidence |
+| -------- | -------- | ---------- |
+| [Task 1] | 4h       | High       |
+| [Task 2] | 8h       | Medium     |
+| [Task 3] | 4h       | Low        |
 
 ### Base Estimate
+
 Sum of tasks: 16 hours
 
 ### Adjustments
+
 - New technology: +50% (8h)
 - Integration: +20% (3h)
 
 ### Final Estimate
+
 27 hours ≈ 3.5 days → Size: L
 
 ### Risks to Estimate
+
 - [Risk 1]: Could add 1-2 days
 - [Risk 2]: Could add 0.5 days
 ```
@@ -281,13 +303,15 @@ Sum of tasks: 16 hours
 ## Project: [Name]
 
 ### Estimated Duration
-| Phase | Points | Weeks | Confidence |
-|-------|--------|-------|------------|
-| MVP | 89 | 8 | High |
-| Scale | 120 | 12 | Medium |
-| Advanced | 80 | 10 | Low |
+
+| Phase    | Points | Weeks | Confidence |
+| -------- | ------ | ----- | ---------- |
+| MVP      | 89     | 8     | High       |
+| Scale    | 120    | 12    | Medium     |
+| Advanced | 80     | 10    | Low        |
 
 ### Buffer Applied
+
 - MVP: +25% → 10 weeks
 - Scale: +30% → 15.6 weeks
 - Advanced: +40% → 14 weeks
@@ -295,6 +319,7 @@ Sum of tasks: 16 hours
 ### Total: 39.6 weeks (~10 months)
 
 ### Key Assumptions
+
 1. Team of 5 engineers
 2. 30 points/sprint velocity
 3. No major scope changes

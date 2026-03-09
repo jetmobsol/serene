@@ -167,15 +167,15 @@ The CLI can be configured using `playwright-cli.json` in the working directory, 
 
 ## Environment Variables
 
-| Variable | Description |
-|----------|-------------|
-| `PLAYWRIGHT_MCP_VIEWPORT_SIZE` | Viewport size, e.g. `1440x900` |
-| `PLAYWRIGHT_MCP_CAPS` | Capabilities: `vision` (screenshots as image responses), `pdf` |
-| `PLAYWRIGHT_MCP_BROWSER` | Browser: `chrome`, `firefox`, `webkit`, `msedge` |
-| `PLAYWRIGHT_MCP_HEADLESS` | Run headless (default) |
-| `PLAYWRIGHT_MCP_OUTPUT_DIR` | Output directory for files |
-| `PLAYWRIGHT_MCP_CONFIG` | Path to config file |
-| `PLAYWRIGHT_CLI_SESSION` | Default session name |
-| `PLAYWRIGHT_MCP_TEST_ID_ATTRIBUTE` | Test ID attribute (default: `data-testid`) |
-| `PLAYWRIGHT_MCP_TIMEOUT_ACTION` | Action timeout in ms (default: 5000) |
-| `PLAYWRIGHT_MCP_TIMEOUT_NAVIGATION` | Navigation timeout in ms (default: 60000) |
+| Variable                            | Description                                                    |
+| ----------------------------------- | -------------------------------------------------------------- |
+| `PLAYWRIGHT_MCP_VIEWPORT_SIZE`      | Viewport size, e.g. `1440x900`                                 |
+| `PLAYWRIGHT_MCP_CAPS`               | Capabilities: `vision` (screenshots as image responses), `pdf` |
+| `PLAYWRIGHT_MCP_BROWSER`            | Browser: `chrome`, `firefox`, `webkit`, `msedge`               |
+| `PLAYWRIGHT_MCP_HEADLESS`           | Run headless (default)                                         |
+| `PLAYWRIGHT_MCP_OUTPUT_DIR`         | Output directory for files                                     |
+| `PLAYWRIGHT_MCP_CONFIG`             | Path to config file                                            |
+| `PLAYWRIGHT_CLI_SESSION`            | Default session name                                           |
+| `PLAYWRIGHT_MCP_TEST_ID_ATTRIBUTE`  | Test ID attribute (default: `data-testid`)                     |
+| `PLAYWRIGHT_MCP_TIMEOUT_ACTION`     | Action timeout in ms (default: 5000)                           |
+| `PLAYWRIGHT_MCP_TIMEOUT_NAVIGATION` | Navigation timeout in ms (default: 60000)                      |

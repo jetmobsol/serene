@@ -52,19 +52,20 @@ Use Case Identified
 
 ### When to Use APIs
 
-| Factor | API Preferred | Self-Hosted Preferred |
-|--------|---------------|----------------------|
-| **Volume** | < 10K requests/month | > 100K requests/month |
-| **Latency** | > 500ms acceptable | < 100ms required |
-| **Customization** | General use case | Domain-specific fine-tuning |
-| **Data Privacy** | Non-sensitive data | PII, HIPAA, financial |
-| **Team Expertise** | No ML engineers | ML team available |
-| **Budget** | Predictable per-call costs | High volume justifies infra |
+| Factor             | API Preferred              | Self-Hosted Preferred       |
+| ------------------ | -------------------------- | --------------------------- |
+| **Volume**         | < 10K requests/month       | > 100K requests/month       |
+| **Latency**        | > 500ms acceptable         | < 100ms required            |
+| **Customization**  | General use case           | Domain-specific fine-tuning |
+| **Data Privacy**   | Non-sensitive data         | PII, HIPAA, financial       |
+| **Team Expertise** | No ML engineers            | ML team available           |
+| **Budget**         | Predictable per-call costs | High volume justifies infra |
 
 ### Cost Comparison Framework
 
 ```markdown
 ## API Costs (Example: OpenAI GPT-4)
+
 - Input: $0.03/1K tokens
 - Output: $0.06/1K tokens
 - Average request: 500 input + 200 output tokens
@@ -72,12 +73,14 @@ Use Case Identified
 - 100K requests/month: $2,700
 
 ## Self-Hosted Costs (Example: Llama 70B)
+
 - GPU instance: $3/hour (A100 40GB)
 - Throughput: ~50 requests/minute = 3K/hour
 - Cost per request: $0.001
 - 100K requests/month: $100 + $500 engineering time
 
 ## Break-even Analysis
+
 - < 50K requests: API likely cheaper
 - > 50K requests: Self-hosted may be cheaper
 - Factor in: engineering time, ops burden, model quality
@@ -116,13 +119,13 @@ Use Case Identified
 
 ### Component Selection Guide
 
-| Component | Options | Recommendation |
-|-----------|---------|----------------|
-| **Feature Store** | Feast, Tecton, SageMaker | Feast (open source), Tecton (enterprise) |
-| **Experiment Tracking** | MLflow, Weights & Biases, Neptune | MLflow (free), W&B (best UX) |
-| **Training Orchestration** | Kubeflow, SageMaker, Vertex AI | SageMaker (AWS), Vertex (GCP) |
-| **Model Registry** | MLflow, SageMaker, custom S3 | MLflow (standard) |
-| **Model Serving** | TorchServe, TFServing, Triton | Triton (multi-framework) |
+| Component                  | Options                           | Recommendation                           |
+| -------------------------- | --------------------------------- | ---------------------------------------- |
+| **Feature Store**          | Feast, Tecton, SageMaker          | Feast (open source), Tecton (enterprise) |
+| **Experiment Tracking**    | MLflow, Weights & Biases, Neptune | MLflow (free), W&B (best UX)             |
+| **Training Orchestration** | Kubeflow, SageMaker, Vertex AI    | SageMaker (AWS), Vertex (GCP)            |
+| **Model Registry**         | MLflow, SageMaker, custom S3      | MLflow (standard)                        |
+| **Model Serving**          | TorchServe, TFServing, Triton     | Triton (multi-framework)                 |
 
 ---
 
@@ -143,6 +146,7 @@ Client → API Gateway → Model Server → Response
 ```
 
 **Latency targets**:
+
 - P50: < 100ms
 - P95: < 300ms
 - P99: < 500ms
@@ -158,6 +162,7 @@ Client → API → Queue (SQS) → Worker → Result Store → Webhook/Poll
 ```
 
 **Use when**:
+
 - Inference > 5 seconds
 - Batch processing required
 - Variable load patterns
@@ -182,6 +187,7 @@ Best for: Privacy, offline capability, ultra-low latency
 ```
 
 **Model optimization for edge**:
+
 - Quantization (INT8): 4x smaller, 2-3x faster
 - Pruning: 50-90% sparsity possible
 - Distillation: Smaller model, similar accuracy
@@ -201,6 +207,7 @@ Camera Stream → Frame Extraction → Preprocessing → Model → Postprocessin
 ```
 
 **Performance optimization**:
+
 - Process every Nth frame (skip frames)
 - Resize to model input size early
 - Batch frames when latency allows
@@ -276,6 +283,7 @@ User Query → Embedding → Vector Search → Context Retrieval → LLM → Res
 ```
 
 **Multi-model strategy**:
+
 - Simple queries → Cheaper model (GPT-3.5, Haiku)
 - Complex reasoning → Expensive model (GPT-4, Opus)
 - Sensitive data → Self-hosted (Llama, Mistral)
@@ -286,13 +294,13 @@ User Query → Embedding → Vector Search → Context Retrieval → LLM → Res
 
 ### GPU Memory Optimization
 
-| Technique | Memory Reduction | Speed Impact |
-|-----------|-----------------|--------------|
-| **FP16 (Half Precision)** | 50% | Neutral to faster |
-| **INT8 Quantization** | 75% | 10-20% slower |
-| **INT4 Quantization** | 87.5% | 20-40% slower |
-| **Gradient Checkpointing** | 60-80% | 20-30% slower |
-| **Model Sharding** | Distributed | Communication overhead |
+| Technique                  | Memory Reduction | Speed Impact           |
+| -------------------------- | ---------------- | ---------------------- |
+| **FP16 (Half Precision)**  | 50%              | Neutral to faster      |
+| **INT8 Quantization**      | 75%              | 10-20% slower          |
+| **INT4 Quantization**      | 87.5%            | 20-40% slower          |
+| **Gradient Checkpointing** | 60-80%           | 20-30% slower          |
+| **Model Sharding**         | Distributed      | Communication overhead |
 
 ### Batching Strategies
 
@@ -326,13 +334,13 @@ class DynamicBatcher:
 
 ### Key Metrics to Track
 
-| Metric | What It Measures | Alert Threshold |
-|--------|------------------|-----------------|
-| **Latency (P95)** | Response time | > 2x baseline |
-| **Throughput** | Requests/second | < 80% capacity |
-| **Error Rate** | Failed predictions | > 1% |
-| **Model Drift** | Distribution shift | PSI > 0.2 |
-| **Data Quality** | Input anomalies | > 5% anomalies |
+| Metric            | What It Measures   | Alert Threshold |
+| ----------------- | ------------------ | --------------- |
+| **Latency (P95)** | Response time      | > 2x baseline   |
+| **Throughput**    | Requests/second    | < 80% capacity  |
+| **Error Rate**    | Failed predictions | > 1%            |
+| **Model Drift**   | Distribution shift | PSI > 0.2       |
+| **Data Quality**  | Input anomalies    | > 5% anomalies  |
 
 ### Drift Detection
 
@@ -344,6 +352,7 @@ Production Distribution ─┘
 ```
 
 **Population Stability Index (PSI)**:
+
 - PSI < 0.1: No significant change
 - 0.1 < PSI < 0.2: Moderate change, monitor
 - PSI > 0.2: Significant change, investigate
@@ -354,25 +363,25 @@ Production Distribution ─┘
 
 ### Model Selection by Use Case
 
-| Use Case | Recommended Model | Latency | Cost |
-|----------|-------------------|---------|------|
-| Text Classification | DistilBERT | 10ms | Low |
-| Text Generation | GPT-4 / Claude | 1-5s | Medium |
-| Image Classification | EfficientNet-B0 | 5ms | Low |
-| Object Detection | YOLOv8-n | 10ms | Low |
-| Object Detection (Accurate) | YOLOv8-x | 50ms | Medium |
-| Semantic Segmentation | SAM | 100ms | Medium |
-| Speech-to-Text | Whisper-base | Real-time | Low |
-| Embeddings | text-embedding-ada-002 | 50ms | Low |
+| Use Case                    | Recommended Model      | Latency   | Cost   |
+| --------------------------- | ---------------------- | --------- | ------ |
+| Text Classification         | DistilBERT             | 10ms      | Low    |
+| Text Generation             | GPT-4 / Claude         | 1-5s      | Medium |
+| Image Classification        | EfficientNet-B0        | 5ms       | Low    |
+| Object Detection            | YOLOv8-n               | 10ms      | Low    |
+| Object Detection (Accurate) | YOLOv8-x               | 50ms      | Medium |
+| Semantic Segmentation       | SAM                    | 100ms     | Medium |
+| Speech-to-Text              | Whisper-base           | Real-time | Low    |
+| Embeddings                  | text-embedding-ada-002 | 50ms      | Low    |
 
 ### Infrastructure Sizing
 
-| Scale | GPU | Model Size | Throughput |
-|-------|-----|------------|------------|
-| Development | T4 (16GB) | < 7B params | 10-50 req/s |
-| Production Small | A10G (24GB) | < 13B params | 50-100 req/s |
-| Production Medium | A100 (40GB) | < 70B params | 100-500 req/s |
-| Production Large | A100 (80GB) x 2+ | > 70B params | 500+ req/s |
+| Scale             | GPU              | Model Size   | Throughput    |
+| ----------------- | ---------------- | ------------ | ------------- |
+| Development       | T4 (16GB)        | < 7B params  | 10-50 req/s   |
+| Production Small  | A10G (24GB)      | < 13B params | 50-100 req/s  |
+| Production Medium | A100 (40GB)      | < 70B params | 100-500 req/s |
+| Production Large  | A100 (80GB) x 2+ | > 70B params | 500+ req/s    |
 
 ---
 

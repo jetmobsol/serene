@@ -35,12 +35,15 @@ Copy and fill in this template when generating validation reports.
 ## 2. What You Got Right
 
 ### Strength 1: [Specific thing done well]
+
 [Why this matters and what it demonstrates about the thinking]
 
 ### Strength 2: [Specific thing done well]
+
 [Why this matters and what to preserve]
 
-### Strength 3: [Specific thing done well] *(optional)*
+### Strength 3: [Specific thing done well] _(optional)_
+
 [Why this matters]
 
 ---
@@ -59,6 +62,7 @@ Copy and fill in this template when generating validation reports.
 [What happens if this goes to production/implementation as-is]
 
 **Evidence**:
+
 > [Quote from proposal or specific data point that supports this flaw]
 
 ---
@@ -75,11 +79,12 @@ Copy and fill in this template when generating validation reports.
 [Outcome]
 
 **Evidence**:
+
 > [Supporting evidence]
 
 ---
 
-### Flaw 3: [Clear title] *(if applicable)*
+### Flaw 3: [Clear title] _(if applicable)_
 
 [Same format]
 
@@ -89,10 +94,10 @@ Copy and fill in this template when generating validation reports.
 
 ### Hidden Assumptions
 
-| Assumption Made | Reality Check | Risk |
-|-----------------|---------------|------|
+| Assumption Made            | Reality Check              | Risk          |
+| -------------------------- | -------------------------- | ------------- |
 | [What was assumed as fact] | [Why it might not be true] | [Consequence] |
-| [Another assumption] | [Reality] | [Risk] |
+| [Another assumption]       | [Reality]                  | [Risk]        |
 
 ### Blindspots
 
@@ -112,6 +117,7 @@ Copy and fill in this template when generating validation reports.
 <!-- Use ONE of these formats: -->
 
 <!-- If reframe is needed: -->
+
 ### Problem Reframe Needed
 
 **You're asking**: "[The stated question/problem]"
@@ -121,6 +127,7 @@ Copy and fill in this template when generating validation reports.
 **Why this matters**: [Explanation of why the reframe changes the approach]
 
 <!-- OR if problem is correctly framed: -->
+
 ### Problem is Correctly Framed
 
 The problem definition is appropriate. The proposal correctly identifies [what it correctly identifies] and is solving the right problem.
@@ -132,15 +139,18 @@ The problem definition is appropriate. The proposal correctly identifies [what i
 For this [plan/architecture/proposal] to be ready for implementation, it must:
 
 ### Must-Have Criteria
+
 - [ ] **[Criterion 1]**: [Measurable definition of success]
 - [ ] **[Criterion 2]**: [Measurable definition]
 - [ ] **[Criterion 3]**: [Measurable definition]
 
 ### Evidence Required
+
 - [ ] [What proof would validate the assumptions]
 - [ ] [What data would confirm the approach]
 
 ### Validation Checkpoints
+
 - [ ] [Checkpoint 1]: Before [milestone], confirm [what]
 - [ ] [Checkpoint 2]: At [milestone], verify [what]
 
@@ -159,6 +169,7 @@ For this [plan/architecture/proposal] to be ready for implementation, it must:
 3. **Validation checkpoints**: [When to pause and verify]
 
 **Minor improvements to consider**:
+
 - [Suggestion 1]
 - [Suggestion 2]
 
@@ -179,6 +190,7 @@ For this [plan/architecture/proposal] to be ready for implementation, it must:
    - Who should do this: [Who]
 
 **Recommended workflow**:
+
 1. Route back to cto-architect for revision
 2. Address critical flaws 1 and 2
 3. Re-validate before proceeding
@@ -195,10 +207,12 @@ For this [plan/architecture/proposal] to be ready for implementation, it must:
 [Explanation of why revision won't work]
 
 **Alternative approaches to consider**:
+
 1. **[Alternative 1]**: [Brief description and trade-offs]
 2. **[Alternative 2]**: [Brief description and trade-offs]
 
 **Recommended next steps**:
+
 1. [Step 1 - e.g., Stakeholder discussion to realign goals]
 2. [Step 2 - e.g., Reframe the problem]
 3. [Step 3 - e.g., Start fresh with new constraints]
@@ -209,21 +223,23 @@ For this [plan/architecture/proposal] to be ready for implementation, it must:
 
 These questions must be answered before this [plan/architecture/proposal] can proceed:
 
-| # | Question | Who Can Answer | What It Blocks | Priority |
-|---|----------|---------------|----------------|----------|
-| 1 | [Specific question] | [Person/team] | [Decision blocked] | Critical |
-| 2 | [Specific question] | [Person/team] | [Decision blocked] | High |
-| 3 | [Specific question] | [Person/team] | [Decision blocked] | Medium |
+| #   | Question            | Who Can Answer | What It Blocks     | Priority |
+| --- | ------------------- | -------------- | ------------------ | -------- |
+| 1   | [Specific question] | [Person/team]  | [Decision blocked] | Critical |
+| 2   | [Specific question] | [Person/team]  | [Decision blocked] | High     |
+| 3   | [Specific question] | [Person/team]  | [Decision blocked] | Medium   |
 
 ### Question Details
 
 **Q1: [Question]**
+
 - Why this matters: [Context]
 - Possible answers and implications:
   - If [answer A]: [implication]
   - If [answer B]: [implication]
 
 **Q2: [Question]**
+
 - Why this matters: [Context]
 - Possible answers and implications:
   - If [answer A]: [implication]
@@ -233,20 +249,20 @@ These questions must be answered before this [plan/architecture/proposal] can pr
 
 ## Summary
 
-| Aspect | Assessment |
-|--------|------------|
-| **Verdict** | [GOOD/NEEDS MAJOR WORK/BAD] |
-| **Confidence** | [High/Medium/Low] |
-| **Critical Flaws** | [Count] identified |
-| **Strengths** | [Count] noted |
-| **Blocking Questions** | [Count] unanswered |
-| **Recommendation** | [Proceed / Revise / Restart] |
+| Aspect                 | Assessment                   |
+| ---------------------- | ---------------------------- |
+| **Verdict**            | [GOOD/NEEDS MAJOR WORK/BAD]  |
+| **Confidence**         | [High/Medium/Low]            |
+| **Critical Flaws**     | [Count] identified           |
+| **Strengths**          | [Count] noted                |
+| **Blocking Questions** | [Count] unanswered           |
+| **Recommendation**     | [Proceed / Revise / Restart] |
 
 ---
 
-*This validation was conducted by strategic-cto-mentor following standard validation protocol. The goal is to prevent costly mistakes by surfacing issues early, not to criticize for its own sake.*
+_This validation was conducted by strategic-cto-mentor following standard validation protocol. The goal is to prevent costly mistakes by surfacing issues early, not to criticize for its own sake._
 
-*Next Steps: [Specific action - e.g., "Schedule meeting with cto-architect to discuss revisions" or "Proceed to implementation planning"]*
+_Next Steps: [Specific action - e.g., "Schedule meeting with cto-architect to discuss revisions" or "Proceed to implementation planning"]_
 ```
 
 ---
@@ -261,11 +277,11 @@ These questions must be answered before this [plan/architecture/proposal] can pr
 
 ### Tone Calibration
 
-| Verdict | Opening Tone | Flaw Tone | Closing Tone |
-|---------|-------------|-----------|--------------|
-| GOOD | Affirming | Advisory | Encouraging |
-| NEEDS MAJOR WORK | Neutral | Direct | Constructive |
-| BAD | Sympathetic | Firm | Helpful |
+| Verdict          | Opening Tone | Flaw Tone | Closing Tone |
+| ---------------- | ------------ | --------- | ------------ |
+| GOOD             | Affirming    | Advisory  | Encouraging  |
+| NEEDS MAJOR WORK | Neutral      | Direct    | Constructive |
+| BAD              | Sympathetic  | Firm      | Helpful      |
 
 ### Common Mistakes
 

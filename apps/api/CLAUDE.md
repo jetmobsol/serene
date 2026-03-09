@@ -28,16 +28,16 @@ The API service is the backend for the entire application:
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | Hono |
-| RPC | tRPC 11 |
-| Auth | Better Auth (email OTP, passkey, Google OAuth, orgs) |
-| Database | Drizzle ORM, Neon PostgreSQL, Cloudflare Hyperdrive |
-| Email | React Email + Resend |
-| AI | OpenAI (via `@ai-sdk/openai`) |
-| Payments | Stripe (via `@better-auth/stripe`) |
-| Runtime | Cloudflare Workers (`nodejs_compat`) |
+| Layer     | Technology                                           |
+| --------- | ---------------------------------------------------- |
+| Framework | Hono                                                 |
+| RPC       | tRPC 11                                              |
+| Auth      | Better Auth (email OTP, passkey, Google OAuth, orgs) |
+| Database  | Drizzle ORM, Neon PostgreSQL, Cloudflare Hyperdrive  |
+| Email     | React Email + Resend                                 |
+| AI        | OpenAI (via `@ai-sdk/openai`)                        |
+| Payments  | Stripe (via `@better-auth/stripe`)                   |
+| Runtime   | Cloudflare Workers (`nodejs_compat`)                 |
 
 ## Project Structure
 
@@ -95,6 +95,7 @@ bun api:test               # Run tests
 ## Service Bindings
 
 Configured in `wrangler.jsonc`:
+
 - Receives requests from **web** worker via service binding
 - Connects to Neon PostgreSQL via **Hyperdrive**
 

@@ -54,22 +54,24 @@ Provides systematic guidance for scaling systems at different growth stages, ide
 
 ### Key Metrics
 
-| Metric | Target | Warning |
-|--------|--------|---------|
-| Response time (P95) | < 500ms | > 1s |
-| Database queries/request | < 10 | > 20 |
-| Server CPU | < 70% | > 85% |
-| Database connections | < 50% pool | > 80% pool |
+| Metric                   | Target     | Warning    |
+| ------------------------ | ---------- | ---------- |
+| Response time (P95)      | < 500ms    | > 1s       |
+| Database queries/request | < 10       | > 20       |
+| Server CPU               | < 70%      | > 85%      |
+| Database connections     | < 50% pool | > 80% pool |
 
 ### What to Focus On
 
 **DO**:
+
 - Write clean, maintainable code
 - Use database indexes on frequently queried columns
 - Implement basic monitoring (uptime, errors)
 - Keep architecture simple (monolith is fine)
 
 **DON'T**:
+
 - Over-engineer for scale you don't have
 - Add caching before you need it
 - Split into microservices prematurely
@@ -117,13 +119,13 @@ Provides systematic guidance for scaling systems at different growth stages, ide
 
 ### Key Additions
 
-| Component | Purpose | When to Add |
-|-----------|---------|-------------|
-| **CDN** | Static asset caching | Images, JS, CSS taking > 20% bandwidth |
-| **Load Balancer** | Distribute traffic | Single server CPU > 70% |
-| **Read Replicas** | Offload reads | > 80% database ops are reads |
-| **Redis Cache** | Application caching | Same queries repeated frequently |
-| **Job Queue** | Async processing | Background tasks blocking requests |
+| Component         | Purpose              | When to Add                            |
+| ----------------- | -------------------- | -------------------------------------- |
+| **CDN**           | Static asset caching | Images, JS, CSS taking > 20% bandwidth |
+| **Load Balancer** | Distribute traffic   | Single server CPU > 70%                |
+| **Read Replicas** | Offload reads        | > 80% database ops are reads           |
+| **Redis Cache**   | Application caching  | Same queries repeated frequently       |
+| **Job Queue**     | Async processing     | Background tasks blocking requests     |
 
 ### Caching Strategy
 
@@ -138,6 +140,7 @@ Request Flow with Caching:
 ```
 
 **What to Cache**:
+
 - Session data (TTL: session duration)
 - User profile data (TTL: 5-15 minutes)
 - API responses (TTL: varies by freshness needs)
@@ -289,11 +292,11 @@ After:
 
 ### Multi-Region Patterns
 
-| Pattern | Consistency | Latency | Complexity |
-|---------|-------------|---------|------------|
-| **Active-Passive** | Strong | High failover | Low |
-| **Active-Active** | Eventual | Low | High |
-| **Follow-the-Sun** | Strong per region | Medium | Medium |
+| Pattern            | Consistency       | Latency       | Complexity |
+| ------------------ | ----------------- | ------------- | ---------- |
+| **Active-Passive** | Strong            | High failover | Low        |
+| **Active-Active**  | Eventual          | Low           | High       |
+| **Follow-the-Sun** | Strong per region | Medium        | Medium     |
 
 ### Data Consistency Strategies
 
@@ -354,13 +357,13 @@ Systematic Diagnosis:
 
 ### Common Bottlenecks by Layer
 
-| Layer | Symptoms | Solutions |
-|-------|----------|-----------|
-| **Database** | Slow queries, high CPU | Indexing, read replicas, caching |
-| **Application** | High CPU, memory | Optimize code, scale horizontally |
-| **Network** | High latency, timeouts | CDN, edge caching, connection pooling |
-| **Storage** | Slow I/O, high wait | SSD, object storage, caching |
-| **External APIs** | Timeouts, rate limits | Circuit breakers, caching, fallbacks |
+| Layer             | Symptoms               | Solutions                             |
+| ----------------- | ---------------------- | ------------------------------------- |
+| **Database**      | Slow queries, high CPU | Indexing, read replicas, caching      |
+| **Application**   | High CPU, memory       | Optimize code, scale horizontally     |
+| **Network**       | High latency, timeouts | CDN, edge caching, connection pooling |
+| **Storage**       | Slow I/O, high wait    | SSD, object storage, caching          |
+| **External APIs** | Timeouts, rate limits  | Circuit breakers, caching, fallbacks  |
 
 ### Database Bottleneck Checklist
 
@@ -440,22 +443,22 @@ Cache Size:
 
 ### Scaling Decision Matrix
 
-| Symptom | First Try | Then Try | Finally |
-|---------|-----------|----------|---------|
-| Slow page loads | Add caching | CDN | Edge compute |
-| Database slow | Add indexes | Read replicas | Sharding |
-| API timeouts | Async processing | Circuit breakers | Event-driven |
-| High server CPU | Vertical scale | Horizontal scale | Optimize code |
-| High memory | Increase RAM | Fix memory leaks | Redesign data structures |
+| Symptom         | First Try        | Then Try         | Finally                  |
+| --------------- | ---------------- | ---------------- | ------------------------ |
+| Slow page loads | Add caching      | CDN              | Edge compute             |
+| Database slow   | Add indexes      | Read replicas    | Sharding                 |
+| API timeouts    | Async processing | Circuit breakers | Event-driven             |
+| High server CPU | Vertical scale   | Horizontal scale | Optimize code            |
+| High memory     | Increase RAM     | Fix memory leaks | Redesign data structures |
 
 ### Infrastructure Cost at Scale
 
-| Users | Architecture | Monthly Cost |
-|-------|-------------|--------------|
-| 10K | Single server | $100-300 |
-| 100K | Load balanced + cache | $1,000-3,000 |
-| 1M | Microservices + sharding | $10,000-30,000 |
-| 10M | Multi-region | $100,000+ |
+| Users | Architecture             | Monthly Cost   |
+| ----- | ------------------------ | -------------- |
+| 10K   | Single server            | $100-300       |
+| 100K  | Load balanced + cache    | $1,000-3,000   |
+| 1M    | Microservices + sharding | $10,000-30,000 |
+| 10M   | Multi-region             | $100,000+      |
 
 ---
 

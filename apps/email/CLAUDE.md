@@ -24,12 +24,12 @@ The email app contains transactional email templates:
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Templates | React Email |
+| Layer     | Technology                                    |
+| --------- | --------------------------------------------- |
+| Templates | React Email                                   |
 | Rendering | `renderEmailToHtml()` + `renderEmailToText()` |
-| Delivery | Resend (from API service) |
-| Package | `@repo/email` workspace package |
+| Delivery  | Resend (from API service)                     |
+| Package   | `@repo/email` workspace package               |
 
 ## Project Structure
 
@@ -90,6 +90,7 @@ await resend.emails.send({ html, text, to, subject });
 ### Build Order
 
 Email templates must be built before the API service:
+
 ```
 email (build) → api (dev/build)
 ```

@@ -46,25 +46,25 @@ Provides structured recommendations for technology stack selection based on proj
 
 ### By Project Type
 
-| Project Type | Frontend | Backend | Database | Why |
-|--------------|----------|---------|----------|-----|
-| **SaaS MVP** | Next.js | Node.js/Express | PostgreSQL | Fast iteration, full-stack JS |
-| **E-commerce** | Next.js | Node.js or Python | PostgreSQL + Redis | SEO, caching, transactions |
-| **Mobile App** | React Native | Node.js/Python | PostgreSQL | Cross-platform, shared logic |
-| **Real-time App** | React | Node.js + WebSocket | PostgreSQL + Redis | Event-driven, low latency |
-| **Data Platform** | React | Python/FastAPI | PostgreSQL + ClickHouse | Data processing, analytics |
-| **Enterprise** | React | Java/Spring or .NET | PostgreSQL/Oracle | Stability, enterprise support |
-| **ML Product** | React | Python/FastAPI | PostgreSQL + Vector DB | ML ecosystem, inference |
+| Project Type      | Frontend     | Backend             | Database                | Why                           |
+| ----------------- | ------------ | ------------------- | ----------------------- | ----------------------------- |
+| **SaaS MVP**      | Next.js      | Node.js/Express     | PostgreSQL              | Fast iteration, full-stack JS |
+| **E-commerce**    | Next.js      | Node.js or Python   | PostgreSQL + Redis      | SEO, caching, transactions    |
+| **Mobile App**    | React Native | Node.js/Python      | PostgreSQL              | Cross-platform, shared logic  |
+| **Real-time App** | React        | Node.js + WebSocket | PostgreSQL + Redis      | Event-driven, low latency     |
+| **Data Platform** | React        | Python/FastAPI      | PostgreSQL + ClickHouse | Data processing, analytics    |
+| **Enterprise**    | React        | Java/Spring or .NET | PostgreSQL/Oracle       | Stability, enterprise support |
+| **ML Product**    | React        | Python/FastAPI      | PostgreSQL + Vector DB  | ML ecosystem, inference       |
 
 ### By Team Profile
 
-| Team Profile | Recommended Stack | Avoid |
-|--------------|-------------------|-------|
-| **Full-stack JS** | Next.js, Node.js, PostgreSQL | Go, Rust (learning curve) |
-| **Python Background** | FastAPI, React, PostgreSQL | Heavy frontend frameworks |
-| **Enterprise Java** | Spring Boot, React, PostgreSQL | Bleeding-edge tech |
-| **Startup (Speed)** | Next.js, Supabase/Firebase | Complex microservices |
-| **Scale-Up** | React, Go/Node, PostgreSQL | Monolithic frameworks |
+| Team Profile          | Recommended Stack              | Avoid                     |
+| --------------------- | ------------------------------ | ------------------------- |
+| **Full-stack JS**     | Next.js, Node.js, PostgreSQL   | Go, Rust (learning curve) |
+| **Python Background** | FastAPI, React, PostgreSQL     | Heavy frontend frameworks |
+| **Enterprise Java**   | Spring Boot, React, PostgreSQL | Bleeding-edge tech        |
+| **Startup (Speed)**   | Next.js, Supabase/Firebase     | Complex microservices     |
+| **Scale-Up**          | React, Go/Node, PostgreSQL     | Monolithic frameworks     |
 
 ---
 
@@ -72,13 +72,13 @@ Provides structured recommendations for technology stack selection based on proj
 
 ### Frontend Frameworks
 
-| Framework | Best For | Learning Curve | Ecosystem | Hiring |
-|-----------|----------|----------------|-----------|--------|
-| **React** | Complex UIs, SPAs | Medium | Excellent | Easy |
-| **Next.js** | Full-stack, SSR, SEO | Medium | Excellent | Easy |
-| **Vue.js** | Simpler apps, gradual adoption | Easy | Good | Medium |
-| **Svelte** | Performance-critical | Easy | Growing | Hard |
-| **Angular** | Enterprise, large teams | Hard | Good | Medium |
+| Framework   | Best For                       | Learning Curve | Ecosystem | Hiring |
+| ----------- | ------------------------------ | -------------- | --------- | ------ |
+| **React**   | Complex UIs, SPAs              | Medium         | Excellent | Easy   |
+| **Next.js** | Full-stack, SSR, SEO           | Medium         | Excellent | Easy   |
+| **Vue.js**  | Simpler apps, gradual adoption | Easy           | Good      | Medium |
+| **Svelte**  | Performance-critical           | Easy           | Growing   | Hard   |
+| **Angular** | Enterprise, large teams        | Hard           | Good      | Medium |
 
 #### React vs Vue vs Angular
 
@@ -91,21 +91,22 @@ Angular         ██████░░░░      █████████�
 
 ### Backend Frameworks
 
-| Framework | Language | Best For | Performance | Ecosystem |
-|-----------|----------|----------|-------------|-----------|
-| **Express** | Node.js | APIs, real-time | Good | Excellent |
-| **Fastify** | Node.js | High-performance APIs | Excellent | Good |
-| **FastAPI** | Python | ML APIs, async | Excellent | Good |
-| **Django** | Python | Full-featured apps | Good | Excellent |
-| **Spring Boot** | Java | Enterprise | Good | Excellent |
-| **Go (Gin/Echo)** | Go | High performance | Excellent | Good |
-| **Rails** | Ruby | Rapid prototyping | Moderate | Good |
-| **NestJS** | TypeScript | Structured Node apps | Good | Good |
+| Framework         | Language   | Best For              | Performance | Ecosystem |
+| ----------------- | ---------- | --------------------- | ----------- | --------- |
+| **Express**       | Node.js    | APIs, real-time       | Good        | Excellent |
+| **Fastify**       | Node.js    | High-performance APIs | Excellent   | Good      |
+| **FastAPI**       | Python     | ML APIs, async        | Excellent   | Good      |
+| **Django**        | Python     | Full-featured apps    | Good        | Excellent |
+| **Spring Boot**   | Java       | Enterprise            | Good        | Excellent |
+| **Go (Gin/Echo)** | Go         | High performance      | Excellent   | Good      |
+| **Rails**         | Ruby       | Rapid prototyping     | Moderate    | Good      |
+| **NestJS**        | TypeScript | Structured Node apps  | Good        | Good      |
 
 #### When to Use What
 
 ```markdown
 ## Node.js (Express/Fastify/NestJS)
+
 ✅ Real-time applications (WebSocket)
 ✅ I/O-heavy workloads
 ✅ Full-stack JavaScript teams
@@ -114,6 +115,7 @@ Angular         ██████░░░░      █████████�
 ❌ Heavy computation
 
 ## Python (FastAPI/Django)
+
 ✅ ML/Data Science integration
 ✅ Rapid prototyping
 ✅ Data processing pipelines
@@ -122,6 +124,7 @@ Angular         ██████░░░░      █████████�
 ❌ Real-time systems
 
 ## Go
+
 ✅ High-performance services
 ✅ System programming
 ✅ Concurrent workloads
@@ -130,6 +133,7 @@ Angular         ██████░░░░      █████████�
 ❌ Complex ORM needs
 
 ## Java (Spring Boot)
+
 ✅ Enterprise applications
 ✅ Complex business logic
 ✅ Transaction-heavy systems
@@ -140,16 +144,16 @@ Angular         ██████░░░░      █████████�
 
 ### Databases
 
-| Database | Type | Best For | Scale | Complexity |
-|----------|------|----------|-------|------------|
-| **PostgreSQL** | Relational | General purpose, ACID | High | Medium |
-| **MySQL** | Relational | Web apps, read-heavy | High | Low |
-| **MongoDB** | Document | Flexible schemas, JSON | High | Low |
-| **Redis** | Key-Value | Caching, sessions | Very High | Low |
-| **Elasticsearch** | Search | Full-text search | High | Medium |
-| **ClickHouse** | Columnar | Analytics, time-series | Very High | Medium |
-| **DynamoDB** | Key-Value | Serverless, AWS | Very High | Medium |
-| **Cassandra** | Wide-column | Write-heavy, distributed | Very High | High |
+| Database          | Type        | Best For                 | Scale     | Complexity |
+| ----------------- | ----------- | ------------------------ | --------- | ---------- |
+| **PostgreSQL**    | Relational  | General purpose, ACID    | High      | Medium     |
+| **MySQL**         | Relational  | Web apps, read-heavy     | High      | Low        |
+| **MongoDB**       | Document    | Flexible schemas, JSON   | High      | Low        |
+| **Redis**         | Key-Value   | Caching, sessions        | Very High | Low        |
+| **Elasticsearch** | Search      | Full-text search         | High      | Medium     |
+| **ClickHouse**    | Columnar    | Analytics, time-series   | Very High | Medium     |
+| **DynamoDB**      | Key-Value   | Serverless, AWS          | Very High | Medium     |
+| **Cassandra**     | Wide-column | Write-heavy, distributed | Very High | High       |
 
 #### Database Selection Guide
 
@@ -169,16 +173,16 @@ Need ACID transactions?
 
 ### Infrastructure
 
-| Platform | Best For | Complexity | Cost |
-|----------|----------|------------|------|
-| **Vercel** | Next.js, frontend | Very Low | $ - $$ |
-| **Railway** | Simple deployments | Low | $ - $$ |
-| **Render** | General apps | Low | $ - $$ |
-| **AWS** | Everything, scale | High | $ - $$$$ |
-| **GCP** | ML/Data, Kubernetes | High | $ - $$$$ |
-| **Azure** | Enterprise, .NET | High | $ - $$$$ |
-| **DigitalOcean** | Simple, affordable | Low | $ |
-| **Fly.io** | Edge, global | Medium | $ - $$ |
+| Platform         | Best For            | Complexity | Cost     |
+| ---------------- | ------------------- | ---------- | -------- |
+| **Vercel**       | Next.js, frontend   | Very Low   | $ - $$   |
+| **Railway**      | Simple deployments  | Low        | $ - $$   |
+| **Render**       | General apps        | Low        | $ - $$   |
+| **AWS**          | Everything, scale   | High       | $ - $$$$ |
+| **GCP**          | ML/Data, Kubernetes | High       | $ - $$$$ |
+| **Azure**        | Enterprise, .NET    | High       | $ - $$$$ |
+| **DigitalOcean** | Simple, affordable  | Low        | $        |
+| **Fly.io**       | Edge, global        | Medium     | $ - $$   |
 
 ---
 
@@ -312,14 +316,14 @@ Time to MVP: 8-16 weeks
 
 ### Language Selection Matrix
 
-| Factor | JavaScript/TS | Python | Go | Java | Rust |
-|--------|--------------|--------|-----|------|------|
-| **Learning Curve** | Low | Low | Medium | Medium | High |
-| **Ecosystem** | Excellent | Excellent | Good | Excellent | Growing |
-| **Performance** | Good | Moderate | Excellent | Good | Excellent |
-| **Hiring Pool** | Large | Large | Medium | Large | Small |
-| **Type Safety** | TS: Good | Optional | Excellent | Excellent | Excellent |
-| **Memory Safety** | GC | GC | GC | GC | Compile-time |
+| Factor             | JavaScript/TS | Python    | Go        | Java      | Rust         |
+| ------------------ | ------------- | --------- | --------- | --------- | ------------ |
+| **Learning Curve** | Low           | Low       | Medium    | Medium    | High         |
+| **Ecosystem**      | Excellent     | Excellent | Good      | Excellent | Growing      |
+| **Performance**    | Good          | Moderate  | Excellent | Good      | Excellent    |
+| **Hiring Pool**    | Large         | Large     | Medium    | Large     | Small        |
+| **Type Safety**    | TS: Good      | Optional  | Excellent | Excellent | Excellent    |
+| **Memory Safety**  | GC            | GC        | GC        | GC        | Compile-time |
 
 ### Framework Selection Criteria
 
@@ -353,31 +357,31 @@ Time to MVP: 8-16 weeks
 
 ### Technology Selection Red Flags
 
-| Anti-Pattern | Why It's Bad | Better Approach |
-|--------------|--------------|-----------------|
-| **Resume-Driven** | Choosing tech for career, not project | Match to requirements |
-| **Hype-Driven** | Picking latest without evaluation | Proven over trendy |
-| **Comfort-Only** | Only familiar tech even when unsuitable | Evaluate objectively |
-| **Over-Engineering** | Complex stack for simple needs | Start simple |
-| **Under-Engineering** | Simple tools for complex needs | Plan for growth |
+| Anti-Pattern          | Why It's Bad                            | Better Approach       |
+| --------------------- | --------------------------------------- | --------------------- |
+| **Resume-Driven**     | Choosing tech for career, not project   | Match to requirements |
+| **Hype-Driven**       | Picking latest without evaluation       | Proven over trendy    |
+| **Comfort-Only**      | Only familiar tech even when unsuitable | Evaluate objectively  |
+| **Over-Engineering**  | Complex stack for simple needs          | Start simple          |
+| **Under-Engineering** | Simple tools for complex needs          | Plan for growth       |
 
 ### Common Mistakes
 
 ```markdown
 ❌ "Let's use microservices from day one"
-   → Start monolith, extract later
+→ Start monolith, extract later
 
 ❌ "We need Kubernetes for our 3-person startup"
-   → Use managed platforms (Vercel, Railway)
+→ Use managed platforms (Vercel, Railway)
 
 ❌ "MongoDB because NoSQL is modern"
-   → PostgreSQL handles 95% of use cases better
+→ PostgreSQL handles 95% of use cases better
 
 ❌ "GraphQL for everything"
-   → REST is simpler for most APIs
+→ REST is simpler for most APIs
 
 ❌ "Let's build our own auth"
-   → Use Auth0, Clerk, or established solutions
+→ Use Auth0, Clerk, or established solutions
 ```
 
 ---
@@ -386,12 +390,12 @@ Time to MVP: 8-16 weeks
 
 ### When to Consider Migration
 
-| Trigger | Action |
-|---------|--------|
-| Performance bottlenecks | Profile first, then consider |
-| Team expertise mismatch | Train or hire before migrating |
-| End of life/support | Plan 6-12 months ahead |
-| Scale limitations | Validate limits with benchmarks |
+| Trigger                  | Action                            |
+| ------------------------ | --------------------------------- |
+| Performance bottlenecks  | Profile first, then consider      |
+| Team expertise mismatch  | Train or hire before migrating    |
+| End of life/support      | Plan 6-12 months ahead            |
+| Scale limitations        | Validate limits with benchmarks   |
 | Security vulnerabilities | Patch if possible, migrate if not |
 
 ### Migration Risk Assessment
@@ -419,25 +423,25 @@ HIGH RISK:
 
 ### "I'm building a..."
 
-| Project | Recommended Stack |
-|---------|-------------------|
-| Blog/CMS | Next.js + Headless CMS (Sanity/Contentful) |
-| SaaS Dashboard | Next.js + Node.js + PostgreSQL |
-| Mobile App | React Native + Node.js + PostgreSQL |
-| E-commerce | Next.js + Medusa/Custom + PostgreSQL |
-| Real-time Chat | React + Node.js + Socket.io + Redis |
-| Data Dashboard | React + Python/FastAPI + PostgreSQL |
-| ML Product | React + Python/FastAPI + PostgreSQL + Vector DB |
-| API Service | Node.js or Python + PostgreSQL |
+| Project        | Recommended Stack                               |
+| -------------- | ----------------------------------------------- |
+| Blog/CMS       | Next.js + Headless CMS (Sanity/Contentful)      |
+| SaaS Dashboard | Next.js + Node.js + PostgreSQL                  |
+| Mobile App     | React Native + Node.js + PostgreSQL             |
+| E-commerce     | Next.js + Medusa/Custom + PostgreSQL            |
+| Real-time Chat | React + Node.js + Socket.io + Redis             |
+| Data Dashboard | React + Python/FastAPI + PostgreSQL             |
+| ML Product     | React + Python/FastAPI + PostgreSQL + Vector DB |
+| API Service    | Node.js or Python + PostgreSQL                  |
 
 ### Stack Complexity Levels
 
-| Complexity | Description | Example Stack |
-|------------|-------------|---------------|
-| **Minimal** | Single deployment, managed services | Vercel + Supabase |
-| **Simple** | Separate frontend/backend | Vercel + Railway + PostgreSQL |
-| **Standard** | Multiple services, caching | AWS ECS + RDS + Redis |
-| **Complex** | Microservices, event-driven | K8s + Multiple DBs + Kafka |
+| Complexity   | Description                         | Example Stack                 |
+| ------------ | ----------------------------------- | ----------------------------- |
+| **Minimal**  | Single deployment, managed services | Vercel + Supabase             |
+| **Simple**   | Separate frontend/backend           | Vercel + Railway + PostgreSQL |
+| **Standard** | Multiple services, caching          | AWS ECS + RDS + Redis         |
+| **Complex**  | Microservices, event-driven         | K8s + Multiple DBs + Kafka    |
 
 ---
 

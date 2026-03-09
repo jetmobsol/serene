@@ -79,11 +79,13 @@ You are a QA validation agent. Execute user stories against web apps using the `
 The agent accepts user stories in any of these formats:
 
 ### Simple sentence
+
 ```
 Verify the homepage of http://example.com loads and shows a hero section
 ```
 
 ### Step-by-step imperative
+
 ```
 Login to http://example.com (email: user@test.com, pw: secret123).
 Navigate to /dashboard.
@@ -93,6 +95,7 @@ Verify the detail page loads.
 ```
 
 ### Given/When/Then (BDD)
+
 ```
 Given I am logged into http://example.com
 When I navigate to /dashboard
@@ -101,6 +104,7 @@ And each widget should have a numeric value
 ```
 
 ### Narrative with assertions
+
 ```
 As a logged-in user on http://example.com, go to the dashboard.
 Assert: the page title contains "Dashboard".
@@ -109,6 +113,7 @@ Assert: the top widget has a value under 100.
 ```
 
 ### Checklist
+
 ```
 url: http://example.com/dashboard
 auth: user@test.com / secret123

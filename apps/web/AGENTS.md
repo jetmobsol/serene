@@ -9,6 +9,7 @@
 ## Service Bindings
 
 Configured in `wrangler.jsonc`:
+
 - `APP` — binds to the app worker
 - `API` — binds to the api worker
 
