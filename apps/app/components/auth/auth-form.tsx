@@ -7,7 +7,7 @@ import { OtpVerification } from "./otp-verification";
 import { PasskeyLogin } from "./passkey-login";
 import { useAuthForm } from "./use-auth-form";
 
-const APP_NAME = import.meta.env.VITE_APP_NAME || "your account";
+const APP_NAME = import.meta.env.VITE_APP_NAME || "Serene";
 
 function SignupTerms() {
   return (
@@ -88,11 +88,16 @@ export function AuthForm({
 
   return (
     <div className={cn("flex flex-col gap-6 w-full", className)} {...props}>
-      {/* Logo */}
-      <div className="flex justify-center">
+      {/* Brand Mark */}
+      <div className="flex flex-col items-center gap-1">
         <Link to="/" aria-label="Go to homepage">
-          <img src="/logo512.png" alt="" className="h-10 w-10" />
+          <span className="text-2xl font-semibold tracking-tight text-primary font-[Lora,serif]">
+            Serene
+          </span>
         </Link>
+        <p className="text-xs text-muted-foreground">
+          Your AI-Powered Wellness Journal
+        </p>
       </div>
 
       {/* Error message - role="alert" ensures screen readers announce it */}

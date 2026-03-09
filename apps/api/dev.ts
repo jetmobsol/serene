@@ -75,7 +75,7 @@ app.use(async (c, next) => {
     ...Object.fromEntries(
       secretKeys.map((key) => [key, process.env[key] || cf.env[key]]),
     ),
-    APP_NAME: process.env.APP_NAME || cf.env.APP_NAME || "Example",
+    APP_NAME: process.env.APP_NAME || cf.env.APP_NAME || "Serene",
     APP_ORIGIN:
       c.req.header("x-forwarded-origin") ||
       process.env.APP_ORIGIN ||

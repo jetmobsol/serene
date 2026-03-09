@@ -53,8 +53,14 @@ function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-muted/40 p-6 md:p-10">
-      <div className="w-full max-w-sm rounded-xl bg-background p-8 shadow-sm ring-1 ring-border/50">
+    <div className="flex min-h-svh flex-col items-center justify-center bg-gradient-to-b from-background to-secondary/30 p-6 md:p-10">
+      <div className="mb-6 text-center">
+        <p className="text-sm text-muted-foreground max-w-xs">
+          Track your mood, reflect on your day, and receive personalized AI
+          insights.
+        </p>
+      </div>
+      <div className="w-full max-w-sm rounded-xl bg-card p-8 shadow-sm ring-1 ring-border/50">
         <AuthForm
           mode="login"
           onSuccess={handleSuccess}

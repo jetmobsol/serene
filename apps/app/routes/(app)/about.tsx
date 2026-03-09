@@ -1,5 +1,4 @@
 import {
-  Button,
   Card,
   CardContent,
   CardDescription,
@@ -18,13 +17,11 @@ function About() {
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
       {/* Hero Section */}
       <div className="text-center mb-16">
-        <h1 className="text-4xl font-bold tracking-tight mb-6">
-          About React Starter Kit
-        </h1>
+        <h1 className="text-4xl font-bold tracking-tight mb-6">About Serene</h1>
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          A production-ready, full-stack web application template that combines
-          modern development practices with cutting-edge technologies to deliver
-          exceptional performance and developer experience.
+          Serene is your private AI-powered wellness journal. Track your mood,
+          write reflections, and receive gentle, personalized encouragement to
+          support your emotional well-being.
         </p>
       </div>
 
@@ -34,236 +31,109 @@ function About() {
           <CardHeader>
             <CardTitle className="text-2xl">Our Mission</CardTitle>
             <CardDescription>
-              Empowering developers to build faster, better web applications
+              Making mindful self-reflection accessible to everyone
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-muted-foreground">
-              React Starter Kit was created to bridge the gap between prototype
-              and production. We believe that developers should focus on
-              building great features, not wrestling with configuration and
-              setup.
+              We believe that small, consistent acts of self-reflection can have
+              a profound impact on emotional well-being. Serene was created to
+              make journaling effortless and rewarding.
             </p>
             <p className="text-muted-foreground">
-              Our template provides a solid foundation with best practices,
-              modern tooling, and optimized performance out of the box, so you
-              can ship your ideas faster and with confidence.
+              By combining mood tracking with AI-powered insights, Serene helps
+              you notice patterns, celebrate progress, and navigate difficult
+              moments with greater self-awareness.
             </p>
           </CardContent>
         </Card>
       </section>
 
-      {/* Key Features */}
+      {/* How It Works */}
       <section className="mb-20">
         <h2 className="text-3xl font-bold tracking-tight mb-8 text-center">
-          What Makes Us Different
+          How Serene Works
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <Card>
             <CardHeader>
-              <CardTitle>🎯 Production-Ready</CardTitle>
+              <CardTitle>1. Log Your Mood</CardTitle>
               <CardDescription>
-                Not just a demo, but a real foundation for your applications
+                Choose how you're feeling from six mood options
               </CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Every component, pattern, and configuration has been
-                battle-tested in production environments. Security, performance,
-                and maintainability are built-in from day one.
+                Happy, Calm, Anxious, Sad, Overwhelmed, or Angry. Each check-in
+                takes just a moment and helps build a picture of your emotional
+                landscape.
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>⚡ Edge-First Architecture</CardTitle>
+              <CardTitle>2. Write a Reflection</CardTitle>
               <CardDescription>
-                Optimized for global performance at CDN edge locations
+                Share your thoughts in your own words
               </CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Built specifically for Cloudflare Workers and edge computing.
-                Your applications run closer to your users for lightning-fast
-                response times.
+                Add context with optional tags and a brief note. There's no
+                right or wrong way to journal. Even a few words can be
+                meaningful.
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>🔧 Developer Experience</CardTitle>
+              <CardTitle>3. Receive Insights</CardTitle>
               <CardDescription>
-                Carefully crafted tooling for maximum productivity
+                Get personalized AI encouragement
               </CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Hot reload, TypeScript support, comprehensive testing setup, and
-                intuitive project structure. Everything you need to stay in the
-                flow.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>🌐 Full-Stack Solution</CardTitle>
-              <CardDescription>
-                Complete backend and frontend in one cohesive package
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                tRPC for type-safe APIs, Better Auth for authentication and
-                database, and WebSocket support for real-time features.
+                Serene's AI companion responds with gentle, contextual
+                encouragement. It acknowledges your feelings and offers support
+                without judgment.
               </p>
             </CardContent>
           </Card>
         </div>
       </section>
 
-      {/* Technology Choices */}
+      {/* Privacy */}
       <section className="mb-20">
-        <h2 className="text-3xl font-bold tracking-tight mb-8 text-center">
-          Technology Choices
-        </h2>
-
         <Card>
-          <CardContent className="pt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="font-semibold mb-4">Frontend Stack</h3>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li>
-                    <strong>React 19:</strong> Latest React with concurrent
-                    features
-                  </li>
-                  <li>
-                    <strong>TypeScript:</strong> Type safety and better
-                    developer experience
-                  </li>
-                  <li>
-                    <strong>Vite:</strong> Lightning-fast build tool and dev
-                    server
-                  </li>
-                  <li>
-                    <strong>TanStack Router:</strong> Type-safe routing with
-                    code splitting
-                  </li>
-                  <li>
-                    <strong>shadcn/ui:</strong> Beautiful, accessible component
-                    library
-                  </li>
-                  <li>
-                    <strong>Tailwind CSS:</strong> Utility-first CSS framework
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="font-semibold mb-4">Backend Stack</h3>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li>
-                    <strong>Bun:</strong> Fast JavaScript runtime and package
-                    manager
-                  </li>
-                  <li>
-                    <strong>Hono:</strong> Ultra-fast web framework for edge
-                    computing
-                  </li>
-                  <li>
-                    <strong>tRPC:</strong> End-to-end type safety for APIs
-                  </li>
-                  <li>
-                    <strong>Better Auth:</strong> Authentication
-                  </li>
-                  <li>
-                    <strong>Cloudflare Workers:</strong> Serverless edge
-                    computing
-                  </li>
-                  <li>
-                    <strong>WebSockets:</strong> Real-time communication support
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </section>
-
-      {/* Team Section */}
-      <section className="mb-20">
-        <h2 className="text-3xl font-bold tracking-tight mb-8 text-center">
-          Built by Kriasoft
-        </h2>
-
-        <Card>
-          <CardContent className="pt-6 text-center">
-            <p className="text-muted-foreground mb-6">
-              React Starter Kit is maintained by Kriasoft, a team of experienced
-              developers passionate about modern web technologies and developer
-              experience.
+          <CardHeader>
+            <CardTitle className="text-2xl">Your Privacy Matters</CardTitle>
+            <CardDescription>
+              Your journal entries are private and secure
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-muted-foreground">
+              Every journal entry is encrypted and accessible only to you. We
+              never share your personal reflections with third parties. You can
+              export or delete your data at any time.
             </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild>
-                <a
-                  href="https://github.com/kriasoft"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Visit Kriasoft on GitHub
-                </a>
-              </Button>
-              <Button variant="outline" asChild>
-                <a
-                  href="https://kriasoft.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Learn More About Kriasoft
-                </a>
-              </Button>
-            </div>
           </CardContent>
         </Card>
       </section>
 
       <Separator className="my-12" />
 
-      {/* CTA Section */}
+      {/* Disclaimer */}
       <section className="text-center">
-        <h2 className="text-3xl font-bold tracking-tight mb-4">
-          Ready to Get Started?
-        </h2>
-        <p className="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
-          Join thousands of developers who have chosen React Starter Kit for
-          their next project.
+        <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
+          Serene is not a substitute for professional mental health care. If you
+          are in crisis, please contact the 988 Suicide and Crisis Lifeline
+          (call or text 988) or the Crisis Text Line (text HOME to 741741).
         </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" asChild>
-            <a
-              href="https://github.com/kriasoft/react-starter-kit"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Get Started Now
-            </a>
-          </Button>
-          <Button variant="outline" size="lg" asChild>
-            <a
-              href="https://github.com/kriasoft/react-starter-kit/discussions"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Join the Community
-            </a>
-          </Button>
-        </div>
       </section>
     </div>
   );

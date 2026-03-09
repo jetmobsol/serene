@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "React App Sample",
+  "short_name": "Serene",
+  "name": "Serene — AI-Powered Wellness Journal",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +20,6 @@
   ],
   "start_url": "/?utm_source=homescreen",
   "display": "standalone",
-  "background_color": "#fafafa",
-  "theme_color": "#fafafa"
+  "background_color": "#FFFEF2",
+  "theme_color": "#8B9E7C"
 }

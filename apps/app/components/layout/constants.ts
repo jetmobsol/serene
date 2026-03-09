@@ -1,9 +1,7 @@
-import { Activity, FileText, Home, Settings, Users } from "lucide-react";
+import { BarChart3, Home, Settings } from "lucide-react";
 
 export const sidebarItems = [
   { icon: Home, label: "Dashboard", to: "/" },
-  { icon: Activity, label: "Analytics", to: "/analytics" },
-  { icon: Users, label: "Users", to: "/users" },
-  { icon: FileText, label: "Reports", to: "/reports" },
+  { icon: BarChart3, label: "Insights", to: "/analytics" },
   { icon: Settings, label: "Settings", to: "/settings" },
 ] as const;

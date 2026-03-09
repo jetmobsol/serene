@@ -1,0 +1,15 @@
+stories:
+  - name: "App shows Serene branding"
+    url: "http://localhost:5173/login"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Verify the page title or heading contains "Serene"
+      Verify there is no reference to "Acme" or "Console" visible on the page
+
+  - name: "Sidebar shows Serene navigation after login"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Verify the sidebar or navigation area contains "Serene" branding
+      Verify navigation items include "Dashboard" or "Insights"
+      Verify there are no references to "Reports" or "Users" from the old template

@@ -7,9 +7,9 @@ export interface Props {
   image?: string;
 }
 
-const { 
-  title = 'React Starter Kit - Modern Full-Stack Web Application', 
-  description = 'Modern full-stack web application template optimized for serverless deployment to CDN edge locations. Built with React, TypeScript, and the latest web technologies.',
+const {
+  title = 'Serene — AI-Powered Wellness Journal',
+  description = 'Track your mood, reflect on your day, and receive personalized AI insights to support your emotional well-being.',
   image = '/og-image.png'
 } = Astro.props;
 ---
@@ -48,7 +48,7 @@ const {
           <div class="flex h-16 items-center justify-between">
             <div class="flex items-center space-x-4">
               <a href="/" class="text-xl font-bold text-primary">
-                React Starter Kit
+                Serene
               </a>
             </div>
             <nav class="hidden md:flex items-center space-x-6">
@@ -66,16 +66,14 @@ const {
               </a>
             </nav>
             <div class="flex items-center space-x-2">
-              <a 
-                href="https://github.com/kriasoft/react-starter-kit" 
-                target="_blank"
-                rel="noopener noreferrer"
+              <a
+                href="http://localhost:5173/login"
                 class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-8 rounded-md px-3"
               >
-                GitHub
+                Log In
               </a>
-              <a 
-                href="https://github.com/kriasoft/react-starter-kit"
+              <a
+                href="http://localhost:5173/signup"
                 class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-8 px-3"
               >
                 Get Started
@@ -95,20 +93,14 @@ const {
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div class="space-y-3">
-              <h3 class="font-semibold">React Starter Kit</h3>
+              <h3 class="font-semibold">Serene</h3>
               <p class="text-sm text-muted-foreground">
-                Modern full-stack web application template optimized for
-                serverless deployment.
+                Your AI-powered wellness journal. Track your mood, reflect, and grow.
               </p>
             </div>
             <div class="space-y-3">
               <h4 class="font-medium">Resources</h4>
               <ul class="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <a href="https://github.com/kriasoft/react-starter-kit#readme" class="hover:text-foreground transition-colors">
-                    Documentation
-                  </a>
-                </li>
                 <li>
                   <a href="/features" class="hover:text-foreground transition-colors">
                     Features
@@ -119,24 +111,24 @@ const {
                     Pricing
                   </a>
                 </li>
+                <li>
+                  <a href="/about" class="hover:text-foreground transition-colors">
+                    About
+                  </a>
+                </li>
               </ul>
             </div>
             <div class="space-y-3">
-              <h4 class="font-medium">Community</h4>
+              <h4 class="font-medium">Support</h4>
               <ul class="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <a href="https://github.com/kriasoft/react-starter-kit" class="hover:text-foreground transition-colors">
-                    GitHub
+                  <a href="http://localhost:5173/login" class="hover:text-foreground transition-colors">
+                    Log In
                   </a>
                 </li>
                 <li>
-                  <a href="https://discord.gg/kriasoft" class="hover:text-foreground transition-colors">
-                    Discord
-                  </a>
-                </li>
-                <li>
-                  <a href="https://twitter.com/kriasoft" class="hover:text-foreground transition-colors">
-                    Twitter
+                  <a href="http://localhost:5173/signup" class="hover:text-foreground transition-colors">
+                    Sign Up
                   </a>
                 </li>
               </ul>
@@ -145,20 +137,28 @@ const {
               <h4 class="font-medium">Legal</h4>
               <ul class="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <a href="https://github.com/kriasoft/react-starter-kit/blob/main/LICENSE" class="hover:text-foreground transition-colors">
-                    License
+                  <a href="/privacy" class="hover:text-foreground transition-colors">
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a href="/terms" class="hover:text-foreground transition-colors">
+                    Terms of Service
                   </a>
                 </li>
               </ul>
             </div>
           </div>
           <div class="border-t mt-6 pt-6">
-            <div class="flex flex-col sm:flex-row justify-between items-center">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-2">
               <p class="text-sm text-muted-foreground">
-                © {new Date().getFullYear()} Kriasoft. All rights reserved.
+                © {new Date().getFullYear()} Serene. All rights reserved.
               </p>
               <p class="text-sm text-muted-foreground">
-                Built with Astro, React, TypeScript, and Tailwind CSS
+                Serene is not a substitute for professional mental health care.
+              </p>
+              <p class="text-sm text-muted-foreground">
+                If you are in crisis, call or text 988.
               </p>
             </div>
           </div>

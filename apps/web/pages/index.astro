@@ -4,89 +4,118 @@ import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } fro
 
 const features = [
   {
-    title: "⚡ Lightning Fast",
-    description: "SSR at CDN edge locations with ~100 Lighthouse scores",
-    content: "Optimized for Cloudflare Workers with Bun runtime for maximum performance."
+    title: "Mood Tracking",
+    description: "Log how you feel with six intuitive mood options",
+    content: "Happy, Calm, Anxious, Sad, Overwhelmed, or Angry. Quick check-ins that take seconds, not minutes."
   },
   {
-    title: "🎨 Modern UI",
-    description: "Beautiful components with ShadCN UI and Tailwind CSS",
-    content: "Pre-built components following modern design principles and accessibility standards."
+    title: "AI Companion",
+    description: "Receive personalized encouragement after each entry",
+    content: "Serene's AI responds with warm, contextual support. It acknowledges your feelings without judgment."
   },
   {
-    title: "🚀 Developer Experience",
-    description: "TypeScript, hot reload, and excellent tooling",
-    content: "Full TypeScript support with Vite, TanStack Router, and modern development tools."
+    title: "Private Journal",
+    description: "Write reflections that are yours and yours alone",
+    content: "Your entries are encrypted and private. Add optional tags to categorize your thoughts."
   },
   {
-    title: "📱 Full-Stack",
-    description: "tRPC API with PostgreSQL and authentication",
-    content: "Complete backend solution with type-safe APIs and database integration."
+    title: "Weekly Insights",
+    description: "Discover patterns in your emotional well-being",
+    content: "Visual mood trends and tag correlations help you understand what affects your mood."
   },
   {
-    title: "🔧 Configurable",
-    description: "Monorepo structure with workspace management",
-    content: "Organized codebase with separate app, API, edge, and database workspaces."
+    title: "Effortless Habit",
+    description: "Build a journaling streak in under 60 seconds",
+    content: "Designed for consistency, not perfection. Even a quick mood check-in counts."
   },
   {
-    title: "☁️ Serverless Ready",
-    description: "Deploy to edge locations worldwide",
-    content: "Built for Cloudflare Workers with global distribution and automatic scaling."
+    title: "Crisis Support",
+    description: "Safety resources when you need them most",
+    content: "If Serene detects distress, it surfaces crisis helpline information alongside its response."
   }
-];
-
-const technologies = [
-  "React 19", "TypeScript", "Astro", "TanStack Router", 
-  "ShadCN UI", "Tailwind CSS", "Bun", "Hono", 
-  "tRPC", "PostgreSQL", "Cloudflare", "Jotai"
 ];
 ---
 
 <BaseLayout>
   <!-- Hero Section -->
-  <section class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background to-muted/20">
+  <section class="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background to-secondary/20">
     <div class="container mx-auto text-center">
       <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-        React Starter Kit
+        Find Your Calm.<br />One Entry at a Time.
       </h1>
-      <p class="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-        Modern full-stack web application template optimized for serverless
-        deployment to CDN edge locations. Built with React, TypeScript, and
-        the latest web technologies.
+      <p class="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
+        Serene is your private AI-powered wellness journal. Log your mood,
+        write your thoughts, and receive gentle encouragement — all in under
+        60 seconds.
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <Button size="lg" asChild>
-          <a
-            href="https://github.com/kriasoft/react-starter-kit"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Get Started
+          <a href="http://localhost:5173/signup">
+            Start Journaling
           </a>
         </Button>
         <Button variant="outline" size="lg" asChild>
-          <a
-            href="https://github.com/kriasoft/react-starter-kit"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            View on GitHub
+          <a href="#how-it-works">
+            Learn More
           </a>
         </Button>
       </div>
     </div>
   </section>
 
-  <!-- Features Section -->
-  <section class="py-20 px-4 sm:px-6 lg:px-8">
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="py-20 px-4 sm:px-6 lg:px-8">
     <div class="container mx-auto">
       <div class="text-center mb-16">
         <h2 class="text-3xl font-bold tracking-tight mb-4">
-          Everything you need to build modern web apps
+          How Serene Works
         </h2>
         <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
-          React Starter Kit provides a solid foundation with best practices,
-          modern tooling, and optimized performance out of the box.
+          Three simple steps to a more mindful day
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <div class="text-center space-y-3">
+          <div class="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
+            <span class="text-lg font-semibold text-primary">1</span>
+          </div>
+          <h3 class="font-semibold">Log Your Mood</h3>
+          <p class="text-sm text-muted-foreground">
+            Choose how you're feeling from six mood options. It takes just a tap.
+          </p>
+        </div>
+        <div class="text-center space-y-3">
+          <div class="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
+            <span class="text-lg font-semibold text-primary">2</span>
+          </div>
+          <h3 class="font-semibold">Write a Reflection</h3>
+          <p class="text-sm text-muted-foreground">
+            Add a few words about your day. Tag what's on your mind.
+          </p>
+        </div>
+        <div class="text-center space-y-3">
+          <div class="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
+            <span class="text-lg font-semibold text-primary">3</span>
+          </div>
+          <h3 class="font-semibold">Get AI Insight</h3>
+          <p class="text-sm text-muted-foreground">
+            Receive personalized encouragement from your AI companion.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-20 px-4 sm:px-6 lg:px-8 bg-muted/20">
+    <div class="container mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold tracking-tight mb-4">
+          Built for Your Well-Being
+        </h2>
+        <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
+          Everything you need for a meaningful journaling practice
         </p>
       </div>
 
@@ -106,54 +135,26 @@ const technologies = [
     </div>
   </section>
 
-  <!-- Tech Stack Section -->
-  <section class="py-20 px-4 sm:px-6 lg:px-8 bg-muted/20">
-    <div class="container mx-auto text-center">
-      <h2 class="text-3xl font-bold tracking-tight mb-4">
-        Built with Modern Technologies
-      </h2>
-      <p class="text-muted-foreground text-lg mb-12 max-w-2xl mx-auto">
-        Carefully selected technologies that work together seamlessly
-      </p>
-
-      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
-        {technologies.map((tech) => (
-          <div class="p-4 rounded-lg bg-background border">
-            <span class="font-medium">{tech}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
   <!-- CTA Section -->
   <section class="py-20 px-4 sm:px-6 lg:px-8">
     <div class="container mx-auto text-center">
       <h2 class="text-3xl font-bold tracking-tight mb-4">
-        Ready to start building?
+        Begin Your Wellness Journey
       </h2>
       <p class="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
-        Get started with React Starter Kit today and build your next project
-        with confidence.
+        Join Serene and start building a mindful journaling habit today.
+        Your first entry is waiting.
       </p>
 
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <Button size="lg" asChild>
-          <a
-            href="https://github.com/kriasoft/react-starter-kit"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Clone Repository
+          <a href="http://localhost:5173/signup">
+            Start Journaling Free
           </a>
         </Button>
         <Button variant="outline" size="lg" asChild>
-          <a
-            href="https://github.com/kriasoft/react-starter-kit#readme"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read Documentation
+          <a href="/about">
+            Learn More
           </a>
         </Button>
       </div>

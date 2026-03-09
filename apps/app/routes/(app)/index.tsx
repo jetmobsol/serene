@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from "@repo/ui";
 import { createFileRoute } from "@tanstack/react-router";
-import { Activity, FileText, TrendingUp, Users } from "lucide-react";
+import { BarChart3, BookHeart, Flame, PenLine, Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/(app)/")({
   component: Dashboard,
@@ -15,28 +15,28 @@ export const Route = createFileRoute("/(app)/")({
 function Dashboard() {
   const stats = [
     {
-      title: "Total Users",
-      value: "1,234",
-      change: "+12%",
-      icon: Users,
+      title: "Journal Entries",
+      value: "0",
+      description: "Total entries",
+      icon: BookHeart,
     },
     {
-      title: "Active Sessions",
-      value: "89",
-      change: "+5%",
-      icon: Activity,
+      title: "Mood Check-ins",
+      value: "0",
+      description: "This week",
+      icon: Sparkles,
     },
     {
-      title: "Reports Generated",
-      value: "456",
-      change: "+23%",
-      icon: FileText,
+      title: "Current Streak",
+      value: "0 days",
+      description: "Keep it going!",
+      icon: Flame,
     },
     {
-      title: "Growth Rate",
-      value: "18.2%",
-      change: "+2.1%",
-      icon: TrendingUp,
+      title: "AI Insights",
+      value: "0",
+      description: "Personalized reflections",
+      icon: BarChart3,
     },
   ];
 
@@ -45,7 +45,7 @@ function Dashboard() {
       <div>
         <h2 className="text-2xl font-bold">Dashboard</h2>
         <p className="text-muted-foreground">
-          Welcome back! Here's an overview of your application.
+          Welcome to Serene. Track your mood, reflect, and grow.
         </p>
       </div>
 
@@ -62,74 +62,73 @@ function Dashboard() {
             <CardContent>
               <div className="text-2xl font-bold">{stat.value}</div>
               <p className="text-xs text-muted-foreground">
-                <span className="text-green-600">{stat.change}</span> from last
-                month
+                {stat.description}
               </p>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      {/* Main Content Area */}
+      {/* Getting Started */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>Latest events in your application</CardDescription>
+            <CardTitle>Getting Started</CardTitle>
+            <CardDescription>Your wellness journey begins here</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="flex items-center gap-4">
-                  <div className="h-2 w-2 rounded-full bg-primary" />
-                  <div className="flex-1">
-                    <p className="text-sm">User action performed</p>
-                    <p className="text-xs text-muted-foreground">
-                      {i} hour{i > 1 ? "s" : ""} ago
-                    </p>
-                  </div>
+              <div className="flex items-center gap-4">
+                <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <PenLine className="h-4 w-4 text-primary" />
                 </div>
-              ))}
+                <div>
+                  <p className="text-sm font-medium">Log your mood</p>
+                  <p className="text-xs text-muted-foreground">
+                    Choose how you're feeling right now
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <BookHeart className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Write a reflection</p>
+                  <p className="text-xs text-muted-foreground">
+                    Share your thoughts in a few sentences
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Sparkles className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Receive AI insights</p>
+                  <p className="text-xs text-muted-foreground">
+                    Get personalized encouragement and support
+                  </p>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-            <CardDescription>Common tasks and operations</CardDescription>
+            <CardTitle>About Serene</CardTitle>
+            <CardDescription>
+              Your AI-powered wellness companion
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 gap-4">
-              <button
-                type="button"
-                className="p-4 text-left border rounded-lg hover:bg-accent transition-colors"
-              >
-                <FileText className="h-5 w-5 mb-2" />
-                <p className="text-sm font-medium">Generate Report</p>
-              </button>
-              <button
-                type="button"
-                className="p-4 text-left border rounded-lg hover:bg-accent transition-colors"
-              >
-                <Users className="h-5 w-5 mb-2" />
-                <p className="text-sm font-medium">Manage Users</p>
-              </button>
-              <button
-                type="button"
-                className="p-4 text-left border rounded-lg hover:bg-accent transition-colors"
-              >
-                <Activity className="h-5 w-5 mb-2" />
-                <p className="text-sm font-medium">View Analytics</p>
-              </button>
-              <button
-                type="button"
-                className="p-4 text-left border rounded-lg hover:bg-accent transition-colors"
-              >
-                <TrendingUp className="h-5 w-5 mb-2" />
-                <p className="text-sm font-medium">Export Data</p>
-              </button>
-            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Serene helps you build a mindful journaling habit. Track your
+              mood, reflect on your day, and receive personalized AI insights to
+              support your emotional well-being. Your entries are private and
+              secure.
+            </p>
           </CardContent>
         </Card>
       </div>
