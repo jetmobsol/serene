@@ -82,3 +82,38 @@ screenshots/
 __pycache__/
 *.pyc
 /db/logs/
+
+# Ruflo
+# Runtime/binary — regenerated automatically
+.swarm/
+.claude/memory.db
+data/ruflo-memory/
+claude-flow.config.json
+# .claude-flow: commit config + capabilities, ignore runtime state
+.claude-flow/daemon.pid
+.claude-flow/daemon.log
+.claude-flow/daemon-state.json
+.claude-flow/data/
+.claude-flow/logs/
+.claude-flow/sessions/
+.claude-flow/metrics/
+.claude-flow/learning/
+.claude-flow/security/
+# .claude: ignore ruflo-bundled subdirs, keep project-specific .md files
+.claude/agents/*/
+.claude/commands/analysis/
+.claude/commands/automation/
+.claude/commands/bowser/
+.claude/commands/cto-team/
+.claude/commands/github/
+.claude/commands/hooks/
+.claude/commands/monitoring/
+.claude/commands/optimization/
+.claude/commands/sparc/
+.claude/commands/claude-flow-help.md
+.claude/commands/claude-flow-memory.md
+.claude/commands/claude-flow-swarm.md
+.claude/skills/
+.claude/helpers/
+.claude/statusline.mjs
+.claude/statusline.sh

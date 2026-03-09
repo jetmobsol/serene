@@ -1,81 +1,193 @@
-@AGENTS.md
+# Claude Code Configuration - RuFlo V3
 
-## Service Guidelines (Progressive Disclosure)
+## Behavioral Rules (Always Enforced)
 
-- **[API Service](apps/api/CLAUDE.md)** — Hono + tRPC + Better Auth backend (Cloudflare Worker)
-- **[App (SPA)](apps/app/CLAUDE.md)** — React 19 + TanStack Router frontend
-- **[Web (Edge Router)](apps/web/CLAUDE.md)** — Astro + Hono traffic router
-- **[Email Templates](apps/email/CLAUDE.md)** — React Email templates (`@repo/email`)
+- Do what has been asked; nothing more, nothing less
+- NEVER create files unless they're absolutely necessary for achieving your goal
+- ALWAYS prefer editing an existing file to creating a new one
+- NEVER proactively create documentation files (\*.md) or README files unless explicitly requested
+- NEVER save working files, text/mds, or tests to the root folder
+- Never continuously check status after spawning a swarm — wait for results
+- ALWAYS read a file before editing it
+- NEVER commit secrets, credentials, or .env files
 
-Read the service-specific CLAUDE.md before making changes in that app.
+## File Organization
 
-## Setup
+- NEVER save to root folder — use the directories below
+- Use `/src` for source code files
+- Use `/tests` for test files
+- Use `/docs` for documentation and markdown files
+- Use `/config` for configuration files
+- Use `/scripts` for utility scripts
+- Use `/examples` for example code
+
+## Project Architecture
+
+- Follow Domain-Driven Design with bounded contexts
+- Keep files under 500 lines
+- Use typed interfaces for all public APIs
+- Prefer TDD London School (mock-first) for new code
+- Use event sourcing for state changes
+- Ensure input validation at system boundaries
+
+### Project Config
+
+- **Topology**: hierarchical-mesh
+- **Max Agents**: 15
+- **Memory**: hybrid
+- **HNSW**: Enabled
+- **Neural**: Enabled
+
+## Build & Test
 
 ```bash
-bun install                    # Install all workspace dependencies
-cp .env .env.local             # Create local env overrides (git-ignored)
-# Edit .env.local with real credentials (DATABASE_URL, BETTER_AUTH_SECRET, etc.)
-bun db:push                    # Push schema to local database
-bun db:seed                    # Seed development data
-bun dev                        # Start all workers (web + api + app)
+# Build
+npm run build
+
+# Test
+npm test
+
+# Lint
+npm run lint
 ```
 
-### Quick Start (Recommended)
+- ALWAYS run tests after making code changes
+- ALWAYS verify build succeeds before committing
+
+## Security Rules
+
+- NEVER hardcode API keys, secrets, or credentials in source files
+- NEVER commit .env files or any file containing secrets
+- Always validate user input at system boundaries
+- Always sanitize file paths to prevent directory traversal
+- Run `npx @claude-flow/cli@latest security scan` after security-related changes
+
+## Concurrency: 1 MESSAGE = ALL RELATED OPERATIONS
+
+- All operations MUST be concurrent/parallel in a single message
+- Use Claude Code's Task tool for spawning agents, not just MCP
+- ALWAYS batch ALL todos in ONE TodoWrite call (5-10+ minimum)
+- ALWAYS spawn ALL agents in ONE message with full instructions via Task tool
+- ALWAYS batch ALL file reads/writes/edits in ONE message
+- ALWAYS batch ALL Bash commands in ONE message
+
+## Swarm Orchestration
+
+- MUST initialize the swarm using CLI tools when starting complex tasks
+- MUST spawn concurrent agents using Claude Code's Task tool
+- Never use CLI tools alone for execution — Task tool agents do the actual work
+- MUST call CLI tools AND Task tool in ONE message for complex work
+
+### 3-Tier Model Routing (ADR-026)
+
+| Tier  | Handler              | Latency | Cost         | Use Cases                                           |
+| ----- | -------------------- | ------- | ------------ | --------------------------------------------------- |
+| **1** | Agent Booster (WASM) | <1ms    | $0           | Simple transforms (var→const, add types) — Skip LLM |
+| **2** | Haiku                | ~500ms  | $0.0002      | Simple tasks, low complexity (<30%)                 |
+| **3** | Sonnet/Opus          | 2-5s    | $0.003-0.015 | Complex reasoning, architecture, security (>30%)    |
+
+- Always check for `[AGENT_BOOSTER_AVAILABLE]` or `[TASK_MODEL_RECOMMENDATION]` before spawning agents
+- Use Edit tool directly when `[AGENT_BOOSTER_AVAILABLE]`
+
+## Swarm Configuration & Anti-Drift
+
+- ALWAYS use hierarchical topology for coding swarms
+- Keep maxAgents at 6-8 for tight coordination
+- Use specialized strategy for clear role boundaries
+- Use `raft` consensus for hive-mind (leader maintains authoritative state)
+- Run frequent checkpoints via `post-task` hooks
+- Keep shared memory namespace for all agents
 
 ```bash
-just start                     # DB in Docker + native dev servers (runs bun install --force)
-just stop                      # Stop everything
-just docker-start              # Full Docker stack (all services containerized)
+npx @claude-flow/cli@latest swarm init --topology hierarchical --max-agents 8 --strategy specialized
 ```
 
-### Local Ports
+## Swarm Execution Rules
 
-| Port | Service                     | URL                   |
-| ---- | --------------------------- | --------------------- |
-| 5173 | App (SPA) — Vite dev server | http://localhost:5173 |
-| 8787 | API — Hono server           | http://localhost:8787 |
-| 4321 | Web — Astro edge router     | http://localhost:4321 |
-| 5434 | PostgreSQL (Docker)         | —                     |
+- ALWAYS use `run_in_background: true` for all agent Task calls
+- ALWAYS put ALL agent Task calls in ONE message for parallel execution
+- After spawning, STOP — do NOT add more tool calls or check status
+- Never poll TaskOutput or check swarm status — trust agents to return
+- When agent results arrive, review ALL results before proceeding
 
-### Dev Auth (Auto-Login)
+## V3 CLI Commands
 
-In development mode, email OTP login is fully automatic — no manual code entry needed:
+### Core Commands
 
-- The API returns the OTP in the response body (`devOtp` field) and logs it to the server console.
-- The frontend auto-fills and auto-submits the OTP code.
-- **For browser automation (Playwright, Chrome MCP, bowser QA):** after clicking "Continue with email" and submitting an email address, wait a few seconds for the auto-login to complete. The OTP screen will appear briefly then auto-submit and redirect to the dashboard. Do not try to manually enter an OTP code — it happens automatically.
-- Any email address works (e.g., `test@test.com`) — the email OTP flow auto-creates accounts for unknown addresses.
-- Email delivery is not required (Resend errors are swallowed in dev).
+| Command     | Subcommands | Description                        |
+| ----------- | ----------- | ---------------------------------- |
+| `init`      | 4           | Project initialization             |
+| `agent`     | 8           | Agent lifecycle management         |
+| `swarm`     | 6           | Multi-agent swarm coordination     |
+| `memory`    | 11          | AgentDB memory with HNSW search    |
+| `task`      | 6           | Task creation and lifecycle        |
+| `session`   | 7           | Session state management           |
+| `hooks`     | 17          | Self-learning hooks + 12 workers   |
+| `hive-mind` | 6           | Byzantine fault-tolerant consensus |
 
-### Gotchas
+### Quick CLI Examples
 
-- If dev fails with missing native binaries (rollup, workerd): run `bun install --force`.
-- Local PostgreSQL runs on port **5434** (not 5432) to avoid conflicts with other projects.
+```bash
+npx @claude-flow/cli@latest init --wizard
+npx @claude-flow/cli@latest agent spawn -t coder --name my-coder
+npx @claude-flow/cli@latest swarm init --v3-mode
+npx @claude-flow/cli@latest memory search --query "authentication patterns"
+npx @claude-flow/cli@latest doctor --fix
+```
 
-## Git Workflow
+## Available Agents (60+ Types)
 
-- Pre-commit hook runs `lint-staged` (ESLint + Prettier) via Husky.
-- Upstream template is the `seed` remote (`kriasoft/react-starter-kit`). Pull updates with `git fetch seed && git merge seed/main`.
-- `origin` is the project's private repo.
+### Core Development
 
-## Code Style
+`coder`, `reviewer`, `tester`, `planner`, `researcher`
 
-- Prettier: double quotes, semicolons, trailing commas, 80 char width.
-- ESLint: flat config (`eslint.config.ts`), TypeScript + React rules, Prettier last.
-- Imports: use workspace aliases (`@repo/ui`, `@repo/core`, `@repo/email`). Path aliases within apps (e.g., `~/lib/...` in app).
-- File naming: kebab-case for files, PascalCase for React components, camelCase for utilities.
-- Database columns: camelCase in TypeScript, auto-mapped to snake_case via Drizzle `casing`.
+### Specialized
 
-## Environment Variables
+`security-architect`, `security-auditor`, `memory-specialist`, `performance-engineer`
 
-- `.env` — shared defaults, committed (no real secrets).
-- `.env.local` — real credentials, git-ignored, overrides `.env`.
-- `.env.{environment}.local` — environment-specific overrides (highest priority).
-- Frontend vars must be prefixed with `VITE_` to be exposed to the client.
+### Swarm Coordination
 
-## Claude-Specific Guidance
+`hierarchical-coordinator`, `mesh-coordinator`, `adaptive-coordinator`
 
-- Use `/plan` for multi-file or architectural changes.
-- Prefer slash commands from `.claude/commands/` when available: `review-better-auth`, `review-terraform`, `validate-auth-schema`, `migrate-to-d1`.
-- ADRs live in `docs/adr/` — check existing decisions before proposing architectural changes.
-- Auto-generated files (never edit manually): `apps/app/lib/routeTree.gen.ts`.
+### GitHub & Repository
+
+`pr-manager`, `code-review-swarm`, `issue-tracker`, `release-manager`
+
+### SPARC Methodology
+
+`sparc-coord`, `sparc-coder`, `specification`, `pseudocode`, `architecture`
+
+## Memory Commands Reference
+
+```bash
+# Store (REQUIRED: --key, --value; OPTIONAL: --namespace, --ttl, --tags)
+npx @claude-flow/cli@latest memory store --key "pattern-auth" --value "JWT with refresh" --namespace patterns
+
+# Search (REQUIRED: --query; OPTIONAL: --namespace, --limit, --threshold)
+npx @claude-flow/cli@latest memory search --query "authentication patterns"
+
+# List (OPTIONAL: --namespace, --limit)
+npx @claude-flow/cli@latest memory list --namespace patterns --limit 10
+
+# Retrieve (REQUIRED: --key; OPTIONAL: --namespace)
+npx @claude-flow/cli@latest memory retrieve --key "pattern-auth" --namespace patterns
+```
+
+## Quick Setup
+
+```bash
+claude mcp add claude-flow -- npx -y @claude-flow/cli@latest
+npx @claude-flow/cli@latest daemon start
+npx @claude-flow/cli@latest doctor --fix
+```
+
+## Claude Code vs CLI Tools
+
+- Claude Code's Task tool handles ALL execution: agents, file ops, code generation, git
+- CLI tools handle coordination via Bash: swarm init, memory, hooks, routing
+- NEVER use CLI tools as a substitute for Task tool agents
+
+## Support
+
+- Documentation: https://github.com/ruvnet/claude-flow
+- Issues: https://github.com/ruvnet/claude-flow/issues

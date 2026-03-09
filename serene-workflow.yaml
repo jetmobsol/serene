@@ -1,0 +1,343 @@
+name: "Serene PRD Completion"
+description: "Complete remaining deliverables #6-#12 with full pipeline"
+
+# ================================================================
+# TRACK A: Sequential (D6 → D7 → D8) — Critical Path
+# Each deliverable has 3 sub-steps: plan → implement → QA
+# ================================================================
+
+steps:
+  # ------ DELIVERABLE #6: Entry Save + Timeline ------
+
+  - stepId: "d6-plan"
+    name: "D6: Create Plan"
+    type: task
+    config:
+      task: |
+        Run /essentials:plan-creator with this input:
+
+        "Read and analyze @ai_docs/prd/ and @ai_docs/prd/deliverables.md
+        and all referenced PRD files to create a thorough plan for
+        Deliverable #6 — Entry Save + Timeline.
+
+        PRD references: 08-frontend-components.md §9.3 (EntryForm, EntryCard, Timeline),
+        03-feature-specs.md §4B.2 (timeline grouping), 06-api-design.md §7.1 (API contracts).
+        User stories: US-MJ-004 (save), US-MJ-005 (timeline), US-MJ-006 (detail view).
+
+        MANDATORY REQUIREMENTS:
+        - Follow ALL instructions from deliverables.md 'Steps for EVERY deliverable'
+        - Follow 'CRITICAL: Bowser QA Gate Rules (NON-NEGOTIABLE)'
+        - Use context7 for ALL library/framework documentation lookups
+        - Use /frontend-design skill for ALL UI component visual decisions
+        - Include a /simplify step that runs after implementation
+        - Include bowser YAML story creation matching deliverables.md template
+        - Include /ui-review QA gate — all stories must pass
+        CRITICAL"
+
+  - stepId: "d6-implement"
+    name: "D6: Execute Plan"
+    type: task
+    config:
+      dependsOn: ["d6-plan"]
+      task: |
+        Find the latest plan file:
+        Run: ls -t .claude/plans/ | head -1
+        Run /essentials:plan-loop .claude/plans/<latest-plan-file>
+        Follow all tasks in dependency order until exit criteria pass.
+
+  - stepId: "d6-qa"
+    name: "D6: Simplify + QA Gate"
+    type: task
+    config:
+      dependsOn: ["d6-implement"]
+      task: |
+        STEP 1 — SIMPLIFY:
+        Run /simplify on all files changed in Deliverable #6.
+        Fix ALL found issues/bugs/suggestions.
+        Run: bun test --run (must pass after simplification)
+        Run: bun prettier --write . && bun prettier --check .
+
+        STEP 2 — BOWSER QA GATE (NON-NEGOTIABLE):
+        Write ai_review/user_stories/entry-save-timeline.yaml using
+        the exact template from ai_docs/prd/deliverables.md Deliverable #6.
+        Run /ui-review entry-save-timeline — ALL stories MUST PASS.
+        If ANY story fails, fix and re-run until ALL are green.
+        DO NOT proceed with failing bowser tests.
+
+  # ------ DELIVERABLE #7: Edit + Delete ------
+
+  - stepId: "d7-plan"
+    name: "D7: Create Plan"
+    type: task
+    config:
+      dependsOn: ["d6-qa"]
+      task: |
+        Run /essentials:plan-creator with this input:
+
+        "Read and analyze @ai_docs/prd/ and @ai_docs/prd/deliverables.md
+        and all referenced PRD files to create a thorough plan for
+        Deliverable #7 — Edit + Delete Entry.
+
+        PRD references: 02-user-stories.md US-MJ-007/008,
+        06-api-design.md §7.1 (update/delete contracts).
+        User stories: US-MJ-007 (edit), US-MJ-008 (delete).
+
+        MANDATORY REQUIREMENTS:
+        - Follow ALL instructions from deliverables.md 'Steps for EVERY deliverable'
+        - Follow 'CRITICAL: Bowser QA Gate Rules (NON-NEGOTIABLE)'
+        - Use context7 for ALL library/framework documentation lookups
+        - Use /frontend-design skill for ALL UI component visual decisions
+        - Include a /simplify step that runs after implementation
+        - Include bowser YAML story creation matching deliverables.md template
+        - Include /ui-review QA gate — all stories must pass
+        CRITICAL"
+
+  - stepId: "d7-implement"
+    name: "D7: Execute Plan"
+    type: task
+    config:
+      dependsOn: ["d7-plan"]
+      task: |
+        Find the latest plan file:
+        Run: ls -t .claude/plans/ | head -1
+        Run /essentials:plan-loop .claude/plans/<latest-plan-file>
+        Follow all tasks in dependency order until exit criteria pass.
+
+  - stepId: "d7-qa"
+    name: "D7: Simplify + QA Gate"
+    type: task
+    config:
+      dependsOn: ["d7-implement"]
+      task: |
+        STEP 1 — SIMPLIFY:
+        Run /simplify on all files changed in Deliverable #7.
+        Fix ALL found issues/bugs/suggestions.
+        Run: bun test --run (must pass)
+        Run: bun prettier --write . && bun prettier --check .
+
+        STEP 2 — BOWSER QA GATE (NON-NEGOTIABLE):
+        Write ai_review/user_stories/entry-crud.yaml using
+        the exact template from ai_docs/prd/deliverables.md Deliverable #7.
+        Run /ui-review entry-crud — ALL stories MUST PASS.
+        If ANY story fails, fix and re-run until ALL are green.
+
+  # ------ DELIVERABLE #8: AI Response Display ------
+
+  - stepId: "d8-plan"
+    name: "D8: Create Plan"
+    type: task
+    config:
+      dependsOn: ["d7-qa"]
+      task: |
+        Run /essentials:plan-creator with this input:
+
+        "Read and analyze @ai_docs/prd/ and @ai_docs/prd/deliverables.md
+        and all referenced PRD files to create a thorough plan for
+        Deliverable #8 — AI Response Display (Streaming + History).
+
+        PRD references: 08-frontend-components.md §9.3 (AiResponse, SafetyBanner),
+        07-ai-integration.md (streaming), 06-api-design.md §7.2 (SSE format).
+        User stories: US-AI-001, US-AI-002, US-AI-003.
+
+        CRITICAL NOTE: Requires ANTHROPIC_API_KEY in .env.local for real AI responses.
+        Bowser tests should verify UI behavior even without API key.
+
+        MANDATORY REQUIREMENTS:
+        - Follow ALL instructions from deliverables.md 'Steps for EVERY deliverable'
+        - Follow 'CRITICAL: Bowser QA Gate Rules (NON-NEGOTIABLE)'
+        - Use context7 for ALL library/framework documentation lookups
+        - Use /frontend-design skill for ALL UI component visual decisions
+        - Include a /simplify step that runs after implementation
+        - Include bowser YAML story creation matching deliverables.md template
+        - Include /ui-review QA gate — all stories must pass
+        CRITICAL"
+
+  - stepId: "d8-implement"
+    name: "D8: Execute Plan"
+    type: task
+    config:
+      dependsOn: ["d8-plan"]
+      task: |
+        Find the latest plan file:
+        Run: ls -t .claude/plans/ | head -1
+        Run /essentials:plan-loop .claude/plans/<latest-plan-file>
+        Follow all tasks in dependency order until exit criteria pass.
+
+  - stepId: "d8-qa"
+    name: "D8: Simplify + QA Gate"
+    type: task
+    config:
+      dependsOn: ["d8-implement"]
+      task: |
+        STEP 1 — SIMPLIFY:
+        Run /simplify on all files changed in Deliverable #8.
+        Fix ALL found issues/bugs/suggestions.
+        Run: bun test --run (must pass)
+        Run: bun prettier --write . && bun prettier --check .
+
+        STEP 2 — BOWSER QA GATE (NON-NEGOTIABLE):
+        Write ai_review/user_stories/ai-response.yaml using
+        the exact template from ai_docs/prd/deliverables.md Deliverable #8.
+        Run /ui-review ai-response — ALL stories MUST PASS.
+        If ANY story fails, fix and re-run until ALL are green.
+
+  # ================================================================
+  # TRACK B: Independent — runs parallel with Track A
+  # Uses worktree isolation to avoid file conflicts
+  # ================================================================
+
+  - stepId: "d9-plan"
+    name: "D9: Create Plan (Analytics)"
+    type: parallel
+    config:
+      isolation: worktree
+      task: |
+        Run /essentials:plan-creator with this input:
+
+        "Read and analyze @ai_docs/prd/ and @ai_docs/prd/deliverables.md
+        and all referenced PRD files to create a thorough plan for
+        Deliverable #9 — Analytics Dashboard.
+
+        PRD references: 06-api-design.md §7.3 (analytics API),
+        08-frontend-components.md §9.3 (chart specs),
+        03-feature-specs.md §4B.3 (chart library + design).
+        User stories: US-AN-001, US-AN-002, US-AN-003.
+
+        MANDATORY REQUIREMENTS:
+        - Follow ALL instructions from deliverables.md 'Steps for EVERY deliverable'
+        - Follow 'CRITICAL: Bowser QA Gate Rules (NON-NEGOTIABLE)'
+        - Use context7 for ALL library/framework documentation lookups
+        - Use context7 for recharts library documentation
+        - Use /frontend-design skill for ALL chart visual decisions
+        - Include a /simplify step that runs after implementation
+        - Include bowser YAML story creation matching deliverables.md template
+        - Include /ui-review QA gate — all stories must pass
+        CRITICAL"
+
+  - stepId: "d9-implement"
+    name: "D9: Execute Plan (Analytics)"
+    type: parallel
+    config:
+      dependsOn: ["d9-plan"]
+      isolation: worktree
+      task: |
+        Find the latest plan file:
+        Run: ls -t .claude/plans/ | head -1
+        Run /essentials:plan-loop .claude/plans/<latest-plan-file>
+        Follow all tasks in dependency order until exit criteria pass.
+
+  - stepId: "d9-qa"
+    name: "D9: Simplify + QA Gate (Analytics)"
+    type: parallel
+    config:
+      dependsOn: ["d9-implement"]
+      isolation: worktree
+      task: |
+        STEP 1 — SIMPLIFY:
+        Run /simplify on all files changed in Deliverable #9.
+        Fix ALL found issues/bugs/suggestions.
+        Run: bun test --run (must pass)
+        Run: bun prettier --write . && bun prettier --check .
+
+        STEP 2 — BOWSER QA GATE (NON-NEGOTIABLE):
+        Write ai_review/user_stories/analytics.yaml using
+        the exact template from ai_docs/prd/deliverables.md Deliverable #9.
+        Run /ui-review analytics — ALL stories MUST PASS.
+        If ANY story fails, fix and re-run until ALL are green.
+
+  # ================================================================
+  # TRACK C: Independent — runs parallel with Track A
+  # Uses worktree isolation. GLM recommended for docs tasks.
+  # ================================================================
+
+  - stepId: "d12-plan"
+    name: "D12: Create Plan (Docs + Deploy)"
+    type: parallel
+    config:
+      isolation: worktree
+      task: |
+        Run /essentials:plan-creator with this input:
+
+        "Read and analyze @ai_docs/prd/ and @ai_docs/prd/deliverables.md
+        and all referenced PRD files to create a thorough plan for
+        Deliverable #12 — Docs + Deployment + Final E2E QA.
+
+        PRD references: 14-readme.md, 15-deployment.md,
+        13-phases.md Phase 6 + 7.
+
+        MANDATORY REQUIREMENTS:
+        - Follow ALL instructions from deliverables.md 'Steps for EVERY deliverable'
+        - Follow 'CRITICAL: Bowser QA Gate Rules (NON-NEGOTIABLE)'
+        - Rewrite README.md — zero template references
+        - Create docs/deployment/serene-deployment-guide.md (all 11 sections)
+        - Create docs/deployment/serene-infrastructure-reference.md
+        - Update terraform.tfvars.example: project_slug = serene
+        - Update Wrangler configs: serene-web, serene-app, serene-api
+        - Update seed data with realistic journal entries
+        - Include /simplify step and bowser QA gate
+        CRITICAL"
+
+  - stepId: "d12-implement"
+    name: "D12: Execute Plan (Docs + Deploy)"
+    type: parallel
+    config:
+      dependsOn: ["d12-plan"]
+      isolation: worktree
+      task: |
+        Find the latest plan file:
+        Run: ls -t .claude/plans/ | head -1
+        Run /essentials:plan-loop .claude/plans/<latest-plan-file>
+        Follow all tasks in dependency order until exit criteria pass.
+
+  - stepId: "d12-qa"
+    name: "D12: Simplify + QA Gate (Docs + Deploy)"
+    type: parallel
+    config:
+      dependsOn: ["d12-implement"]
+      isolation: worktree
+      task: |
+        STEP 1 — SIMPLIFY:
+        Run /simplify on all changed code files.
+        Run: bun prettier --write . && bun prettier --check .
+
+        STEP 2 — BOWSER QA GATE (NON-NEGOTIABLE):
+        Write ai_review/user_stories/e2e-full.yaml using
+        the exact template from ai_docs/prd/deliverables.md Deliverable #12.
+        Run /ui-review e2e-full — ALL stories MUST PASS.
+        If ANY story fails, fix and re-run until ALL are green.
+
+  # ================================================================
+  # FINAL: After all tracks complete — merge worktrees + E2E QA
+  # ================================================================
+
+  - stepId: "merge-worktrees"
+    name: "Merge Parallel Tracks"
+    type: task
+    config:
+      dependsOn: ["d8-qa", "d9-qa", "d12-qa"]
+      task: |
+        Merge worktree branches from Track B and Track C back to main.
+        Resolve any conflicts.
+        Run: bun test --run && bun typecheck && bun lint
+        All must pass after merge.
+
+  - stepId: "final-qa"
+    name: "Final E2E QA"
+    type: task
+    config:
+      dependsOn: ["merge-worktrees"]
+      task: |
+        Run ALL bowser YAML stories in ai_review/user_stories/:
+        - branding.yaml
+        - entry-form-parts.yaml
+        - entry-save-timeline.yaml
+        - entry-crud.yaml
+        - ai-response.yaml
+        - analytics.yaml
+        - landing.yaml
+        - auth-flow.yaml
+        - e2e-full.yaml
+
+        Verify: bun test --run, bun typecheck, bun lint — ALL pass.
+        No console errors in production build.
+        Full walkthrough: landing → signup → journal → AI → analytics.
