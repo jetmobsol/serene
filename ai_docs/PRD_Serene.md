@@ -24,6 +24,8 @@
 13. [Non-Functional Requirements](#13-non-functional-requirements)
 14. [Implementation Phases and Milestones](#14-implementation-phases-and-milestones)
 15. [Definition of Done](#15-definition-of-done)
+16. [README.md Rewrite Requirements](#16-readmemd-rewrite-requirements)
+17. [Cloudflare Infrastructure Deployment Guide](#17-cloudflare-infrastructure-deployment-guide)
 
 ---
 
@@ -1804,9 +1806,9 @@ app.get("/health", async (c) => {
 - [ ] Empty states display appropriate messages.
 - [ ] All chart component tests pass.
 
-### Phase 6: Landing Page and Polish (Days 22-25)
+### Phase 6: Landing Page, Documentation, and Polish (Days 22-27)
 
-**Goal:** Calm landing page, branding updates, and final polish.
+**Goal:** Calm landing page, Serene README, Cloudflare deployment docs, branding updates, and final polish.
 
 **Tasks:**
 1. Replace `apps/web/pages/index.astro` content with Serene landing page.
@@ -1816,19 +1818,29 @@ app.get("/health", async (c) => {
 5. Update branding (APP_NAME, sidebar title, meta tags).
 6. Update seed data with realistic journal entries.
 7. Write seed script additions for journal data.
-8. Final accessibility audit.
-9. Final cross-browser testing.
-10. Update `README.md` with Serene-specific setup instructions.
+8. **Rewrite `README.md`** — completely replace the React Starter Kit template README with Serene-specific content (see Section 16 for full requirements). Remove all template branding, sponsor badges, and third-party assistant links.
+9. **Create `docs/deployment/serene-deployment-guide.md`** — end-to-end Cloudflare deployment guide covering Terraform provisioning, Wrangler secrets (including `ANTHROPIC_API_KEY`), build/deploy commands, post-deployment verification, and multi-environment strategy (see Section 17.3).
+10. **Create `docs/deployment/serene-infrastructure-reference.md`** — technical reference with architecture diagram, Terraform variable reference, worker naming conventions, and Wrangler environment variable tables (see Section 17.3).
+11. **Update `docs/deployment/cloudflare.md`** and `docs/deployment/index.md` with links to new Serene-specific guides.
+12. **Update `terraform.tfvars.example`** files — set `project_slug` default to `serene` in all environments.
+13. **Update Wrangler configs** — rename workers to `serene-web`, `serene-app`, `serene-api` in all three `wrangler.jsonc` files. Update `APP_NAME` to "Serene".
+14. Final accessibility audit.
+15. Final cross-browser testing.
 
 **Definition of Done for Phase 6:**
 - [ ] Landing page achieves Lighthouse performance score >= 90.
 - [ ] Landing page achieves Lighthouse accessibility score >= 95.
 - [ ] Calm aesthetic is consistent across landing page and app.
 - [ ] `docker-compose up` from a clean clone runs the full application.
-- [ ] README.md has clear setup instructions for local and Docker environments.
+- [ ] README.md is fully rewritten for Serene — zero references to React Starter Kit or template content.
+- [ ] README.md Quick Start section enables a new developer to run the project within 5 minutes.
+- [ ] `docs/deployment/serene-deployment-guide.md` exists with all 11 required sections.
+- [ ] `docs/deployment/serene-infrastructure-reference.md` exists with architecture diagram and reference tables.
+- [ ] All `terraform.tfvars.example` files default `project_slug` to `serene`.
+- [ ] All Wrangler configs use `serene-{web,app,api}` naming convention.
 - [ ] Seed data includes realistic journal entries.
 
-### Phase 7: Integration Testing and QA (Days 26-28)
+### Phase 7: Integration Testing and QA (Days 28-30)
 
 **Goal:** End-to-end validation and bug fixes.
 
@@ -1898,6 +1910,378 @@ A feature is considered DONE when ALL of the following criteria are met:
 - [ ] `docker-compose up` starts clean and runs all services.
 - [ ] Seed script includes relevant test data.
 - [ ] No hardcoded secrets or environment-specific values in code.
+
+### Documentation
+- [ ] README.md is fully rewritten for Serene (no template references remain).
+- [ ] Cloudflare deployment guide exists in `docs/deployment/`.
+- [ ] Infrastructure setup guide exists in `docs/deployment/`.
+- [ ] All environment variables documented in `.env.example` with comments.
+
+---
+
+## 16. README.md Rewrite Requirements
+
+### 16.1 Mandate
+
+The current `README.md` is the unmodified React Starter Kit template README. It references `kriasoft/react-starter-kit`, sponsor badges, ChatGPT/Gemini assistant links, and other template-specific content. **This MUST be completely rewritten** to represent the Serene product.
+
+### 16.2 Current State (to be replaced entirely)
+
+The existing README contains:
+- React Starter Kit branding, badges, and sponsor images
+- Generic template "Highlights" section
+- Links to `reactstarter.com` documentation
+- Sponsor/backer/contributor image grids
+- ChatGPT and Gemini assistant links
+- Template contributing guide reference
+
+**None of the above should remain in the final README.**
+
+### 16.3 Required README Structure
+
+```markdown
+# Serene — AI-Powered Mental Wellness Journal
+
+[Badges: Build Status, License, Live Demo link]
+
+Brief 2-3 sentence description of Serene and its core value proposition.
+
+## Features
+- Mood journaling with visual mood selector and contextual tags
+- AI-powered "Vibe Check" — empathetic responses via Claude API
+- Weekly mood analytics and trend visualization
+- Privacy-first: your data stays yours
+- Calm, accessible UI designed for daily wellbeing
+
+## Tech Stack
+[Table: Runtime, Frontend, Backend, Database, AI, Deployment layers]
+
+## Architecture
+[ASCII diagram of the 3-worker model: web → app/api, service bindings]
+Brief explanation of monorepo structure.
+
+## Quick Start
+
+### Prerequisites
+- Bun v1.3+
+- Docker & Docker Compose (for local DB)
+- Anthropic API key (https://console.anthropic.com/)
+
+### Local Development
+  cp .env .env.local
+  # Edit .env.local with real credentials
+  just start           # DB + dev servers
+  # or: bun install && bun dev
+
+### Docker (Full Stack)
+  docker-compose up    # Everything including DB
+
+### Environment Variables
+Table of required variables with descriptions.
+Reference to .env.example for full list.
+
+## Development
+- bun dev / bun test / bun lint / bun typecheck
+- bun db:push / bun db:seed / bun db:studio
+
+## Deployment
+Brief overview pointing to docs/deployment/ for detailed guides.
+- Cloudflare Workers (edge deployment)
+- Terraform for infrastructure provisioning
+- Neon PostgreSQL with Hyperdrive connection pooling
+
+## Project Structure
+Annotated tree of apps/, packages/, db/, infra/, docs/
+
+## License
+[Project license]
+```
+
+### 16.4 Acceptance Criteria for README
+
+- [ ] AC-1: No references to "React Starter Kit", "kriasoft", sponsor badges, or template-specific content remain.
+- [ ] AC-2: Product name "Serene" and its value proposition are prominently displayed.
+- [ ] AC-3: Quick Start section enables a new developer to run the project within 5 minutes.
+- [ ] AC-4: Both local development and Docker setup paths are documented.
+- [ ] AC-5: All required environment variables are listed with descriptions.
+- [ ] AC-6: `ANTHROPIC_API_KEY` is documented as required with a link to the Anthropic console.
+- [ ] AC-7: Architecture section includes the 3-worker model explanation.
+- [ ] AC-8: Deployment section references `docs/deployment/cloudflare.md` for detailed instructions.
+- [ ] AC-9: Project structure tree matches actual directory layout.
+- [ ] AC-10: README renders correctly on GitHub (no broken links, proper markdown formatting).
+
+---
+
+## 17. Cloudflare Infrastructure Deployment Guide
+
+### 17.1 Mandate
+
+The project template includes a complete Cloudflare deployment pipeline (Terraform modules, Wrangler configs, multi-environment support). The existing `docs/deployment/cloudflare.md` documents the generic template setup. **New Serene-specific deployment documentation MUST be created** to guide deployment of the complete Serene application including the AI features.
+
+### 17.2 Existing Infrastructure Assets
+
+The following are already in place and must be leveraged (not rebuilt):
+
+| Asset | Location | Purpose |
+|-------|----------|---------|
+| **Terraform edge stack** | `infra/stacks/edge/main.tf` | Provisions 3 Workers (web, app, api) + Hyperdrive + DNS |
+| **Terraform modules** | `infra/modules/cloudflare/` | Atomic resources: `worker`, `hyperdrive`, `dns`, `r2-bucket` |
+| **Environment configs** | `infra/envs/{dev,preview,staging,prod}/edge/` | Per-environment Terraform roots with `terraform.tfvars.example` |
+| **Wrangler configs** | `apps/{web,app,api}/wrangler.jsonc` | Per-worker deployment config with service bindings |
+| **Existing deployment docs** | `docs/deployment/cloudflare.md` | Template-level Cloudflare deployment guide |
+| **Production database docs** | `docs/deployment/production-database.md` | Neon + Hyperdrive setup guide |
+| **CI/CD docs** | `docs/deployment/ci-cd.md` | CI/CD pipeline documentation |
+
+### 17.3 New Documentation Requirements
+
+#### Document 1: `docs/deployment/serene-deployment-guide.md`
+
+**Purpose:** End-to-end guide for deploying Serene to Cloudflare Workers with all Serene-specific configuration.
+
+**Required Sections:**
+
+1. **Prerequisites**
+   - Cloudflare account (free tier sufficient for MVP)
+   - Neon PostgreSQL account and database
+   - Anthropic API key
+   - Bun v1.3+ installed locally
+   - Terraform >= 1.12 installed
+   - Domain name (optional but recommended)
+
+2. **Infrastructure Provisioning (Terraform)**
+   ```bash
+   # Step 1: Configure environment variables
+   cp infra/envs/prod/edge/terraform.tfvars.example infra/envs/prod/edge/terraform.tfvars
+   # Edit with: cloudflare_api_token, cloudflare_account_id, project_slug="serene",
+   #            environment="prod", neon_database_url, cloudflare_zone_id, hostname
+
+   # Step 2: Initialize and apply
+   terraform -chdir=infra/envs/prod/edge init
+   terraform -chdir=infra/envs/prod/edge plan    # Review changes
+   terraform -chdir=infra/envs/prod/edge apply
+
+   # Step 3: Retrieve Hyperdrive IDs
+   terraform -chdir=infra/envs/prod/edge output hyperdrive_id
+   # Copy the ID into apps/api/wrangler.jsonc for the prod environment
+   ```
+
+3. **Worker Secrets Configuration**
+   ```bash
+   # Required secrets for the API worker
+   cd apps/api
+
+   # Auth
+   openssl rand -hex 32 | wrangler secret put BETTER_AUTH_SECRET
+   wrangler secret put GOOGLE_CLIENT_ID
+   wrangler secret put GOOGLE_CLIENT_SECRET
+
+   # AI (Serene-specific)
+   wrangler secret put ANTHROPIC_API_KEY
+
+   # Email
+   wrangler secret put RESEND_API_KEY
+
+   # Stripe (optional — only if billing is enabled)
+   wrangler secret put STRIPE_SECRET_KEY
+   wrangler secret put STRIPE_WEBHOOK_SECRET
+   wrangler secret put STRIPE_STARTER_PRICE_ID
+   wrangler secret put STRIPE_PRO_PRICE_ID
+   ```
+
+4. **Wrangler Configuration Updates for Serene**
+   - Update `apps/web/wrangler.jsonc`: set `name` to `serene-web`, route patterns to custom domain
+   - Update `apps/api/wrangler.jsonc`: set `name` to `serene-api`, add Hyperdrive IDs from Terraform output, add `ANTHROPIC_API_KEY` to secret bindings
+   - Update `apps/app/wrangler.jsonc`: set `name` to `serene-app`
+   - Update service binding names in web worker to match renamed workers
+   - Update `APP_NAME` to "Serene", `APP_ORIGIN` to production URL
+   - Update `ALLOWED_ORIGINS` to include production domain
+
+5. **Database Migration**
+   ```bash
+   # Generate migrations for Serene schema (journal_entry, ai_response tables)
+   bun db:generate
+
+   # Review generated SQL in db/migrations/
+   # Then apply to production
+   bun db:migrate:prod
+   ```
+
+6. **Build and Deploy**
+   ```bash
+   # Build in dependency order
+   bun email:build    # Email templates
+   bun web:build      # Marketing/landing page
+   bun app:build      # React SPA
+   # API worker is deployed from source (no build step)
+
+   # Deploy all workers
+   bun api:deploy
+   bun app:deploy
+   bun web:deploy     # Deploy last (routes traffic to others)
+   ```
+
+7. **Post-Deployment Verification**
+   - Verify health endpoint: `curl https://yourdomain.com/api/health`
+   - Verify landing page loads at root URL
+   - Verify auth flow: sign up, email OTP, login
+   - Verify journal entry creation triggers AI vibe check
+   - Verify SSE streaming works (check browser DevTools Network tab for EventSource)
+   - Check Cloudflare dashboard: Workers analytics, request counts, error rates
+
+8. **Custom Domain Setup**
+   - Add domain to Cloudflare, update nameservers
+   - Set SSL/TLS to Full (strict)
+   - Enable Always Use HTTPS
+   - Update `wrangler.jsonc` route patterns
+   - Redeploy web worker
+
+9. **Multi-Environment Strategy**
+   ```
+   infra/envs/
+     dev/edge/       → serene-{web,app,api}-dev       (local/preview)
+     staging/edge/   → serene-{web,app,api}-staging    (pre-production)
+     prod/edge/      → serene-{web,app,api}            (production)
+   ```
+   - Each environment has isolated Terraform state
+   - Staging mirrors prod config but with test API keys
+   - Preview environments auto-created per PR (if CI/CD configured)
+
+10. **Cost Estimation (Cloudflare + Neon + Anthropic)**
+
+    | Service | Free Tier | Estimated Monthly (100 DAU) |
+    |---------|-----------|----------------------------|
+    | Cloudflare Workers | 100K requests/day free | $0 (well within free tier) |
+    | Cloudflare Hyperdrive | Included with Workers | $0 |
+    | Neon PostgreSQL | 0.5 GB storage, 190 compute hours free | $0-19 (Free or Launch tier) |
+    | Anthropic Claude API | Pay per token | $7-12 (see Section 8.6) |
+    | Custom domain (optional) | N/A | $10-15/year |
+    | **Total** | | **$7-31/month** |
+
+11. **Troubleshooting**
+    - Worker not found: verify Terraform applied and worker names match `wrangler.jsonc`
+    - Hyperdrive connection refused: verify `neon_database_url` in Terraform vars and Hyperdrive IDs in `wrangler.jsonc`
+    - AI vibe check fails: verify `ANTHROPIC_API_KEY` secret is set on the API worker
+    - CORS errors: verify `ALLOWED_ORIGINS` includes the production domain
+    - Service binding errors: verify all three workers are deployed and binding names match
+
+#### Document 2: `docs/deployment/serene-infrastructure-reference.md`
+
+**Purpose:** Technical reference for the Serene-specific Terraform and Wrangler configuration.
+
+**Required Sections:**
+
+1. **Architecture Diagram**
+   ```
+   ┌─────────────────────────────────────────────────────┐
+   │                    Cloudflare Edge                    │
+   │                                                       │
+   │  ┌──────────┐    service    ┌──────────┐              │
+   │  │          │───binding───▶│          │              │
+   │  │   Web    │              │   App    │              │
+   │  │ (Astro)  │              │  (React) │              │
+   │  │          │    service    │          │              │
+   │  │  Landing │───binding───▶│          │              │
+   │  │  /about  │              ├──────────┤              │
+   │  │  /feat.  │              │          │              │
+   │  │  /price  │    service    │   API    │              │
+   │  │          │───binding───▶│  (Hono)  │              │
+   │  │  /api/*  │              │  tRPC    │              │
+   │  │  /*      │              │  Auth    │              │
+   │  └──────────┘              │  AI SSE  │              │
+   │                            └────┬─────┘              │
+   │                                 │                     │
+   │                          ┌──────┴──────┐              │
+   │                          │ Hyperdrive  │              │
+   │                          │ (conn pool) │              │
+   │                          └──────┬──────┘              │
+   └─────────────────────────────────┼─────────────────────┘
+                                     │
+                              ┌──────┴──────┐
+                              │    Neon     │
+                              │ PostgreSQL  │
+                              └─────────────┘
+   ```
+
+2. **Terraform Variable Reference**
+
+   | Variable | Required | Description |
+   |----------|----------|-------------|
+   | `cloudflare_api_token` | Yes | Cloudflare API token with Workers + DNS permissions |
+   | `cloudflare_account_id` | Yes | Cloudflare account ID |
+   | `project_slug` | Yes | Base name for workers (use `serene`) |
+   | `environment` | Yes | `dev`, `staging`, or `prod` |
+   | `neon_database_url` | Yes | Neon PostgreSQL connection string |
+   | `cloudflare_zone_id` | No | Required for custom domain |
+   | `hostname` | No | Custom domain hostname |
+
+3. **Cloudflare API Token Permissions**
+   - Terraform token: Zone:DNS:Edit, Zone:Zone:Read, Account:Workers Scripts:Edit, Account:Cloudflare Hyperdrive:Edit
+   - Wrangler token: Zone:Workers Routes:Edit, Account:Workers Scripts:Edit
+
+4. **Worker Naming Convention**
+   ```
+   Production:  serene-web, serene-app, serene-api
+   Staging:     serene-web-staging, serene-app-staging, serene-api-staging
+   Dev:         serene-web-dev, serene-app-dev, serene-api-dev
+   ```
+
+5. **Wrangler Environment Variable Reference (API Worker)**
+
+   | Variable | Type | Per-Env | Description |
+   |----------|------|---------|-------------|
+   | `ENVIRONMENT` | var | Yes | `development` / `staging` / `production` |
+   | `APP_NAME` | var | No | `Serene` |
+   | `APP_ORIGIN` | var | Yes | Full origin URL |
+   | `ALLOWED_ORIGINS` | var | Yes | Comma-separated CORS origins |
+   | `RESEND_EMAIL_FROM` | var | Yes | Sender email address |
+   | `BETTER_AUTH_SECRET` | secret | Yes | Auth session signing key |
+   | `ANTHROPIC_API_KEY` | secret | Yes | Claude API key for vibe check |
+   | `GOOGLE_CLIENT_ID` | secret | Yes | Google OAuth client ID |
+   | `GOOGLE_CLIENT_SECRET` | secret | Yes | Google OAuth client secret |
+   | `RESEND_API_KEY` | secret | Yes | Resend email service key |
+
+6. **Remote State Configuration**
+   - R2 backend for Terraform state (recommended for team use)
+   - Instructions to copy `infra/templates/backend-r2.example.hcl`
+   - State isolation: one state file per environment per stack
+
+### 17.4 Updates to Existing Documentation
+
+#### Update `docs/deployment/cloudflare.md`
+
+Add a notice at the top:
+
+```markdown
+::: tip Serene-Specific Guide
+For the complete Serene deployment walkthrough including AI configuration,
+see [Serene Deployment Guide](./serene-deployment-guide.md).
+:::
+```
+
+#### Update `docs/deployment/index.md`
+
+Add navigation links to the new Serene-specific guides:
+
+```markdown
+## Serene Deployment
+- [Serene Deployment Guide](./serene-deployment-guide.md) — End-to-end production deployment
+- [Serene Infrastructure Reference](./serene-infrastructure-reference.md) — Terraform and Wrangler technical reference
+```
+
+### 17.5 Acceptance Criteria
+
+- [ ] AC-1: `docs/deployment/serene-deployment-guide.md` exists with all 11 sections.
+- [ ] AC-2: `docs/deployment/serene-infrastructure-reference.md` exists with architecture diagram and all reference tables.
+- [ ] AC-3: A developer with a Cloudflare account and Neon database can follow the guide to deploy Serene from scratch.
+- [ ] AC-4: All `terraform.tfvars.example` files have `project_slug` defaulted to `serene`.
+- [ ] AC-5: Wrangler configs in all three apps use `serene-{web,app,api}` naming.
+- [ ] AC-6: `ANTHROPIC_API_KEY` is documented in both the deployment guide and the Wrangler secret setup.
+- [ ] AC-7: Cost estimation table includes all services (Cloudflare, Neon, Anthropic).
+- [ ] AC-8: Architecture diagram accurately reflects the 3-worker + Hyperdrive + Neon topology.
+- [ ] AC-9: Troubleshooting section covers the 5 most common deployment failures.
+- [ ] AC-10: Existing `docs/deployment/cloudflare.md` links to the new Serene-specific guide.
+- [ ] AC-11: Multi-environment strategy (dev/staging/prod) is documented with worker naming conventions.
+- [ ] AC-12: The `/review-terraform` slash command can be used to validate infrastructure changes.
 
 ---
 
