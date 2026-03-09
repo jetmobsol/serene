@@ -1,4 +1,6 @@
 import { passkey } from "@better-auth/passkey";
+// TS2742: explicit import so TypeScript can name the inferred return type of createAuth
+import type {} from "@simplewebauthn/server";
 import { stripe } from "@better-auth/stripe";
 import { schema as Db, generateAuthId, type AuthModel } from "@repo/db";
 import { betterAuth } from "better-auth";
@@ -245,12 +247,9 @@ export function createAuth(db: DB, env: AuthEnv) {
   });
 }
 
-export type Auth = ReturnType<typeof betterAuth>;
+export type Auth = ReturnType<typeof createAuth>;
 
 // Base session types from Better Auth - plugin-specific fields added at runtime
 type SessionResponse = Auth["$Infer"]["Session"];
 export type AuthUser = SessionResponse["user"];
-// Organization plugin adds activeOrganizationId at runtime
-export type AuthSession = SessionResponse["session"] & {
-  activeOrganizationId?: string;
-};
+export type AuthSession = SessionResponse["session"];

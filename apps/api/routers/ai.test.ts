@@ -60,6 +60,7 @@ function testCtx({
       email: "test@example.com",
       emailVerified: true,
       name: "Test User",
+      isAnonymous: false,
     },
     db: {
       query: {
