@@ -12,6 +12,10 @@ const {
   description = 'Track your mood, reflect on your day, and receive personalized AI insights to support your emotional well-being.',
   image = '/og-image.png'
 } = Astro.props;
+
+// In dev, app routes live on a separate Vite server (port 5173).
+// In production, the Hono worker routes them via service bindings, so relative paths work.
+const app = import.meta.env.DEV ? 'http://localhost:5173' : '';
 ---
 
 <!doctype html>
@@ -67,13 +71,13 @@ const {
             </nav>
             <div class="flex items-center space-x-2">
               <a
-                href="/login"
+                href={`${app}/login`}
                 class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-8 rounded-md px-3"
               >
                 Log In
               </a>
               <a
-                href="/signup"
+                href={`${app}/signup`}
                 class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-8 px-3"
               >
                 Get Started
@@ -122,12 +126,12 @@ const {
               <h4 class="font-medium">Support</h4>
               <ul class="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <a href="/login" class="hover:text-foreground transition-colors">
+                  <a href={`${app}/login`} class="hover:text-foreground transition-colors">
                     Log In
                   </a>
                 </li>
                 <li>
-                  <a href="/signup" class="hover:text-foreground transition-colors">
+                  <a href={`${app}/signup`} class="hover:text-foreground transition-colors">
                     Sign Up
                   </a>
                 </li>

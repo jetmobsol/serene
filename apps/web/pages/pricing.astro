@@ -2,6 +2,8 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui';
 
+const app = import.meta.env.DEV ? 'http://localhost:5173' : '';
+
 const title = "Pricing — Serene";
 const description = "Serene is free to use. Start your wellness journaling journey today.";
 
@@ -20,7 +22,7 @@ const plans = [
       "Data export (GDPR compliant)",
     ],
     cta: "Start Journaling",
-    href: "/signup",
+    href: `${app}/signup`,
     primary: true,
   },
 ];
