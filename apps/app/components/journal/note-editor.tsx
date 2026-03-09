@@ -3,6 +3,7 @@ import { CheckCircle2 } from "lucide-react";
 import {
   useCallback,
   useEffect,
+  useImperativeHandle,
   useRef,
   useState,
   useLayoutEffect,
@@ -11,20 +12,39 @@ import {
 const AI_INSIGHT_THRESHOLD = 50;
 const DEFAULT_MAX_LENGTH = 500;
 
+export interface NoteEditorHandle {
+  flush: () => void;
+}
+
 interface NoteEditorProps {
   value: string;
   onChange: (note: string) => void;
   maxLength?: number;
+  ref?: React.Ref<NoteEditorHandle>;
 }
 
 export function NoteEditor({
   value,
   onChange,
   maxLength = DEFAULT_MAX_LENGTH,
+  ref,
 }: NoteEditorProps) {
   const [localValue, setLocalValue] = useState(value);
+  const localValueRef = useRef(value);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(null);
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
+
+  useImperativeHandle(ref, () => ({
+    flush() {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+        debounceRef.current = null;
+        onChangeRef.current(localValueRef.current);
+      }
+    },
+  }));
 
   // Sync external value changes (e.g. parent reset). Cancel any pending debounce
   // first so a stale timeout doesn't call onChange with the pre-reset value.
@@ -34,6 +54,7 @@ export function NoteEditor({
     }
     // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
     setLocalValue(value);
+    localValueRef.current = value;
   }, [value]);
 
   // Auto-expand textarea height
@@ -52,6 +73,7 @@ export function NoteEditor({
       if (newValue.length > maxLength) return;
 
       setLocalValue(newValue);
+      localValueRef.current = newValue;
 
       if (debounceRef.current) {
         clearTimeout(debounceRef.current);

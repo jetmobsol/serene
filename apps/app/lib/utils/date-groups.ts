@@ -29,12 +29,6 @@ function getMonday(date: Date): Date {
   return d;
 }
 
-function isSameWeek(a: Date, b: Date): boolean {
-  const mondayA = getMonday(a);
-  const mondayB = getMonday(b);
-  return isSameLocalDate(mondayA, mondayB);
-}
-
 export function groupEntriesByDate<T extends { createdAt: Date }>(
   entries: T[],
 ): DateGroup<T>[] {
@@ -44,6 +38,7 @@ export function groupEntriesByDate<T extends { createdAt: Date }>(
     now.getMonth(),
     now.getDate() - 1,
   );
+  const thisMonday = getMonday(now);
 
   const today: T[] = [];
   const yesterdayGroup: T[] = [];
@@ -55,7 +50,7 @@ export function groupEntriesByDate<T extends { createdAt: Date }>(
       today.push(entry);
     } else if (isSameLocalDate(entry.createdAt, yesterday)) {
       yesterdayGroup.push(entry);
-    } else if (isSameWeek(entry.createdAt, now)) {
+    } else if (isSameLocalDate(getMonday(entry.createdAt), thisMonday)) {
       thisWeek.push(entry);
     } else {
       earlier.push(entry);

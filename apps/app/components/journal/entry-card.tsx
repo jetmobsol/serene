@@ -1,5 +1,6 @@
 import { formatRelativeTime } from "@/lib/utils/relative-time";
-import { MOOD_COLORS, MOOD_ICONS, type MoodType } from "@repo/core";
+import { getMoodIcon } from "@/lib/utils/mood-icons";
+import { MOOD_COLORS, type MoodType } from "@repo/core";
 import {
   Badge,
   Button,
@@ -13,28 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui";
 import { Link } from "@tanstack/react-router";
-import type { LucideIcon } from "lucide-react";
-import {
-  CloudRain,
-  CloudSun,
-  Flame,
-  MoreVertical,
-  Pencil,
-  Smile,
-  Sparkles,
-  Trash2,
-  Waves,
-  Zap,
-} from "lucide-react";
-
-const ICON_MAP: Record<string, LucideIcon> = {
-  Smile,
-  CloudSun,
-  Zap,
-  CloudRain,
-  Waves,
-  Flame,
-};
+import { MoreVertical, Pencil, Sparkles, Trash2 } from "lucide-react";
 
 export interface JournalEntryWithAi {
   id: string;
@@ -63,7 +43,7 @@ function truncate(text: string, maxLength: number): string {
 
 export function EntryCard({ entry, onEdit, onDelete }: EntryCardProps) {
   const mood = entry.mood as MoodType;
-  const MoodIcon = ICON_MAP[MOOD_ICONS[mood]];
+  const MoodIcon = getMoodIcon(mood);
   const moodColor = MOOD_COLORS[mood]?.light;
 
   return (
@@ -81,11 +61,9 @@ export function EntryCard({ entry, onEdit, onDelete }: EntryCardProps) {
             {MoodIcon && <MoodIcon className="h-5 w-5 text-muted-foreground" />}
             <span className="font-medium">{mood}</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">
-              {formatRelativeTime(entry.createdAt)}
-            </span>
-          </div>
+          <span className="text-xs text-muted-foreground">
+            {formatRelativeTime(entry.createdAt)}
+          </span>
         </CardHeader>
 
         <CardContent className="space-y-2">

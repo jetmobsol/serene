@@ -1,24 +1,13 @@
+import { DeleteEntryDialog } from "@/components/journal/delete-entry-dialog";
 import { EntryForm } from "@/components/journal/entry-form";
-import { formatRelativeTime } from "@/lib/utils/relative-time";
 import {
   useDeleteJournalMutation,
   useJournalByIdQuery,
 } from "@/lib/queries/journal";
+import { getMoodIcon } from "@/lib/utils/mood-icons";
+import { formatRelativeTime } from "@/lib/utils/relative-time";
+import { MOOD_COLORS, type MoodType, type TagType } from "@repo/core";
 import {
-  MOOD_COLORS,
-  MOOD_ICONS,
-  type MoodType,
-  type TagType,
-} from "@repo/core";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
   Badge,
   Button,
   Card,
@@ -29,30 +18,8 @@ import {
   Skeleton,
 } from "@repo/ui";
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
-import type { LucideIcon } from "lucide-react";
-import {
-  ArrowLeft,
-  CloudRain,
-  CloudSun,
-  Flame,
-  Loader2,
-  Pencil,
-  Smile,
-  Sparkles,
-  Trash2,
-  Waves,
-  Zap,
-} from "lucide-react";
+import { ArrowLeft, Pencil, Sparkles, Trash2 } from "lucide-react";
 import { useState } from "react";
-
-const ICON_MAP: Record<string, LucideIcon> = {
-  Smile,
-  CloudSun,
-  Zap,
-  CloudRain,
-  Waves,
-  Flame,
-};
 
 export const Route = createFileRoute("/(app)/journal/$entryId")({
   component: EntryDetail,
@@ -99,7 +66,7 @@ function EntryDetail() {
   }
 
   const mood = entry.mood as MoodType;
-  const MoodIcon = ICON_MAP[MOOD_ICONS[mood]];
+  const MoodIcon = getMoodIcon(mood);
   const moodColor = MOOD_COLORS[mood]?.light;
 
   if (isEditing) {
@@ -203,33 +170,12 @@ function EntryDetail() {
         )}
       </Card>
 
-      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete entry?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              journal entry.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDelete}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              {deleteMutation.isPending ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Deleting...
-                </>
-              ) : (
-                "Delete"
-              )}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <DeleteEntryDialog
+        open={showDeleteDialog}
+        onOpenChange={setShowDeleteDialog}
+        onConfirm={handleDelete}
+        isPending={deleteMutation.isPending}
+      />
     </div>
   );
 }

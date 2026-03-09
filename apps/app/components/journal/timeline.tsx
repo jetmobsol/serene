@@ -1,3 +1,4 @@
+import { DeleteEntryDialog } from "@/components/journal/delete-entry-dialog";
 import { EntryCard } from "@/components/journal/entry-card";
 import type { JournalEntryWithAi } from "@/components/journal/entry-card";
 import {
@@ -5,18 +6,7 @@ import {
   useJournalListQuery,
 } from "@/lib/queries/journal";
 import { groupEntriesByDate } from "@/lib/utils/date-groups";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  Button,
-  Skeleton,
-} from "@repo/ui";
+import { Button, Skeleton } from "@repo/ui";
 import { useNavigate } from "@tanstack/react-router";
 import { BookHeart, Loader2 } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -121,38 +111,14 @@ export function Timeline() {
         )}
       </div>
 
-      <AlertDialog
+      <DeleteEntryDialog
         open={deleteTarget !== null}
         onOpenChange={(open) => {
           if (!open) setDeleteTarget(null);
         }}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete entry?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              journal entry.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmDelete}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              {deleteMutation.isPending ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Deleting...
-                </>
-              ) : (
-                "Delete"
-              )}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        onConfirm={confirmDelete}
+        isPending={deleteMutation.isPending}
+      />
     </>
   );
 }

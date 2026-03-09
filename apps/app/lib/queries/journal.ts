@@ -5,8 +5,13 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
+  type InfiniteData,
 } from "@tanstack/react-query";
 import { toast } from "sonner";
+
+type JournalListPage = Awaited<
+  ReturnType<typeof trpcClient.journal.list.query>
+>;
 
 export const journalQueryKeys = {
   all: ["journal"] as const,
@@ -25,9 +30,17 @@ export function useJournalListQuery() {
 }
 
 export function useJournalByIdQuery(id: string) {
+  const queryClient = useQueryClient();
+
   return useQuery({
     queryKey: journalQueryKeys.detail(id),
     queryFn: () => trpcClient.journal.getById.query({ id }),
+    placeholderData: () => {
+      const listData = queryClient.getQueryData<InfiniteData<JournalListPage>>(
+        journalQueryKeys.lists(),
+      );
+      return listData?.pages.flatMap((p) => p.entries).find((e) => e.id === id);
+    },
   });
 }
 

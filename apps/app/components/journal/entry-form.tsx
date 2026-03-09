@@ -1,5 +1,8 @@
 import { MoodSelector } from "@/components/journal/mood-selector";
-import { NoteEditor } from "@/components/journal/note-editor";
+import {
+  NoteEditor,
+  type NoteEditorHandle,
+} from "@/components/journal/note-editor";
 import { TagChips } from "@/components/journal/tag-chips";
 import {
   useCreateJournalMutation,
@@ -8,7 +11,7 @@ import {
 import type { MoodType, TagType } from "@repo/core";
 import { Button } from "@repo/ui";
 import { Loader2, Save } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 interface EntryFormProps {
   defaultValues?: {
@@ -25,6 +28,8 @@ export function EntryForm({
   entryId,
   onSuccess,
 }: EntryFormProps) {
+  const noteEditorRef = useRef<NoteEditorHandle>(null);
+
   const [mood, setMood] = useState<MoodType | null>(
     defaultValues?.mood ?? null,
   );
@@ -41,6 +46,7 @@ export function EntryForm({
 
   function handleSave() {
     if (!mood) return;
+    noteEditorRef.current?.flush();
 
     if (isEditing && entryId) {
       updateMutation.mutate(
@@ -80,7 +86,7 @@ export function EntryForm({
 
       <div>
         <h3 className="text-lg font-semibold mb-3">Notes</h3>
-        <NoteEditor value={note} onChange={setNote} />
+        <NoteEditor ref={noteEditorRef} value={note} onChange={setNote} />
       </div>
 
       <Button onClick={handleSave} disabled={!canSave} className="w-full">

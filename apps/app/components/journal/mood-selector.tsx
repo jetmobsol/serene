@@ -1,16 +1,6 @@
-import { MOODS, MOOD_COLORS, MOOD_ICONS, type MoodType } from "@repo/core";
-import type { LucideIcon } from "lucide-react";
-import { CloudRain, CloudSun, Flame, Smile, Waves, Zap } from "lucide-react";
+import { getMoodIcon } from "@/lib/utils/mood-icons";
+import { MOODS, MOOD_COLORS, type MoodType } from "@repo/core";
 import { useCallback, useRef, useState } from "react";
-
-const ICON_MAP: Record<string, LucideIcon> = {
-  Smile,
-  CloudSun,
-  Zap,
-  CloudRain,
-  Waves,
-  Flame,
-};
 
 interface MoodSelectorProps {
   value: MoodType | null;
@@ -66,7 +56,7 @@ export function MoodSelector({ value, onChange }: MoodSelectorProps) {
       className="grid grid-cols-2 md:grid-cols-3 gap-3"
     >
       {MOODS.map((mood, index) => {
-        const Icon = ICON_MAP[MOOD_ICONS[mood]];
+        const Icon = getMoodIcon(mood);
         const isSelected = value === mood;
         const colors = MOOD_COLORS[mood];
 
