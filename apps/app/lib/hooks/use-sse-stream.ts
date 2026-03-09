@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 /**
  * Jotai atom holding the entry ID currently being streamed.
@@ -26,7 +26,6 @@ const INITIAL_STATE: SseStreamState = {
 
 export function useSseStream(entryId: string | null): SseStreamState {
   const [state, setState] = useState<SseStreamState>(INITIAL_STATE);
-  const sourceRef = useRef<EventSource | null>(null);
 
   useEffect(() => {
     if (!entryId) {
@@ -41,7 +40,6 @@ export function useSseStream(entryId: string | null): SseStreamState {
 
     const url = `/api/ai/stream/${encodeURIComponent(entryId)}`;
     const source = new EventSource(url, { withCredentials: true });
-    sourceRef.current = source;
 
     // eslint-disable-next-line @eslint-react/web-api/no-leaked-event-listener
     source.addEventListener("token", (event: MessageEvent) => {
@@ -92,7 +90,6 @@ export function useSseStream(entryId: string | null): SseStreamState {
 
     return () => {
       source.close();
-      sourceRef.current = null;
     };
   }, [entryId]);
 

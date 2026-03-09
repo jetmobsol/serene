@@ -1,5 +1,6 @@
 import { formatRelativeTime } from "@/lib/utils/relative-time";
 import { getMoodIcon } from "@/lib/utils/mood-icons";
+import { truncate } from "@/lib/utils/text";
 import { MOOD_COLORS, type MoodType } from "@repo/core";
 import {
   Badge,
@@ -38,11 +39,6 @@ interface EntryCardProps {
   isStreaming?: boolean;
   streamedText?: string;
   streamHasCrisisContent?: boolean;
-}
-
-function truncate(text: string, maxLength: number): string {
-  if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength).trimEnd() + "...";
 }
 
 export function EntryCard({

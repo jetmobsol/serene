@@ -1,10 +1,7 @@
+import { cn } from "@/lib/utils";
 import { Sparkles } from "lucide-react";
+import { truncate } from "@/lib/utils/text";
 import { SafetyBanner } from "./safety-banner";
-
-function truncate(text: string, maxLength: number): string {
-  if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength).trimEnd() + "...";
-}
 
 interface AiResponseProps {
   response: string | null;
@@ -34,10 +31,18 @@ export function AiResponse({
     <div className="space-y-2">
       {hasCrisisContent && <SafetyBanner />}
       <div
-        className={`flex items-start gap-${variant === "compact" ? "2" : "3"} rounded-${variant === "compact" ? "md" : "lg"} bg-muted/50 p-${variant === "compact" ? "2" : "4"} w-full`}
+        className={cn(
+          "flex items-start bg-muted/50 w-full",
+          variant === "compact"
+            ? "gap-2 rounded-md p-2"
+            : "gap-3 rounded-lg p-4",
+        )}
       >
         <Sparkles
-          className={`${variant === "compact" ? "h-4 w-4" : "h-5 w-5"} text-muted-foreground mt-0.5 shrink-0`}
+          className={cn(
+            "text-muted-foreground mt-0.5 shrink-0",
+            variant === "compact" ? "h-4 w-4" : "h-5 w-5",
+          )}
         />
         <div className={variant === "full" ? "flex-1" : undefined}>
           {variant === "full" && (
@@ -54,7 +59,10 @@ export function AiResponse({
             </div>
           ) : (
             <p
-              className={`text-${variant === "compact" ? "xs" : "sm"} text-muted-foreground italic`}
+              className={cn(
+                "text-muted-foreground italic",
+                variant === "compact" ? "text-xs" : "text-sm",
+              )}
               aria-live="polite"
             >
               {text}
