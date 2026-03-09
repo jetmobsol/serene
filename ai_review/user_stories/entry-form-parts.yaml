@@ -1,0 +1,35 @@
+stories:
+  - name: "Mood selector displays 6 moods"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Verify the journal page loads successfully
+      Verify exactly 6 mood options are visible: Happy, Calm, Anxious, Sad, Overwhelmed, Angry
+      Verify each mood option has an icon and label
+      Click the "Happy" mood option
+      Verify the Happy option shows a selected/active visual state
+      Click the "Sad" mood option
+      Verify Sad is now selected and Happy is deselected
+
+  - name: "Tag chips allow multi-select"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Verify tag chips are visible with labels: Work, Sleep, Relationships, Fitness, Hobbies, Health, Social, Nature
+      Click the "Work" tag chip
+      Verify "Work" shows a selected/active visual state
+      Click the "Fitness" tag chip
+      Verify both "Work" and "Fitness" are selected (multi-select)
+      Click "Work" again
+      Verify "Work" is deselected and "Fitness" remains selected
+
+  - name: "Note editor shows character count"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Verify a text area is visible with placeholder text mentioning 50 characters
+      Verify a character count indicator is visible
+      Type "Short note" into the text area
+      Verify the character count updates (should show approximately 10 characters)
+      Type a longer note with at least 50 characters: "This is a longer reflective note about my day and how I am feeling right now today"
+      Verify a visual indicator confirms AI insight will be generated (green checkmark or text change)

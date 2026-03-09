@@ -19,6 +19,7 @@ import { Route as appReportsRouteImport } from './../routes/(app)/reports'
 import { Route as appDashboardRouteImport } from './../routes/(app)/dashboard'
 import { Route as appAnalyticsRouteImport } from './../routes/(app)/analytics'
 import { Route as appAboutRouteImport } from './../routes/(app)/about'
+import { Route as appJournalIndexRouteImport } from './../routes/(app)/journal/index'
 
 const appRouteRoute = appRouteRouteImport.update({
   id: '/(app)',
@@ -69,6 +70,11 @@ const appAboutRoute = appAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => appRouteRoute,
 } as any)
+const appJournalIndexRoute = appJournalIndexRouteImport.update({
+  id: '/journal/',
+  path: '/journal/',
+  getParentRoute: () => appRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/about': typeof appAboutRoute
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof authLoginRoute
   '/signup': typeof authSignupRoute
   '/': typeof appIndexRoute
+  '/journal/': typeof appJournalIndexRoute
 }
 export interface FileRoutesByTo {
   '/about': typeof appAboutRoute
@@ -91,6 +98,7 @@ export interface FileRoutesByTo {
   '/login': typeof authLoginRoute
   '/signup': typeof authSignupRoute
   '/': typeof appIndexRoute
+  '/journal': typeof appJournalIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -104,6 +112,7 @@ export interface FileRoutesById {
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/signup': typeof authSignupRoute
   '/(app)/': typeof appIndexRoute
+  '/(app)/journal/': typeof appJournalIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -117,6 +126,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/'
+    | '/journal/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/about'
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/'
+    | '/journal'
   id:
     | '__root__'
     | '/(app)'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/(auth)/login'
     | '/(auth)/signup'
     | '/(app)/'
+    | '/(app)/journal/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -220,6 +232,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appAboutRouteImport
       parentRoute: typeof appRouteRoute
     }
+    '/(app)/journal/': {
+      id: '/(app)/journal/'
+      path: '/journal'
+      fullPath: '/journal/'
+      preLoaderRoute: typeof appJournalIndexRouteImport
+      parentRoute: typeof appRouteRoute
+    }
   }
 }
 
@@ -231,6 +250,7 @@ interface appRouteRouteChildren {
   appSettingsRoute: typeof appSettingsRoute
   appUsersRoute: typeof appUsersRoute
   appIndexRoute: typeof appIndexRoute
+  appJournalIndexRoute: typeof appJournalIndexRoute
 }
 
 const appRouteRouteChildren: appRouteRouteChildren = {
@@ -241,6 +261,7 @@ const appRouteRouteChildren: appRouteRouteChildren = {
   appSettingsRoute: appSettingsRoute,
   appUsersRoute: appUsersRoute,
   appIndexRoute: appIndexRoute,
+  appJournalIndexRoute: appJournalIndexRoute,
 }
 
 const appRouteRouteWithChildren = appRouteRoute._addFileChildren(

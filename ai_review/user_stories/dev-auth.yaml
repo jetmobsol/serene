@@ -1,0 +1,11 @@
+stories:
+  - name: "Dev auto-login with test@test.com"
+    url: "http://localhost:5173/login"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Verify the login page loads successfully
+      Enter "test@test.com" in the email input field
+      Click the continue/submit button
+      Wait for auto-login to complete (OTP auto-fills and submits)
+      Verify redirect to dashboard or app home page
+      Verify user is authenticated (session exists)
