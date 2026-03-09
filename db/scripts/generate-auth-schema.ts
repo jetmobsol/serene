@@ -13,11 +13,20 @@ async function generateAuthSchema() {
 
   // Create the auth instance to get the configuration
   const auth = createAuth(mockDb, {
+    ENVIRONMENT: env.ENVIRONMENT || "development",
     APP_NAME: env.APP_NAME || "Serene",
     APP_ORIGIN: env.APP_ORIGIN || "http://localhost:3000",
-    BETTER_AUTH_SECRET: env.BETTER_AUTH_SECRET || "mock-secret",
+    BETTER_AUTH_SECRET:
+      env.BETTER_AUTH_SECRET || "mock-secret-must-be-at-least-32-chars",
     GOOGLE_CLIENT_ID: env.GOOGLE_CLIENT_ID || "mock-client-id",
     GOOGLE_CLIENT_SECRET: env.GOOGLE_CLIENT_SECRET || "mock-client-secret",
+    RESEND_API_KEY: env.RESEND_API_KEY || "mock-resend-key",
+    RESEND_EMAIL_FROM: env.RESEND_EMAIL_FROM || "noreply@example.com",
+    STRIPE_SECRET_KEY: env.STRIPE_SECRET_KEY,
+    STRIPE_WEBHOOK_SECRET: env.STRIPE_WEBHOOK_SECRET,
+    STRIPE_STARTER_PRICE_ID: env.STRIPE_STARTER_PRICE_ID,
+    STRIPE_PRO_PRICE_ID: env.STRIPE_PRO_PRICE_ID,
+    STRIPE_PRO_ANNUAL_PRICE_ID: env.STRIPE_PRO_ANNUAL_PRICE_ID,
   });
 
   // WARNING: Type assertion needed as Better Auth doesn't export the auth instance type
@@ -77,7 +86,8 @@ async function main() {
   }
 }
 
-if (require.main === module) {
+// Run if executed directly (ESM compatible)
+if (import.meta.main) {
   main();
 }
 

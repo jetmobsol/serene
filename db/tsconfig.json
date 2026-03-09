@@ -8,6 +8,6 @@
     "outDir": "./dist",
     "types": ["bun", "node"]
   },
-  "include": ["schema/**/*.ts", "*.ts", "*.json"],
+  "include": ["schema/**/*.ts", "seeds/**/*.ts", "*.ts", "*.json"],
   "exclude": ["**/dist/**/*", "**/node_modules/**/*", "scripts/**/*"]
 }
