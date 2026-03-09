@@ -1,0 +1,7 @@
+# Development Dockerfile for the Bun monorepo.
+# Source code is mounted as a volume for hot reload.
+# Dependencies are installed by the setup service before api/app start.
+
+FROM oven/bun:1.3
+
+WORKDIR /app

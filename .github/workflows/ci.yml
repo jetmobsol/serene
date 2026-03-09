@@ -1,0 +1,106 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment"
+        type: environment
+        default: "test"
+        required: true
+
+env:
+  HUSKY: 0
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: "Build"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+
+      # Code style (PRs only — merged code was already checked)
+      - run: bun prettier --check .
+        if: github.event_name == 'pull_request'
+      - run: bun lint
+        if: github.event_name == 'pull_request'
+
+      # Validate Terraform formatting
+      - uses: hashicorp/setup-terraform@v3
+      - run: terraform fmt -check -recursive infra/
+
+      # Type checking (email templates must be built first for types)
+      - run: bun email:build
+      - run: bun tsc --build
+
+      # Tests
+      - run: bun run test -- --run
+
+      # Build all workspaces
+      - run: bun --filter @repo/web build
+      - run: bun --filter @repo/api build
+      - run: bun --filter @repo/app build
+
+      # Upload build artifacts for deploy jobs
+      - uses: actions/upload-artifact@v6
+        with:
+          name: build
+          path: |
+            apps/web/dist
+            apps/app/dist
+            apps/api/dist
+
+  deploy-preview:
+    name: "Deploy"
+    needs: [build]
+    if: github.event_name == 'pull_request'
+    uses: ./.github/workflows/deploy.yml
+    with:
+      name: Preview
+      environment: preview
+      url: https://{codename}.example.com
+    secrets: inherit
+    permissions:
+      deployments: write
+      pull-requests: read
+
+  deploy-staging:
+    name: "Deploy"
+    needs: [build]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/deploy.yml
+    with:
+      name: Staging
+      environment: staging
+      url: https://staging.example.com
+    secrets: inherit
+    permissions:
+      deployments: write
+      pull-requests: read
+
+  deploy-prod:
+    name: "Deploy"
+    needs: [build]
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production'
+    uses: ./.github/workflows/deploy.yml
+    with:
+      name: Production
+      environment: production
+      url: https://example.com
+    secrets: inherit
+    permissions:
+      deployments: write
+      pull-requests: read

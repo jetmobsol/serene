@@ -1,0 +1,94 @@
+# Local development stack — run everything with: docker compose up
+#
+# Services:
+#   db    — PostgreSQL 17 (host port 5433 to avoid conflicts)
+#   setup — One-shot: installs deps, builds email templates, pushes DB schema
+#   web   — Astro marketing/landing site (port 4321)
+#   api   — Hono API server via Bun (port 8787)
+#   app   — Vite SPA dev server (port 5173)
+
+x-shared: &shared
+  build:
+    context: .
+    dockerfile: Dockerfile.dev
+  volumes:
+    - .:/app
+  environment: &shared-env
+    HUSKY: "0"
+
+services:
+  db:
+    image: postgres:17-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: example
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  setup:
+    <<: *shared
+    command: >
+      sh -c "bun install --frozen-lockfile &&
+             bun --cwd apps/email build &&
+             bun db:push"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      <<: *shared-env
+      DATABASE_URL: postgres://postgres:postgres@db:5432/example
+
+  web:
+    <<: *shared
+    command: bun --cwd apps/web dev --host 0.0.0.0
+    ports:
+      - "4321:4321"
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+    environment:
+      <<: *shared-env
+
+  api:
+    <<: *shared
+    working_dir: /app/apps/api
+    command: bun run --watch dev.ts
+    ports:
+      - "8787:8787"
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+    environment:
+      <<: *shared-env
+      DATABASE_URL: postgres://postgres:postgres@db:5432/example
+      CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE_CACHED: postgres://postgres:postgres@db:5432/example
+      CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE_DIRECT: postgres://postgres:postgres@db:5432/example
+      APP_NAME: "Acme Co."
+      APP_ORIGIN: http://localhost:5173
+      BETTER_AUTH_SECRET: docker-dev-secret-change-me-in-production
+      PORT: "8787"
+
+  app:
+    <<: *shared
+    command: bun --cwd apps/app dev --host 0.0.0.0
+    ports:
+      - "5173:5173"
+    depends_on:
+      api:
+        condition: service_started
+    environment:
+      <<: *shared-env
+      APP_NAME: "Acme Co."
+      APP_ORIGIN: http://localhost:5173
+      API_ORIGIN: http://api:8787
+
+volumes:
+  pgdata:
