@@ -33,7 +33,7 @@ docker-stop:
 
 # Run all tests, typecheck, lint, and format check
 check-all:
-    bun test --run
+    bun run test --run
     bun typecheck
     bun lint
     bun prettier --check .
