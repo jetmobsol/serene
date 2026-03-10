@@ -18,6 +18,14 @@ export const journalRouter = router({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      console.log(
+        `\n📝 JOURNAL CREATE\n` +
+          `  User:    ${ctx.user.id}\n` +
+          `  Mood:    ${input.mood}\n` +
+          `  Tags:    ${input.tags.join(", ") || "(none)"}\n` +
+          `  Note:    ${input.note.length} chars${input.note.length < 50 ? " (< 50, AI stream will NOT trigger)" : " (>= 50, AI stream will trigger)"}`,
+      );
+
       const [entry] = await ctx.dbDirect
         .insert(journalEntry)
         .values({
@@ -28,6 +36,7 @@ export const journalRouter = router({
         })
         .returning();
 
+      console.log(`  ✅ Created entry: ${entry.id}`);
       return entry;
     }),
 

@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui";
 import { Link } from "@tanstack/react-router";
+import { AnimatePresence, motion } from "motion/react";
 import { MoreVertical, Pencil, Trash2 } from "lucide-react";
 import { AiResponse } from "./ai-response";
 
@@ -89,21 +90,30 @@ export function EntryCard({
             </p>
           )}
         </CardContent>
-
-        {(entry.aiResponse || isStreaming) && (
-          <CardFooter className="pt-0">
-            <AiResponse
-              response={entry.aiResponse?.response ?? null}
-              hasCrisisContent={
-                entry.aiResponse?.hasCrisisContent ?? streamHasCrisisContent
-              }
-              isStreaming={isStreaming}
-              streamedText={streamedText}
-              variant="compact"
-            />
-          </CardFooter>
-        )}
       </Link>
+
+      <AnimatePresence>
+        {(entry.aiResponse || isStreaming) && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
+            <CardFooter className="pt-0">
+              <AiResponse
+                response={entry.aiResponse?.response ?? null}
+                hasCrisisContent={
+                  entry.aiResponse?.hasCrisisContent ?? streamHasCrisisContent
+                }
+                isStreaming={isStreaming}
+                streamedText={streamedText}
+                variant="compact"
+              />
+            </CardFooter>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="absolute right-4 top-4">
         <DropdownMenu>

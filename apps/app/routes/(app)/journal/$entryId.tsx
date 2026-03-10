@@ -19,7 +19,10 @@ import {
   Skeleton,
 } from "@repo/ui";
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
+import { streamingEntryIdAtom, useSseStream } from "@/lib/hooks/use-sse-stream";
+import { AnimatePresence, motion } from "motion/react";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
+import { useAtomValue } from "jotai";
 import { useState } from "react";
 
 export const Route = createFileRoute("/(app)/journal/$entryId")({
@@ -34,6 +37,11 @@ function EntryDetail() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const streamingEntryId = useAtomValue(streamingEntryIdAtom);
+  const streamState = useSseStream(
+    streamingEntryId === entryId ? entryId : null,
+  );
+  const isStreaming = streamingEntryId === entryId && streamState.isStreaming;
 
   function handleDelete() {
     deleteMutation.mutate(entryId, {
@@ -156,15 +164,29 @@ function EntryDetail() {
           )}
         </CardContent>
 
-        {entry.aiResponse && (
-          <CardFooter>
-            <AiResponse
-              response={entry.aiResponse.response}
-              hasCrisisContent={entry.aiResponse.hasCrisisContent}
-              variant="full"
-            />
-          </CardFooter>
-        )}
+        <AnimatePresence>
+          {(entry.aiResponse || isStreaming) && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+              <CardFooter>
+                <AiResponse
+                  response={entry.aiResponse?.response ?? null}
+                  hasCrisisContent={
+                    entry.aiResponse?.hasCrisisContent ??
+                    streamState.hasCrisisContent
+                  }
+                  isStreaming={isStreaming}
+                  streamedText={streamState.streamedText}
+                  variant="full"
+                />
+              </CardFooter>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </Card>
 
       <DeleteEntryDialog

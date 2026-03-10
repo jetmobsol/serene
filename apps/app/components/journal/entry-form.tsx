@@ -66,8 +66,15 @@ export function EntryForm({
         { mood, tags, note },
         {
           onSuccess: (data) => {
+            console.log(
+              `[EntryForm] Created entry ${data?.id} | note length: ${note.length} | streaming: ${note.length >= 50}`,
+            );
             if (note.length >= 50 && data?.id) {
               setStreamingEntryId(data.id);
+            } else {
+              console.log(
+                `[EntryForm] Skipping AI stream — note too short (need 50+, got ${note.length})`,
+              );
             }
             setMood(null);
             setTags([]);

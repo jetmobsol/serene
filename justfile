@@ -31,6 +31,27 @@ docker-start:
 docker-stop:
     docker compose down
 
+# Start DB + dev servers in tmux with separate windows per service
+dev:
+    docker compose up -d db
+    @until docker compose exec db pg_isready -U postgres > /dev/null 2>&1; do sleep 1; done
+    @tmux kill-session -t serene 2>/dev/null || true
+    tmux new-session -d -s serene -n api
+    tmux send-keys -t serene:api 'bun api:dev' Enter
+    tmux new-window -t serene -n app
+    tmux send-keys -t serene:app 'bun app:dev' Enter
+    tmux new-window -t serene -n web
+    tmux send-keys -t serene:web 'bun web:dev' Enter
+    @echo "tmux session 'serene' started with windows: api, app, web"
+    @echo "Attach with: tmux attach -t serene"
+    tmux attach -t serene
+
+# Stop all dev servers, kill tmux session, and stop DB
+dev-stop:
+    @tmux kill-session -t serene 2>/dev/null && echo "tmux session 'serene' killed" || echo "No tmux session 'serene' found"
+    -pkill -f "bun.*dev" || true
+    docker compose down db
+
 # Run all tests, typecheck, lint, and format check
 check-all:
     bun run test --run

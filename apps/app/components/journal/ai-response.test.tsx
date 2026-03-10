@@ -14,7 +14,7 @@ describe("AiResponse", () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it("shows pulsing dots when streaming with no text yet", () => {
+  it("shows loading indicator when streaming with no text yet", () => {
     render(
       <AiResponse
         response={null}
@@ -23,7 +23,7 @@ describe("AiResponse", () => {
         streamedText=""
       />,
     );
-    expect(screen.getByLabelText("Generating AI response")).toBeInTheDocument();
+    expect(screen.getByText("Reflecting on your entry")).toBeInTheDocument();
   });
 
   it("shows streamed text while streaming", () => {

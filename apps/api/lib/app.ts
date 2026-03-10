@@ -81,9 +81,13 @@ app.on(["GET", "POST"], "/api/auth/*", (c) => {
 
 // SSE streaming endpoint for AI vibe check
 app.get("/api/ai/stream/:entryId", async (c) => {
+  const entryId = c.req.param("entryId");
+  console.log(`\n🔵 AI STREAM REQUEST received for entry: ${entryId}`);
+
   // 1. Authenticate via Better Auth session
   const auth = c.get("auth");
   if (!auth) {
+    console.log(`  ❌ Auth service not initialized`);
     return c.json({ error: "Authentication service not initialized" }, 503);
   }
 
@@ -92,11 +96,12 @@ app.get("/api/ai/stream/:entryId", async (c) => {
   });
 
   if (!sessionData?.session || !sessionData?.user) {
+    console.log(`  ❌ Auth failed — no session/user`);
     return c.json({ error: "Authentication required" }, 401);
   }
+  console.log(`  ✅ Authenticated as ${sessionData.user.email}`);
 
   const { user } = sessionData;
-  const entryId = c.req.param("entryId");
 
   // 2. Rate limiting
   const rateLimit = await checkRateLimit(c.env.AI_RATE_LIMIT, user.id);
@@ -128,7 +133,15 @@ app.get("/api/ai/stream/:entryId", async (c) => {
   const note = entry.note ?? "";
 
   // 4. Gibberish check — return immediately without streaming
-  if (isGibberish(note)) {
+  const gibberishResult = isGibberish(note);
+  console.log(
+    `  📝 Note: "${note.slice(0, 120)}${note.length > 120 ? "..." : ""}"\n` +
+      `  🔍 Gibberish check: ${gibberishResult}`,
+  );
+  if (gibberishResult) {
+    console.log(
+      `  ⏭️  Skipping Anthropic — gibberish detected, returning generic response`,
+    );
     await persistAiResponse(dbDirect, {
       entryId: entry.id,
       response: GENERIC_RESPONSE,
@@ -157,6 +170,19 @@ app.get("/api/ai/stream/:entryId", async (c) => {
   // 6. Build prompt
   const prompt = buildVibeCheckPrompt(entry.mood, entry.tags ?? [], note);
 
+  // Debug: log prompt and params sent to Anthropic
+  console.log(
+    `\n🤖 AI VIBE CHECK REQUEST\n` +
+      `  Entry:       ${entryId}\n` +
+      `  Mood:        ${entry.mood}\n` +
+      `  Tags:        ${(entry.tags ?? []).join(", ") || "(none)"}\n` +
+      `  Note:        ${note.slice(0, 120)}${note.length > 120 ? "..." : ""}\n` +
+      `  Crisis flag: ${keywordCrisisFlag}\n` +
+      `  Model:       ${AI_MODEL} | max_tokens: ${AI_MAX_TOKENS} | temp: ${AI_TEMPERATURE}\n` +
+      `  System:      ${prompt.system.slice(0, 200)}...\n` +
+      `  User prompt: ${prompt.user}`,
+  );
+
   // 7. Stream from Anthropic
   return streamSSE(c, async (stream) => {
     let anthropicStream: ReturnType<
@@ -180,10 +206,12 @@ app.get("/api/ai/stream/:entryId", async (c) => {
 
     try {
       if (!c.env.ANTHROPIC_API_KEY) {
+        console.log(`  ❌ ANTHROPIC_API_KEY not set`);
         throw new Error(
           "ANTHROPIC_API_KEY is not configured. AI features are unavailable.",
         );
       }
+      console.log(`  🚀 Calling Anthropic API (${AI_MODEL})...`);
       const anthropic = new Anthropic({ apiKey: c.env.ANTHROPIC_API_KEY });
 
       anthropicStream = anthropic.messages.stream({
@@ -241,6 +269,14 @@ app.get("/api/ai/stream/:entryId", async (c) => {
       if (hasCrisisContent) {
         finalResponse = prependCrisisDisclaimer(finalResponse);
       }
+
+      // Debug: log AI response
+      console.log(
+        `\n✅ AI VIBE CHECK RESPONSE\n` +
+          `  Entry:    ${entryId}\n` +
+          `  Crisis:   ${hasCrisisContent} (keyword: ${keywordCrisisFlag}, ai: ${aiCrisisFlag})\n` +
+          `  Response: ${finalResponse}`,
+      );
 
       // Persist AI response
       await persistAiResponse(dbDirect, {
