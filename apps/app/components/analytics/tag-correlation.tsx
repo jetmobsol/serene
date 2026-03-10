@@ -54,7 +54,7 @@ export function TagCorrelation() {
           </div>
         ) : (
           <div className="space-y-2">
-            {data.correlations.map((item: (typeof data.correlations)[0]) => (
+            {data.correlations.map((item) => (
               <div
                 key={item.tag}
                 className="flex items-center justify-between rounded-lg border p-3"

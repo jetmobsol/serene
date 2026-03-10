@@ -1,4 +1,5 @@
 import { useWeeklyMoodQuery } from "@/lib/queries/analytics";
+import { getMonday } from "@/lib/utils/date-groups";
 import { MOOD_COLORS, MOODS, type MoodType } from "@repo/core";
 import {
   Button,
@@ -20,15 +21,6 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-
-function getMonday(date: Date): Date {
-  const d = new Date(date);
-  const day = d.getDay();
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-  d.setDate(diff);
-  d.setHours(0, 0, 0, 0);
-  return d;
-}
 
 function formatWeekLabel(weekStart: Date): string {
   const weekEnd = new Date(weekStart);

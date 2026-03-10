@@ -34,10 +34,7 @@ export const analyticsRouter = router({
       const totalEntries = rows.reduce((sum, row) => sum + row.count, 0);
 
       return {
-        distribution: rows.map((row) => ({
-          mood: row.mood,
-          count: row.count,
-        })),
+        distribution: rows,
         totalEntries,
       };
     }),

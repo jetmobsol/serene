@@ -21,7 +21,7 @@ function isSameLocalDate(a: Date, b: Date): boolean {
   return pa.year === pb.year && pa.month === pb.month && pa.day === pb.day;
 }
 
-function getMonday(date: Date): Date {
+export function getMonday(date: Date): Date {
   const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
   const dayOfWeek = d.getDay();
   const diff = (dayOfWeek + 6) % 7;
