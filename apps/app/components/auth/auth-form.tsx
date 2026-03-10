@@ -1,10 +1,12 @@
-import { Button, Input, cn } from "@repo/ui";
+import { Button, Input, Label, cn } from "@repo/ui";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, Mail } from "lucide-react";
 import type { ComponentProps, FormEvent } from "react";
+import { useState } from "react";
 import { GoogleLogin } from "./google-login";
 import { OtpVerification } from "./otp-verification";
 import { PasskeyLogin } from "./passkey-login";
+import { PasswordInput } from "./password-input";
 import { useAuthForm } from "./use-auth-form";
 
 function SignupTerms() {
@@ -29,10 +31,23 @@ function SignupTerms() {
   );
 }
 
+function Divider({ text }: { text: string }) {
+  return (
+    <div className="relative">
+      <div className="absolute inset-0 flex items-center">
+        <span className="w-full border-t" />
+      </div>
+      <div className="relative flex justify-center text-xs uppercase">
+        <span className="bg-card px-2 text-muted-foreground">{text}</span>
+      </div>
+    </div>
+  );
+}
+
 interface AuthFormProps extends ComponentProps<"div"> {
   /**
-   * UI mode affecting copy, ToS display, and available methods.
-   * Both modes use the same passwordless OTP flow that auto-creates accounts.
+   * UI mode affecting fields, copy, and available methods.
+   * "signup" shows name+email+password. "login" shows email+password with OTP/passkey alternatives.
    */
   mode?: "login" | "signup";
   /** Called after successful auth. Awaited before UI progresses. Caller handles cache invalidation and navigation. */
@@ -53,15 +68,23 @@ export function AuthForm({
   const {
     step,
     email,
+    password,
+    name,
     devOtp,
     isDisabled,
     error,
+    forgotPasswordSent,
     changeEmail,
+    changePassword,
+    changeName,
     onAuthSuccess,
     setError,
     sendOtp,
-    goToEmailStep,
-    goToMethodStep,
+    signUpWithPassword,
+    signInWithPassword,
+    handleForgotPassword,
+    goToOtpFlow,
+    goToPasswordForm,
     resetToEmail,
     setChildBusy,
     mode: formMode,
@@ -71,10 +94,20 @@ export function AuthForm({
     mode,
   });
 
-  // Clear error when user changes email
+  // Clear error when user changes inputs
   const handleEmailChange = (value: string) => {
     if (error) setError(null);
     changeEmail(value);
+  };
+
+  const handlePasswordChange = (value: string) => {
+    if (error) setError(null);
+    changePassword(value);
+  };
+
+  const handleNameChange = (value: string) => {
+    if (error) setError(null);
+    changeName(value);
   };
 
   // Voluntary back from OTP clears error; forced back (via onCancel) preserves it
@@ -112,28 +145,46 @@ export function AuthForm({
         </div>
       )}
 
-      {/* Step: Method Selection */}
-      {step === "method" && (
-        <MethodSelection
+      {/* Forgot password success message */}
+      {forgotPasswordSent && (
+        <div
+          role="status"
+          className="rounded-md bg-primary/10 p-3 text-sm text-primary"
+        >
+          If an account exists with that email, you'll receive a password reset
+          link shortly.
+        </div>
+      )}
+
+      {/* Step: Password Form (primary) */}
+      {step === "password-form" && (
+        <PasswordForm
           isSignup={isSignup}
+          email={email}
+          password={password}
+          name={name}
           isDisabled={isDisabled}
-          onEmailClick={goToEmailStep}
-          onSuccess={onAuthSuccess}
+          onEmailChange={handleEmailChange}
+          onPasswordChange={handlePasswordChange}
+          onNameChange={handleNameChange}
+          onSubmit={isSignup ? signUpWithPassword : signInWithPassword}
+          onForgotPassword={handleForgotPassword}
+          onOtpClick={goToOtpFlow}
+          onPasskeySuccess={onAuthSuccess}
           onError={setError}
           onLoadingChange={setChildBusy}
           returnTo={returnTo}
         />
       )}
 
-      {/* Step: Email Input */}
+      {/* Step: Email Input (OTP alternative) */}
       {step === "email" && (
         <EmailInput
           email={email}
-          isSignup={isSignup}
           isDisabled={isDisabled}
           onEmailChange={handleEmailChange}
           onSubmit={sendOtp}
-          onBack={goToMethodStep}
+          onBack={goToPasswordForm}
         />
       )}
 
@@ -154,32 +205,134 @@ export function AuthForm({
   );
 }
 
-// Step 1: Method Selection
-interface MethodSelectionProps {
+// Step 1: Password Form (primary auth method)
+interface PasswordFormProps {
   isSignup: boolean;
+  email: string;
+  password: string;
+  name: string;
   isDisabled: boolean;
-  onEmailClick: () => void;
-  onSuccess: () => void;
+  onEmailChange: (email: string) => void;
+  onPasswordChange: (password: string) => void;
+  onNameChange: (name: string) => void;
+  onSubmit: (e?: FormEvent) => void;
+  onForgotPassword: () => void;
+  onOtpClick: () => void;
+  onPasskeySuccess: () => void;
   onError: (error: string | null) => void;
   onLoadingChange: (loading: boolean) => void;
   returnTo?: string;
 }
 
-function MethodSelection({
+function PasswordForm({
   isSignup,
+  email,
+  password,
+  name,
   isDisabled,
-  onEmailClick,
-  onSuccess,
+  onEmailChange,
+  onPasswordChange,
+  onNameChange,
+  onSubmit,
+  onForgotPassword,
+  onOtpClick,
+  onPasskeySuccess,
   onError,
   onLoadingChange,
   returnTo,
-}: MethodSelectionProps) {
+}: PasswordFormProps) {
   const heading = isSignup ? "Create your account" : "Welcome back";
+  const [passwordTouched, setPasswordTouched] = useState(false);
+  const showPasswordError =
+    passwordTouched && password.length > 0 && password.length < 8;
 
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-2xl font-bold text-center">{heading}</h1>
 
+      <form onSubmit={onSubmit} className="flex flex-col gap-4">
+        {/* Name field (signup only) */}
+        {isSignup && (
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="auth-name">Name</Label>
+            <Input
+              id="auth-name"
+              name="name"
+              type="text"
+              placeholder="Your name"
+              value={name}
+              onChange={(e) => onNameChange(e.target.value)}
+              disabled={isDisabled}
+              autoComplete="name"
+            />
+          </div>
+        )}
+
+        {/* Email field */}
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="auth-email">Email</Label>
+          <Input
+            id="auth-email"
+            name="email"
+            type="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => onEmailChange(e.target.value)}
+            disabled={isDisabled}
+            autoComplete="email"
+            required
+          />
+        </div>
+
+        {/* Password field */}
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="auth-password">Password</Label>
+            {!isSignup && (
+              <button
+                type="button"
+                onClick={onForgotPassword}
+                disabled={isDisabled}
+                className="text-xs text-muted-foreground hover:text-primary transition-colors underline-offset-4 hover:underline"
+              >
+                Forgot password?
+              </button>
+            )}
+          </div>
+          <PasswordInput
+            id="auth-password"
+            name="password"
+            placeholder={isSignup ? "Min. 8 characters" : "Enter your password"}
+            value={password}
+            onChange={(e) => onPasswordChange(e.target.value)}
+            onBlur={() => setPasswordTouched(true)}
+            disabled={isDisabled}
+            autoComplete={isSignup ? "new-password" : "current-password"}
+            required
+            minLength={8}
+          />
+          {showPasswordError && (
+            <p className="text-xs text-destructive">
+              Password must be at least 8 characters
+            </p>
+          )}
+        </div>
+
+        {/* Submit button */}
+        <Button
+          type="submit"
+          variant="default"
+          className="w-full"
+          disabled={isDisabled || !email.trim() || password.length < 8}
+        >
+          {isSignup ? "Create account" : "Sign in"}
+        </Button>
+      </form>
+
+      {/* Divider */}
+      <Divider text="or continue with" />
+
+      {/* Alternative auth methods */}
       <div className="flex flex-col gap-3">
         <GoogleLogin
           onError={onError}
@@ -188,25 +341,27 @@ function MethodSelection({
           returnTo={returnTo}
         />
 
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full"
-          onClick={onEmailClick}
-          disabled={isDisabled}
-        >
-          <Mail className="mr-2 h-4 w-4" />
-          Continue with email
-        </Button>
-
-        {/* Passkey only available for login (requires existing account) */}
+        {/* OTP alternative (login only) */}
         {!isSignup && (
-          <PasskeyLogin
-            onSuccess={onSuccess}
-            onError={onError}
-            onLoadingChange={onLoadingChange}
-            isDisabled={isDisabled}
-          />
+          <>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={onOtpClick}
+              disabled={isDisabled}
+            >
+              <Mail className="mr-2 h-4 w-4" />
+              Use email code instead
+            </Button>
+
+            <PasskeyLogin
+              onSuccess={onPasskeySuccess}
+              onError={onError}
+              onLoadingChange={onLoadingChange}
+              isDisabled={isDisabled}
+            />
+          </>
         )}
       </div>
 
@@ -226,7 +381,7 @@ function MethodSelection({
           </>
         ) : (
           <>
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link
               to="/signup"
               className="font-medium text-primary underline-offset-4 hover:underline"
@@ -240,10 +395,9 @@ function MethodSelection({
   );
 }
 
-// Step 2: Email Input
+// Step 2: Email Input (OTP flow)
 interface EmailInputProps {
   email: string;
-  isSignup: boolean;
   isDisabled: boolean;
   onEmailChange: (email: string) => void;
   onSubmit: (e?: FormEvent) => void;
@@ -252,7 +406,6 @@ interface EmailInputProps {
 
 function EmailInput({
   email,
-  isSignup,
   isDisabled,
   onEmailChange,
   onSubmit,
@@ -261,7 +414,7 @@ function EmailInput({
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-2xl font-bold text-center">
-        What's your email address?
+        Sign in with email code
       </h1>
 
       <form onSubmit={onSubmit} className="flex flex-col gap-3">
@@ -281,11 +434,9 @@ function EmailInput({
           className="w-full"
           disabled={isDisabled || !email.trim()}
         >
-          Continue with email
+          Send code
         </Button>
       </form>
-
-      {isSignup && <SignupTerms />}
 
       {/* Back link */}
       <button
@@ -295,7 +446,7 @@ function EmailInput({
         className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
       >
         <ArrowLeft className="h-4 w-4" />
-        Back to {isSignup ? "sign up" : "login"}
+        Back to sign in
       </button>
     </div>
   );

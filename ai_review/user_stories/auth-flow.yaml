@@ -1,0 +1,44 @@
+stories:
+  - name: "Signup form validates inputs"
+    url: "http://localhost:5173/signup"
+    workflow: |
+      Navigate to http://localhost:5173/signup
+      Verify the signup form is visible
+      Verify a name input field exists
+      Verify an email input field exists
+      Verify a password input field exists
+      Verify a submit button exists
+      Verify a Google OAuth or social login button is present
+      Try to submit the form with empty fields
+      Verify validation errors are displayed
+
+  - name: "Login form has all auth methods"
+    url: "http://localhost:5173/login"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Verify the login form is visible
+      Verify an email input field exists
+      Verify a password input field exists
+      Verify a Google OAuth login button is present
+      Verify a submit button exists
+      Verify a link or button for email OTP login exists
+      Verify a passkey login button exists
+
+  - name: "Login and signup pages link to each other"
+    url: "http://localhost:5173/login"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Verify a link to the signup page exists
+      Click the link to signup
+      Verify the URL changes to /signup
+      Verify the signup form is visible
+      Verify a link to the login page exists on the signup page
+      Click the link to login
+      Verify the URL changes to /login
+
+  - name: "Unauthenticated user redirected to login"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Verify the page redirects to the login page
+      Verify the URL contains /login

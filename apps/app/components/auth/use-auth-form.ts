@@ -2,15 +2,14 @@ import { auth } from "@/lib/auth";
 import type { FormEvent } from "react";
 import { useCallback, useRef, useState } from "react";
 
-export type AuthStep = "method" | "email" | "otp";
+export type AuthStep = "password-form" | "email" | "otp";
 
-// Minimal state machine for passwordless OTP flow. Intentionally shallow:
-// - Errors are orthogonal to steps (can occur at any step)
-// - No terminal state (component unmounts on success)
-// Revisit if adding password fallback or MFA steps.
+// Minimal state machine for auth flow.
+// "password-form" is the primary step showing email+password fields.
+// "email" and "otp" are the alternative OTP flow (login only).
 const VALID_TRANSITIONS: Record<AuthStep, AuthStep[]> = {
-  method: ["email"],
-  email: ["method", "otp"],
+  "password-form": ["email"],
+  email: ["password-form", "otp"],
   otp: ["email"],
 };
 
@@ -22,8 +21,8 @@ interface UseAuthFormOptions {
   onSuccess: () => Promise<void>;
   isExternallyLoading?: boolean;
   /**
-   * UI mode affecting copy, ToS display, and available methods.
-   * Both modes use the same passwordless OTP flow that auto-creates accounts.
+   * UI mode affecting copy, available fields, and auth method.
+   * "signup" shows name+email+password. "login" shows email+password with OTP alternative.
    */
   mode?: "login" | "signup";
 }
@@ -33,17 +32,19 @@ export function useAuthForm({
   isExternallyLoading,
   mode = "login",
 }: UseAuthFormOptions) {
-  const [step, setStep] = useState<AuthStep>("method");
+  const [step, setStep] = useState<AuthStep>("password-form");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [devOtp, setDevOtp] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   // Counter-based to handle overlapping child operations (e.g., rapid double-click)
   const [pendingOps, setPendingOps] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [forgotPasswordSent, setForgotPasswordSent] = useState(false);
 
   // Guards against concurrent auth completion (e.g., passkey conditional UI + manual click).
-  // Conditional passkey autofill intentionally doesn't block UI - it's passive/background.
-  // Reset when returning to method step to allow retry after navigation back.
+  // Reset when returning to password-form step to allow retry after navigation back.
   const hasSucceededRef = useRef(false);
   // Ref provides current step to memoized transitionTo callback (avoids stale closure)
   const stepRef = useRef(step);
@@ -74,21 +75,21 @@ export function useAuthForm({
   };
 
   // Validates transitions to prevent invalid step jumps.
-  // Returning to "method" resets the success guard to allow fresh auth attempts.
+  // Returning to "password-form" resets the success guard to allow fresh auth attempts.
   const transitionTo = useCallback((next: AuthStep, clearErr = true) => {
     const current = stepRef.current;
     if (!VALID_TRANSITIONS[current].includes(next)) {
       return;
     }
-    if (next === "method") {
+    if (next === "password-form") {
       hasSucceededRef.current = false;
     }
     setStep(next);
     if (clearErr) setError(null);
   }, []);
 
-  const goToEmailStep = () => transitionTo("email");
-  const goToMethodStep = () => transitionTo("method");
+  const goToOtpFlow = () => transitionTo("email");
+  const goToPasswordForm = () => transitionTo("password-form");
   // Go back to email step, preserving error message
   const resetToEmail = () => transitionTo("email", false);
 
@@ -126,27 +127,143 @@ export function useAuthForm({
     }
   };
 
+  const signUpWithPassword = async (e?: FormEvent) => {
+    e?.preventDefault();
+
+    const normalizedEmail = email.trim().toLowerCase();
+    const trimmedName = name.trim();
+    if (!normalizedEmail || !password || password.length < 8) return;
+
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const result = await auth.signUp.email({
+        name: trimmedName || normalizedEmail.split("@")[0],
+        email: normalizedEmail,
+        password,
+      });
+
+      if (result.data) {
+        await onAuthSuccess();
+      } else if (result.error) {
+        const code = "code" in result.error ? result.error.code : undefined;
+        if (code === "USER_ALREADY_EXISTS") {
+          setError("Unable to create account. Please try logging in instead.");
+        } else {
+          setError(result.error.message || "Failed to create account");
+        }
+      }
+    } catch (err) {
+      console.error("Signup error:", err);
+      setError("Failed to create account. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const signInWithPassword = async (e?: FormEvent) => {
+    e?.preventDefault();
+
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!normalizedEmail || !password) return;
+
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const result = await auth.signIn.email({
+        email: normalizedEmail,
+        password,
+      });
+
+      if (result.data) {
+        await onAuthSuccess();
+      } else if (result.error) {
+        // Deliberately vague to prevent account enumeration
+        setError("Invalid email or password. Please try again.");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("Failed to sign in. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!normalizedEmail) {
+      setError("Please enter your email address first.");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      // Send password reset email via API
+      const response = await fetch("/api/auth/send-reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: normalizedEmail,
+          redirectTo: "/login",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send reset email");
+      }
+
+      // Always show success regardless of whether email exists (prevents enumeration)
+      setForgotPasswordSent(true);
+    } catch (err) {
+      console.error("Forgot password error:", err);
+      setError("Failed to send reset email. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const changeEmail = (value: string) => {
     setEmail(value);
+    if (forgotPasswordSent) setForgotPasswordSent(false);
+  };
+
+  const changePassword = (value: string) => {
+    setPassword(value);
+  };
+
+  const changeName = (value: string) => {
+    setName(value);
   };
 
   return {
     // State
     step,
     email,
+    password,
+    name,
     devOtp,
     isLoading,
     isDisabled,
     error,
     mode,
+    forgotPasswordSent,
 
     // Actions
     changeEmail,
+    changePassword,
+    changeName,
     onAuthSuccess,
     setError,
     sendOtp,
-    goToEmailStep,
-    goToMethodStep,
+    signUpWithPassword,
+    signInWithPassword,
+    handleForgotPassword,
+    goToOtpFlow,
+    goToPasswordForm,
     resetToEmail,
     setChildBusy,
   };
