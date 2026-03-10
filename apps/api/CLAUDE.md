@@ -48,7 +48,7 @@ apps/api/
 ├── index.ts               # Public API exports (Hono app, tRPC router, utilities)
 ├── dev.ts                 # Development server (Bun)
 ├── lib/
-│   ├── app.ts             # Hono app + tRPC endpoint setup
+│   ├── app.ts             # Hono routes + tRPC wiring (slim orchestrator)
 │   ├── auth.ts            # Better Auth server config (plugins: passkey, stripe, org, email-otp)
 │   ├── trpc.ts            # tRPC init (publicProcedure, protectedProcedure, error formatting)
 │   ├── context.ts         # TRPCContext & AppContext types
@@ -56,11 +56,18 @@ apps/api/
 │   ├── loaders.ts         # DataLoader pattern (request-scoped cache)
 │   ├── db.ts              # Drizzle client setup (db + dbDirect)
 │   ├── middleware.ts      # Error handler, 404 handler, request ID generator
-│   ├── ai.ts              # Request-scoped OpenAI provider caching
-│   ├── stripe.ts          # Stripe client helper
 │   ├── email.ts           # Email service (Resend wrapper)
-│   └── plans.ts           # Billing plan limits
-├── routers/               # tRPC routers (user, organization, billing)
+│   ├── ai/                # AI vibe check module
+│   │   ├── service.ts     # Shared pipeline (generateVibeCheck, preCheck, finalize)
+│   │   ├── stream-handler.ts # SSE streaming endpoint
+│   │   ├── anthropic.ts   # Anthropic client, constants, persistAiResponse
+│   │   ├── prompts.ts     # Prompt builder
+│   │   ├── safety.ts      # Crisis detection, gibberish check
+│   │   └── rate-limit.ts  # Per-user rate limiting via KV
+│   └── billing/           # Billing module
+│       ├── plans.ts       # Plan limits
+│       └── stripe.ts      # Stripe client helper
+├── routers/               # tRPC routers (ai, journal, user, organization, billing)
 ├── Dockerfile             # Container build (Bun runtime)
 └── package.json
 ```

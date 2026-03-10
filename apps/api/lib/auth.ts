@@ -12,8 +12,8 @@ import { emailOTP } from "better-auth/plugins/email-otp";
 import { and, eq } from "drizzle-orm";
 import { sendOTP, sendPasswordReset, sendVerificationEmail } from "./email";
 import type { Env } from "./env";
-import { planLimits } from "./plans";
-import { createStripeClient } from "./stripe";
+import { planLimits } from "./billing/plans.js";
+import { createStripeClient } from "./billing/stripe.js";
 
 // Auth hint cookie for edge routing (see docs/adr/001-auth-hint-cookie.md)
 // NOT a security boundary - false positives are acceptable (causes one redirect)

@@ -9,7 +9,7 @@ import {
   isGibberish,
   prependCrisisDisclaimer,
   stripCrisisMarker,
-} from "./safety";
+} from "./safety.js";
 
 // ---------------------------------------------------------------------------
 // detectKeywordCrisis

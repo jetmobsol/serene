@@ -1,6 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { aiResponse } from "@repo/db/schema/ai-response.js";
-import type { TRPCContext } from "./context.js";
+import type { TRPCContext } from "../context.js";
 
 export const AI_MODEL = "claude-sonnet-4-20250514";
 export const AI_MAX_TOKENS = 150;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildVibeCheckPrompt } from "./prompts";
+import { buildVibeCheckPrompt } from "./prompts.js";
 
 describe("buildVibeCheckPrompt", () => {
   it("returns system and user prompt strings", () => {

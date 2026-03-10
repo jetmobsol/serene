@@ -1,4 +1,4 @@
-import { planLimits, type PlanName } from "../lib/plans.js";
+import { planLimits, type PlanName } from "../lib/billing/plans.js";
 import { protectedProcedure, router } from "../lib/trpc.js";
 
 export const billingRouter = router({
