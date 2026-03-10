@@ -22,7 +22,9 @@ export * from "./components/separator";
 export * from "./components/skeleton";
 export * from "./components/sonner";
 export * from "./components/switch";
+export * from "./components/tabs";
 export * from "./components/textarea";
+export * from "./components/tooltip";
 
 // Export utilities
 export * from "./lib/utils";

@@ -1,0 +1,32 @@
+stories:
+  - name: "Analytics page loads with weekly mood chart"
+    url: "http://localhost:5173/analytics"
+    workflow: |
+      Navigate to http://localhost:5173/analytics
+      Verify the analytics/insights page loads successfully
+      Verify a weekly mood distribution chart is visible (bar chart)
+      Verify mood labels are displayed (Happy, Calm, Anxious, etc.)
+      Verify week navigation arrows are present (previous/next week)
+
+  - name: "30-day mood trend chart renders"
+    url: "http://localhost:5173/analytics"
+    workflow: |
+      Navigate to http://localhost:5173/analytics
+      Find and click the tab or section for mood trends
+      Verify a line or area chart is visible showing mood trend over time
+      Verify the chart has date labels on the X axis
+
+  - name: "Tag correlation insights display"
+    url: "http://localhost:5173/analytics"
+    workflow: |
+      Navigate to http://localhost:5173/analytics
+      Find and click the tab or section for tag correlation/insights
+      Verify a table or list of tags with their average mood scores is visible
+      Verify tags are sorted or have visual indicators (green/amber/red)
+
+  - name: "Analytics empty state when no data"
+    url: "http://localhost:5173/analytics"
+    workflow: |
+      Navigate to http://localhost:5173/analytics
+      If no journal entries exist, verify appropriate empty state messages are displayed
+      Verify the messages encourage the user to start journaling

@@ -7,5 +7,6 @@ export default defineProject({
   test: {
     environment: "happy-dom",
     setupFiles: ["./vitest.setup.ts"],
+    globals: true,
   },
 });

@@ -10,6 +10,7 @@ import type { AppContext } from "./context.js";
 import { router } from "./trpc.js";
 import { registerAiStreamRoute } from "./ai/stream-handler.js";
 import { aiRouter } from "../routers/ai.js";
+import { analyticsRouter } from "../routers/analytics.js";
 import { billingRouter } from "../routers/billing.js";
 import { journalRouter } from "../routers/journal.js";
 import { organizationRouter } from "../routers/organization.js";
@@ -18,6 +19,7 @@ import { userRouter } from "../routers/user.js";
 // tRPC API router
 const appRouter = router({
   ai: aiRouter,
+  analytics: analyticsRouter,
   billing: billingRouter,
   journal: journalRouter,
   user: userRouter,
