@@ -3,7 +3,7 @@
 
   // [METADATA]
   // Edge router that receives all traffic and routes to api/app via service bindings.
-  "name": "example-web",
+  "name": "serene-web",
   "main": "./worker.ts",
   "compatibility_date": "2025-08-15",
   "compatibility_flags": [],
@@ -24,15 +24,15 @@
   // NOTE: services is non-inheritable — must be specified per environment.
   // Use naming convention: <worker>-<env> (e.g., example-app-staging)
   "services": [
-    { "binding": "APP_SERVICE", "service": "example-app" },
-    { "binding": "API_SERVICE", "service": "example-api" }
+    { "binding": "APP_SERVICE", "service": "serene-app" },
+    { "binding": "API_SERVICE", "service": "serene-api" }
   ],
 
   // [ENV:PRODUCTION]
   // Command: bun wrangler deploy
   // prettier-ignore
   "routes": [
-    { "pattern": "example.com/*", "zone_name": "example.com" }
+    { "pattern": "serene.example.com/*", "zone_name": "serene.example.com" }
   ],
   "vars": {
     "ENVIRONMENT": "production"
@@ -51,15 +51,15 @@
     // Command: bun wrangler deploy --env staging
     "staging": {
       "services": [
-        { "binding": "APP_SERVICE", "service": "example-app-staging" },
-        { "binding": "API_SERVICE", "service": "example-api-staging" }
+        { "binding": "APP_SERVICE", "service": "serene-app-staging" },
+        { "binding": "API_SERVICE", "service": "serene-api-staging" }
       ],
       "vars": {
         "ENVIRONMENT": "staging"
       },
       // prettier-ignore
       "routes": [
-        { "pattern": "staging.example.com/*", "zone_name": "example.com" }
+        { "pattern": "staging.serene.example.com/*", "zone_name": "serene.example.com" }
       ]
     },
 
@@ -67,15 +67,15 @@
     // Command: bun wrangler deploy --env preview
     "preview": {
       "services": [
-        { "binding": "APP_SERVICE", "service": "example-app-preview" },
-        { "binding": "API_SERVICE", "service": "example-api-preview" }
+        { "binding": "APP_SERVICE", "service": "serene-app-preview" },
+        { "binding": "API_SERVICE", "service": "serene-api-preview" }
       ],
       "vars": {
         "ENVIRONMENT": "preview"
       },
       // prettier-ignore
       "routes": [
-        { "pattern": "preview.example.com/*", "zone_name": "example.com" }
+        { "pattern": "preview.serene.example.com/*", "zone_name": "serene.example.com" }
       ]
     }
   }

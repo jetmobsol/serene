@@ -5,6 +5,7 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "../schema";
 import { seedUsers } from "../seeds/users";
+import { seedJournalEntries } from "../seeds/journal";
 
 // Import drizzle config to trigger environment loading
 import "../drizzle.config";
@@ -16,6 +17,7 @@ console.log("🌱 Starting database seeding...");
 
 try {
   await seedUsers(db);
+  await seedJournalEntries(db);
   console.log("✅ Database seeding completed successfully!");
 } catch (error) {
   console.error("❌ Database seeding failed:");

@@ -1,5 +1,9 @@
 # Cloudflare Workers
 
+::: tip Serene Deployment Guide
+For a complete end-to-end deployment walkthrough specific to Serene, see the [Serene Deployment Guide](./serene-deployment-guide.md).
+:::
+
 Each app has its own `wrangler.jsonc` with per-environment configuration for variables, service bindings, and Hyperdrive.
 
 ## Wrangler Configuration
@@ -9,11 +13,13 @@ The **web** worker is the edge router. It receives all traffic via route pattern
 ```jsonc
 // apps/web/wrangler.jsonc (simplified)
 {
-  "name": "example-web",
-  "routes": [{ "pattern": "example.com/*", "zone_name": "example.com" }],
+  "name": "serene-web",
+  "routes": [
+    { "pattern": "serene.example.com/*", "zone_name": "serene.example.com" },
+  ],
   "services": [
-    { "binding": "APP_SERVICE", "service": "example-app" },
-    { "binding": "API_SERVICE", "service": "example-api" },
+    { "binding": "APP_SERVICE", "service": "serene-app" },
+    { "binding": "API_SERVICE", "service": "serene-api" },
   ],
   "assets": {
     "directory": "./dist",
@@ -27,7 +33,7 @@ The **api** worker has `nodejs_compat` enabled and connects to Neon through two 
 ```jsonc
 // apps/api/wrangler.jsonc (simplified)
 {
-  "name": "example-api",
+  "name": "serene-api",
   "compatibility_flags": ["nodejs_compat"],
   "hyperdrive": [
     { "binding": "HYPERDRIVE_CACHED", "id": "your-hyperdrive-cached-id" },
@@ -39,7 +45,7 @@ The **api** worker has `nodejs_compat` enabled and connects to Neon through two 
 The **app** worker serves the SPA with `not_found_handling: "single-page-application"` so all routes resolve to `index.html`.
 
 ::: info
-Service bindings are non-inheritable in Wrangler – each environment (`staging`, `preview`) must declare its own `services` array with the correct worker names (e.g., `example-app-staging`).
+Service bindings are non-inheritable in Wrangler -- each environment (`staging`, `preview`) must declare its own `services` array with the correct worker names (e.g., `serene-app-staging`).
 :::
 
 See [Architecture: Edge](/architecture/edge) for details on the service binding model.
@@ -48,13 +54,13 @@ See [Architecture: Edge](/architecture/edge) for details on the service binding 
 
 Each worker declares `vars` per environment in `wrangler.jsonc`. The API worker has the most:
 
-| Variable            | Worker   | Description                                       |
-| ------------------- | -------- | ------------------------------------------------- |
-| `ENVIRONMENT`       | all      | `development`, `preview`, `staging`, `production` |
-| `APP_NAME`          | api      | Display name used in emails                       |
-| `APP_ORIGIN`        | api      | Full origin URL (e.g., `https://example.com`)     |
-| `ALLOWED_ORIGINS`   | api, app | Comma-separated list for CORS                     |
-| `RESEND_EMAIL_FROM` | api      | Sender address for transactional emails           |
+| Variable            | Worker   | Description                                          |
+| ------------------- | -------- | ---------------------------------------------------- |
+| `ENVIRONMENT`       | all      | `development`, `preview`, `staging`, `production`    |
+| `APP_NAME`          | api      | Display name used in emails                          |
+| `APP_ORIGIN`        | api      | Full origin URL (e.g., `https://serene.example.com`) |
+| `ALLOWED_ORIGINS`   | api, app | Comma-separated list for CORS                        |
+| `RESEND_EMAIL_FROM` | api      | Sender address for transactional emails              |
 
 See [Environment Variables](/getting-started/environment-variables) for the complete reference.
 
@@ -68,6 +74,7 @@ openssl rand -hex 32
 
 # Set secrets (repeat for each environment: --env staging, --env preview)
 wrangler secret put BETTER_AUTH_SECRET
+wrangler secret put ANTHROPIC_API_KEY
 wrangler secret put GOOGLE_CLIENT_ID
 wrangler secret put GOOGLE_CLIENT_SECRET
 wrangler secret put RESEND_API_KEY
@@ -81,11 +88,11 @@ Run `wrangler secret put` from the workspace directory (e.g., `apps/api/`) or pa
 
 ## Build and Deploy
 
-Build order matters – email templates must compile before the API worker bundles them:
+Build order matters -- email templates must compile before the API worker bundles them:
 
 ```bash
 # Build all workspaces in dependency order
-bun build              # email → web → api → app
+bun build              # email -> web -> api -> app
 
 # Deploy each worker
 bun api:deploy

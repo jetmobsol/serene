@@ -1,0 +1,45 @@
+stories:
+  - name: "Full E2E: Landing to Journal to Analytics"
+    url: "http://localhost:4321/"
+    workflow: |
+      Navigate to http://localhost:4321/
+      Verify the Serene landing page loads with hero section containing "Find Your Calm"
+      Verify a "Start Journaling" button is visible
+      Click the "Start Journaling" button
+      Verify navigation to the signup page at http://localhost:5173/signup
+      Navigate to http://localhost:5173/journal
+      Verify the journal page loads with entry form and timeline
+      Select "Happy" mood
+      Click "Work" and "Nature" tags
+      Type a note with 50+ characters: "Final end-to-end test entry. Everything is working great and the calm aesthetic feels perfect for a wellness journal application."
+      Click "Save Entry"
+      Verify success toast and entry appears in timeline
+      Wait for AI response to appear (up to 15 seconds)
+      Navigate to http://localhost:5173/analytics
+      Verify the analytics page loads with charts
+      Verify at least one chart shows data
+
+  - name: "Full E2E: Edit and Delete flow"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Verify entries exist in the timeline
+      Click edit on the first entry
+      Change the mood to "Calm"
+      Save the edit
+      Verify the entry updates in the timeline
+      Click delete on any entry
+      Verify confirmation dialog appears
+      Confirm deletion
+      Verify the entry is removed
+
+  - name: "Full E2E: Responsive check"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Verify the page renders correctly at 1440px width
+      Resize to 768px
+      Verify the layout adapts for tablet
+      Resize to 375px
+      Verify the layout adapts for mobile
+      Verify all interactive elements are still usable

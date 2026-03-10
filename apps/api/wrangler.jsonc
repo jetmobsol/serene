@@ -3,7 +3,7 @@
 
   // [METADATA]
   // API worker accessed via service binding from web worker (no routes needed).
-  "name": "example-api",
+  "name": "serene-api",
   "main": "./worker.ts",
   "compatibility_date": "2025-08-15",
   "compatibility_flags": ["nodejs_compat"],
@@ -14,9 +14,9 @@
   // Command: bun wrangler deploy
   "vars": {
     "ENVIRONMENT": "production",
-    "APP_NAME": "Example",
-    "APP_ORIGIN": "https://example.com",
-    "ALLOWED_ORIGINS": "https://example.com",
+    "APP_NAME": "Serene",
+    "APP_ORIGIN": "https://serene.example.com",
+    "ALLOWED_ORIGINS": "https://serene.example.com",
     "RESEND_EMAIL_FROM": "onboarding@resend.dev"
   },
   // prettier-ignore
@@ -35,7 +35,7 @@
     "dev": {
       "vars": {
         "ENVIRONMENT": "development",
-        "APP_NAME": "Example",
+        "APP_NAME": "Serene",
         "APP_ORIGIN": "http://localhost:5173",
         "ALLOWED_ORIGINS": "http://localhost:5173,http://127.0.0.1:5173",
         "RESEND_EMAIL_FROM": "onboarding@resend.dev"
@@ -56,9 +56,9 @@
     "staging": {
       "vars": {
         "ENVIRONMENT": "staging",
-        "APP_NAME": "Example",
-        "APP_ORIGIN": "https://staging.example.com",
-        "ALLOWED_ORIGINS": "https://staging.example.com",
+        "APP_NAME": "Serene",
+        "APP_ORIGIN": "https://staging.serene.example.com",
+        "ALLOWED_ORIGINS": "https://staging.serene.example.com",
         "RESEND_EMAIL_FROM": "onboarding@resend.dev"
       },
       // prettier-ignore
@@ -77,9 +77,9 @@
     "preview": {
       "vars": {
         "ENVIRONMENT": "preview",
-        "APP_NAME": "Example",
-        "APP_ORIGIN": "https://preview.example.com",
-        "ALLOWED_ORIGINS": "https://preview.example.com",
+        "APP_NAME": "Serene",
+        "APP_ORIGIN": "https://preview.serene.example.com",
+        "ALLOWED_ORIGINS": "https://preview.serene.example.com",
         "RESEND_EMAIL_FROM": "onboarding@resend.dev"
       },
       // prettier-ignore
