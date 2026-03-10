@@ -141,9 +141,7 @@ export async function seedJournalEntries(
     },
   ];
 
-  for (const entry of entries) {
-    await db.insert(journalEntry).values(entry).onConflictDoNothing();
-  }
+  await db.insert(journalEntry).values(entries).onConflictDoNothing();
 
   console.log(`Seeded ${entries.length} journal entries`);
 }
