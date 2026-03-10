@@ -26,6 +26,7 @@ app.all("/api/*", (c) => c.env.API_SERVICE.fetch(c.req.raw));
 app.all("/_app/*", (c) => c.env.APP_SERVICE.fetch(c.req.raw));
 app.all("/login*", (c) => c.env.APP_SERVICE.fetch(c.req.raw));
 app.all("/signup*", (c) => c.env.APP_SERVICE.fetch(c.req.raw));
+app.all("/journal*", (c) => c.env.APP_SERVICE.fetch(c.req.raw));
 app.all("/analytics*", (c) => c.env.APP_SERVICE.fetch(c.req.raw));
 
 // Home page: route based on auth-hint cookie presence

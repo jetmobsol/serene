@@ -34,7 +34,7 @@ The app is the main user-facing SPA:
 | Server State | TanStack Query + tRPC                                  |
 | Client State | Jotai                                                  |
 | UI           | shadcn/ui (new-york), Tailwind CSS v4                  |
-| Auth         | Better Auth client (passkey, Stripe)                   |
+| Auth         | Better Auth client (email OTP, Google OAuth)           |
 | Build        | Vite (SWC, code splitting: react, tanstack, ui chunks) |
 | Testing      | Vitest, Happy DOM                                      |
 | Deployment   | Cloudflare Workers (static assets)                     |
@@ -58,22 +58,20 @@ apps/app/
 │   ├── errors.ts          # Error utilities
 │   └── queries/
 │       ├── session.ts     # Session query (useSessionQuery)
-│       └── billing.ts     # Billing-related queries
+│       ├── journal.ts     # Journal-related queries
+│       └── analytics.ts   # Analytics-related queries
 ├── routes/                # File-based routes
 │   ├── __root.tsx         # Root layout with AppErrorBoundary
 │   ├── (app)/             # Protected routes (auth required)
 │   │   ├── route.tsx      # Layout with auth beforeLoad guard
-│   │   ├── index.tsx      # Dashboard
-│   │   ├── analytics.tsx
-│   │   ├── reports.tsx
-│   │   ├── users.tsx
-│   │   ├── settings.tsx
-│   │   └── about.tsx
+│   │   ├── index.tsx      # Journal (home)
+│   │   ├── journal.tsx
+│   │   └── analytics.tsx
 │   └── (auth)/            # Public routes
 │       ├── login.tsx
 │       └── signup.tsx
 ├── components/            # React components
-│   ├── auth/              # Auth UI (auth-form, otp, passkey, google)
+│   ├── auth/              # Auth UI (auth-form, otp, google)
 │   ├── layout/            # Layout (header, sidebar, sidebar-nav)
 │   └── ...
 ├── styles/

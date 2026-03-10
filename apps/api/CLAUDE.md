@@ -18,7 +18,7 @@ Hono + tRPC + Better Auth API server running as a Cloudflare Worker.
 
 The API service is the backend for the entire application:
 
-- Handles authentication (Better Auth: email OTP, passkey, Google OAuth, organizations)
+- Handles authentication (Better Auth: email OTP, Google OAuth)
 - Exposes tRPC routes consumed by the app SPA
 - Manages database access via Drizzle ORM + Cloudflare Hyperdrive
 - Sends transactional email via Resend
@@ -28,16 +28,15 @@ The API service is the backend for the entire application:
 
 ## Tech Stack
 
-| Layer     | Technology                                           |
-| --------- | ---------------------------------------------------- |
-| Framework | Hono                                                 |
-| RPC       | tRPC 11                                              |
-| Auth      | Better Auth (email OTP, passkey, Google OAuth, orgs) |
-| Database  | Drizzle ORM, Neon PostgreSQL, Cloudflare Hyperdrive  |
-| Email     | React Email + Resend                                 |
-| AI        | OpenAI (via `@ai-sdk/openai`)                        |
-| Payments  | Stripe (via `@better-auth/stripe`)                   |
-| Runtime   | Cloudflare Workers (`nodejs_compat`)                 |
+| Layer     | Technology                                          |
+| --------- | --------------------------------------------------- |
+| Framework | Hono                                                |
+| RPC       | tRPC 11                                             |
+| Auth      | Better Auth (email OTP, Google OAuth)               |
+| Database  | Drizzle ORM, Neon PostgreSQL, Cloudflare Hyperdrive |
+| Email     | React Email + Resend                                |
+| AI        | Anthropic (via `@anthropic-ai/sdk`)                 |
+| Runtime   | Cloudflare Workers (`nodejs_compat`)                |
 
 ## Project Structure
 
@@ -49,7 +48,7 @@ apps/api/
 ├── dev.ts                 # Development server (Bun)
 ├── lib/
 │   ├── app.ts             # Hono routes + tRPC wiring (slim orchestrator)
-│   ├── auth.ts            # Better Auth server config (plugins: passkey, stripe, org, email-otp)
+│   ├── auth.ts            # Better Auth server config (plugins: email-otp)
 │   ├── trpc.ts            # tRPC init (publicProcedure, protectedProcedure, error formatting)
 │   ├── context.ts         # TRPCContext & AppContext types
 │   ├── env.ts             # Zod env validation
@@ -57,17 +56,14 @@ apps/api/
 │   ├── db.ts              # Drizzle client setup (db + dbDirect)
 │   ├── middleware.ts      # Error handler, 404 handler, request ID generator
 │   ├── email.ts           # Email service (Resend wrapper)
-│   ├── ai/                # AI vibe check module
-│   │   ├── service.ts     # Shared pipeline (generateVibeCheck, preCheck, finalize)
-│   │   ├── stream-handler.ts # SSE streaming endpoint
-│   │   ├── anthropic.ts   # Anthropic client, constants, persistAiResponse
-│   │   ├── prompts.ts     # Prompt builder
-│   │   ├── safety.ts      # Crisis detection, gibberish check
-│   │   └── rate-limit.ts  # Per-user rate limiting via KV
-│   └── billing/           # Billing module
-│       ├── plans.ts       # Plan limits
-│       └── stripe.ts      # Stripe client helper
-├── routers/               # tRPC routers (ai, journal, user, organization, billing)
+│   └── ai/                # AI vibe check module
+│       ├── service.ts     # Shared pipeline (generateVibeCheck, preCheck, finalize)
+│       ├── stream-handler.ts # SSE streaming endpoint
+│       ├── anthropic.ts   # Anthropic client, constants, persistAiResponse
+│       ├── prompts.ts     # Prompt builder
+│       ├── safety.ts      # Crisis detection, gibberish check
+│       └── rate-limit.ts  # Per-user rate limiting via KV
+├── routers/               # tRPC routers (ai, analytics, journal, user)
 ├── Dockerfile             # Container build (Bun runtime)
 └── package.json
 ```

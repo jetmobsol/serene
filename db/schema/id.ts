@@ -11,11 +11,6 @@ const AUTH_PREFIX = {
   session: "ses",
   account: "idn", // "identity" table — avoids confusion with user/billing account
   verification: "vfy",
-  organization: "org",
-  member: "mem",
-  invitation: "inv",
-  passkey: "pky",
-  subscription: "sub",
 } as const;
 
 export type AuthModel = keyof typeof AUTH_PREFIX;

@@ -45,9 +45,7 @@ apps/web/
 │   └── BaseLayout.astro   # Master layout (header, nav, footer)
 ├── pages/                 # Astro pages (marketing/landing)
 │   ├── index.astro        # Home page
-│   ├── about.astro
-│   ├── features.astro
-│   └── pricing.astro
+│   └── about.astro
 ├── styles/
 │   └── globals.css        # Global styles + CSS variables (oklch)
 ├── public/                # Static assets (favicon, OG image)
@@ -65,8 +63,7 @@ The web worker coordinates all three workers:
 Client Request
   ├── /api/*                      → API worker (service binding)
   ├── /_app/*, /login*, /signup*,
-  │   /settings*, /analytics*,
-  │   /reports*                   → App worker (service binding)
+  │   /journal*, /analytics*      → App worker (service binding)
   ├── / (with auth cookie)        → App worker (authenticated user)
   ├── / (no auth cookie)          → Static assets (marketing)
   └── /*                          → Static assets (Astro pages)

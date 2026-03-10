@@ -14,7 +14,7 @@
 
 - **Runtime:** Bun >=1.3.0, TypeScript 5.9, ESM (`"type": "module"`)
 - **Frontend:** React 19, TanStack Router, TanStack Query, Jotai, shadcn/ui (new-york), Tailwind CSS v4
-- **Backend:** Hono, tRPC 11, Better Auth (email OTP, passkey, Google OAuth, organizations)
+- **Backend:** Hono, tRPC 11, Better Auth (email OTP, Google OAuth)
 - **Database:** Neon PostgreSQL, Drizzle ORM (`snake_case` casing), Cloudflare Hyperdrive
 - **Email:** React Email, Resend
 - **Testing:** Vitest, Happy DOM
