@@ -9,6 +9,28 @@ import { PasskeyLogin } from "./passkey-login";
 import { PasswordInput } from "./password-input";
 import { useAuthForm } from "./use-auth-form";
 
+function BackLink({
+  onClick,
+  disabled,
+  children,
+}: {
+  onClick: () => void;
+  disabled: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
+    >
+      <ArrowLeft className="h-4 w-4" />
+      {children}
+    </button>
+  );
+}
+
 function SignupTerms() {
   return (
     <p className="text-xs text-muted-foreground text-center text-balance">
@@ -94,21 +116,15 @@ export function AuthForm({
     mode,
   });
 
-  // Clear error when user changes inputs
-  const handleEmailChange = (value: string) => {
+  // Clear error when user changes any input
+  const withErrorClear = (setter: (v: string) => void) => (value: string) => {
     if (error) setError(null);
-    changeEmail(value);
+    setter(value);
   };
 
-  const handlePasswordChange = (value: string) => {
-    if (error) setError(null);
-    changePassword(value);
-  };
-
-  const handleNameChange = (value: string) => {
-    if (error) setError(null);
-    changeName(value);
-  };
+  const handleEmailChange = withErrorClear(changeEmail);
+  const handlePasswordChange = withErrorClear(changePassword);
+  const handleNameChange = withErrorClear(changeName);
 
   // Voluntary back from OTP clears error; forced back (via onCancel) preserves it
   const handleOtpBack = () => {
@@ -438,16 +454,9 @@ function EmailInput({
         </Button>
       </form>
 
-      {/* Back link */}
-      <button
-        type="button"
-        onClick={onBack}
-        disabled={isDisabled}
-        className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
-      >
-        <ArrowLeft className="h-4 w-4" />
+      <BackLink onClick={onBack} disabled={isDisabled}>
         Back to sign in
-      </button>
+      </BackLink>
     </div>
   );
 }
@@ -493,16 +502,9 @@ function OtpStep({
         isDisabled={isDisabled}
       />
 
-      {/* Back link */}
-      <button
-        type="button"
-        onClick={onBack}
-        disabled={isDisabled}
-        className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
-      >
-        <ArrowLeft className="h-4 w-4" />
+      <BackLink onClick={onBack} disabled={isDisabled}>
         Back to email
-      </button>
+      </BackLink>
     </div>
   );
 }

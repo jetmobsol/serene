@@ -2,6 +2,11 @@ import { auth } from "@/lib/auth";
 import type { FormEvent } from "react";
 import { useCallback, useRef, useState } from "react";
 
+/** Trim and lowercase for consistent email matching across auth flows. */
+function normalizeEmail(email: string): string {
+  return email.trim().toLowerCase();
+}
+
 export type AuthStep = "password-form" | "email" | "otp";
 
 // Minimal state machine for auth flow.
@@ -96,8 +101,7 @@ export function useAuthForm({
   const sendOtp = async (e?: FormEvent) => {
     e?.preventDefault();
 
-    // Normalize before auth calls to prevent case/whitespace mismatches
-    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedEmail = normalizeEmail(email);
     if (!normalizedEmail) return;
     setEmail(normalizedEmail);
 
@@ -130,7 +134,7 @@ export function useAuthForm({
   const signUpWithPassword = async (e?: FormEvent) => {
     e?.preventDefault();
 
-    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedEmail = normalizeEmail(email);
     const trimmedName = name.trim();
     if (!normalizedEmail || !password || password.length < 8) return;
 
@@ -165,7 +169,7 @@ export function useAuthForm({
   const signInWithPassword = async (e?: FormEvent) => {
     e?.preventDefault();
 
-    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedEmail = normalizeEmail(email);
     if (!normalizedEmail || !password) return;
 
     try {
@@ -192,7 +196,7 @@ export function useAuthForm({
   };
 
   const handleForgotPassword = async () => {
-    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedEmail = normalizeEmail(email);
     if (!normalizedEmail) {
       setError("Please enter your email address first.");
       return;
@@ -202,8 +206,8 @@ export function useAuthForm({
       setIsLoading(true);
       setError(null);
 
-      // Send password reset email via API
-      const response = await fetch("/api/auth/send-reset-password", {
+      // Better Auth exposes this as a server endpoint, not a typed client method.
+      const response = await fetch("/api/auth/request-password-reset", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
