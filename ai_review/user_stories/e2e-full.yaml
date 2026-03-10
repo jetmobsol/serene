@@ -1,45 +1,240 @@
 stories:
-  - name: "Full E2E: Landing to Journal to Analytics"
+  # --- Landing Page & Marketing ---
+  - name: "Landing Page: Hero section and CTA"
     url: "http://localhost:4321/"
     workflow: |
       Navigate to http://localhost:4321/
       Verify the Serene landing page loads with hero section containing "Find Your Calm"
-      Verify a "Start Journaling" button is visible
+      Verify a "Start Journaling" button/CTA is visible
+      Verify the navigation header contains only "Home" link (no Pricing, Features, or About links)
+      Verify the footer does NOT contain broken links to /privacy or /terms
+      Verify the overall aesthetic is calm (soft colors, clean layout)
       Click the "Start Journaling" button
       Verify navigation to the signup page at http://localhost:5173/signup
-      Navigate to http://localhost:5173/journal
-      Verify the journal page loads with entry form and timeline
-      Select "Happy" mood
-      Click "Work" and "Nature" tags
-      Type a note with 50+ characters: "Final end-to-end test entry. Everything is working great and the calm aesthetic feels perfect for a wellness journal application."
-      Click "Save Entry"
-      Verify success toast and entry appears in timeline
-      Wait for AI response to appear (up to 15 seconds)
-      Navigate to http://localhost:5173/analytics
-      Verify the analytics page loads with charts
-      Verify at least one chart shows data
 
-  - name: "Full E2E: Edit and Delete flow"
+  # --- Authentication ---
+  - name: "Auth: Signup page renders correctly"
+    url: "http://localhost:5173/signup"
+    workflow: |
+      Navigate to http://localhost:5173/signup
+      Verify the signup page loads
+      Verify an email input field is visible
+      Verify a password input field is visible
+      Verify a "Continue with Google" or Google OAuth button is visible
+      Verify there is NO passkey/fingerprint login button
+      Verify there is a link to switch to login page
+
+  - name: "Auth: Login page renders correctly"
+    url: "http://localhost:5173/login"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Verify the login page loads
+      Verify an email input field is visible
+      Verify a password input field is visible
+      Verify a "Continue with Google" or Google OAuth button is visible
+      Verify there is NO passkey/fingerprint login button
+      Verify there is a link to switch to signup page
+
+  - name: "Auth: Dev auto-login flow"
+    url: "http://localhost:5173/login"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Enter email "test@test.com" in the email field
+      Click "Continue with email" or submit the email form
+      Wait up to 10 seconds for auto-login to complete (OTP auto-fills in dev mode)
+      Verify redirect to the journal page at http://localhost:5173/journal
+
+  # --- Navigation & Sidebar ---
+  - name: "Navigation: Sidebar has only Journal and Insights"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Verify the sidebar/navigation is visible
+      Verify "Journal" nav item exists and is active/highlighted
+      Verify "Insights" nav item exists
+      Verify there is NO "Dashboard" nav item
+      Verify there is NO "Settings" nav item
+      Verify there is NO "Reports" nav item
+      Verify there is NO "Users" nav item
+
+  - name: "Navigation: No broken routes"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Verify the journal page loads successfully
+      Click "Insights" in the sidebar
+      Verify navigation to http://localhost:5173/analytics
+      Verify the analytics page loads successfully
+      Click "Journal" in the sidebar
+      Verify navigation back to http://localhost:5173/journal
+
+  - name: "Navigation: Header has no Settings gear button"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Verify the header bar is visible with the Serene logo/title
+      Verify there is NO non-functional settings gear icon in the header
+
+  # --- Journal Entry Form ---
+  - name: "Journal: Mood selector UI"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Verify the "New Entry" section is visible
+      Verify mood selector shows visual icons/cards for moods
+      Verify at least these moods are available: Happy, Anxious, Calm, Overwhelmed
+      Click "Happy" mood
+      Verify "Happy" mood is visually selected/highlighted
+      Click "Calm" mood
+      Verify "Calm" mood is now selected and "Happy" is deselected
+
+  - name: "Journal: Contextual tags"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Verify tag chips are visible below the mood selector
+      Verify at least these tags are available: Work, Sleep, Relationships, Fitness, Hobbies
+      Click "Work" tag
+      Verify "Work" tag is visually selected
+      Click "Sleep" tag
+      Verify both "Work" and "Sleep" are selected (multi-select)
+      Click "Work" tag again
+      Verify "Work" is deselected and "Sleep" remains selected
+
+  - name: "Journal: Reflective note with 50-char threshold"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Verify a text area is visible for writing reflections
+      Type a short note under 50 characters: "Short note"
+      Verify the save button is available but note the character count
+      Clear the text area
+      Type a note with 50+ characters: "This is a longer reflective note that meets the minimum character threshold for AI analysis."
+      Verify the text area accepts the input
+
+  # --- Full Entry CRUD ---
+  - name: "Journal: Create entry with all fields"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Select "Happy" mood
+      Click "Work" and "Hobbies" tags
+      Type a note with 50+ characters: "Comprehensive end-to-end test entry covering mood selection, tag picking, and reflective note writing for the Serene wellness journal."
+      Click "Save Entry"
+      Verify a success toast or confirmation appears
+      Verify the new entry appears in the timeline below
+      Verify the entry card shows the "Happy" mood with appropriate color coding
+      Verify the entry card shows "Work" and "Hobbies" tags
+
+  - name: "Journal: Timeline with date grouping and color-coded cards"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Verify the timeline section is visible below the entry form
+      Verify entries are grouped by date (Today, Yesterday, or similar date headers)
+      Verify each entry card has a color-coded indicator based on the logged mood
+      Verify each entry shows the mood, tags, and a preview of the note text
+
+  - name: "Journal: View entry detail"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Verify at least one entry exists in the timeline
+      Click on the first entry to view its detail
+      Verify the detail page loads with the full note text
+      Verify the mood is displayed
+      Verify the tags are displayed
+      Verify the AI vibe check response is shown (if available)
+
+  - name: "Journal: Edit entry"
     url: "http://localhost:5173/journal"
     workflow: |
       Navigate to http://localhost:5173/journal
       Verify entries exist in the timeline
       Click edit on the first entry
       Change the mood to "Calm"
+      Update the note text to include "Updated entry"
       Save the edit
-      Verify the entry updates in the timeline
-      Click delete on any entry
-      Verify confirmation dialog appears
-      Confirm deletion
-      Verify the entry is removed
+      Verify the entry updates in the timeline with the new mood color
 
-  - name: "Full E2E: Responsive check"
+  - name: "Journal: Delete entry"
     url: "http://localhost:5173/journal"
     workflow: |
       Navigate to http://localhost:5173/journal
-      Verify the page renders correctly at 1440px width
-      Resize to 768px
-      Verify the layout adapts for tablet
-      Resize to 375px
+      Verify entries exist in the timeline
+      Note the number of entries visible
+      Click delete on any entry
+      Verify a confirmation dialog appears
+      Confirm deletion
+      Verify the entry is removed from the timeline
+
+  # --- AI Vibe Check ---
+  - name: "AI: Vibe check appears after saving entry with 50+ chars"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Select "Anxious" mood
+      Click "Work" and "Sleep" tags
+      Type a note with 50+ characters: "I have been feeling quite overwhelmed with all the deadlines at work lately, and my sleep has been really disrupted."
+      Click "Save Entry"
+      Verify the entry saves successfully
+      Wait up to 15 seconds for the AI vibe check response to appear
+      Verify the AI response is a short empathetic message (1-2 sentences)
+      Verify the AI response appears near or within the saved entry
+
+  # --- Analytics / Insights ---
+  - name: "Analytics: Weekly mood bar chart"
+    url: "http://localhost:5173/analytics"
+    workflow: |
+      Navigate to http://localhost:5173/analytics
+      Verify the analytics/insights page loads
+      Verify a weekly mood distribution bar chart is visible
+      Verify there are NO tabs for "Trend" or "Tags" (only the bar chart view)
+      Verify the chart shows mood categories on one axis
+      Verify the chart displays data if entries exist
+
+  # --- Removed Pages Return 404 or Redirect ---
+  - name: "Removed: No settings page"
+    url: "http://localhost:5173/settings"
+    workflow: |
+      Navigate to http://localhost:5173/settings
+      Verify the page either shows a 404, redirects to journal, or does not render a settings form
+      Verify there is no billing card, notification toggles, security section, or appearance section
+
+  - name: "Removed: No reports page"
+    url: "http://localhost:5173/reports"
+    workflow: |
+      Navigate to http://localhost:5173/reports
+      Verify the page does not render a "Monthly Sales Report" or any generic report content
+
+  - name: "Removed: No users admin page"
+    url: "http://localhost:5173/users"
+    workflow: |
+      Navigate to http://localhost:5173/users
+      Verify the page does not render a user management table
+
+  - name: "Removed: No pricing page"
+    url: "http://localhost:4321/pricing"
+    workflow: |
+      Navigate to http://localhost:4321/pricing
+      Verify the page returns a 404 or does not render pricing plans
+
+  # --- Responsive Design ---
+  - name: "Responsive: Journal page on mobile"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Resize viewport to 375px width (mobile)
       Verify the layout adapts for mobile
-      Verify all interactive elements are still usable
+      Verify the mood selector is usable
+      Verify the tag chips are usable
+      Verify the text area is usable
+      Verify the timeline entries are visible and readable
+
+  - name: "Responsive: Journal page on tablet"
+    url: "http://localhost:5173/journal"
+    workflow: |
+      Navigate to http://localhost:5173/journal
+      Resize viewport to 768px width (tablet)
+      Verify the layout adapts for tablet
+      Verify all interactive elements remain usable

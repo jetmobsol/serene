@@ -7,6 +7,8 @@
 
 Remove all non-PRD SaaS starter-kit features (organizations, Stripe billing, passkeys, admin panels, extra marketing pages) from the Serene codebase. Fix broken navigation, dead links, and non-functional UI elements. Update `.env.example` and `README.md` to reflect the stripped-down, PRD-only feature set. This is a deletion-heavy cleanup with surgical edits to ~15 files and deletion of ~20 files.
 
+**Pre-condition**: The `ai_review/user_stories/e2e-full.yaml` file has been updated with comprehensive UI test coverage for ALL post-cleanup screens and functionality. After all implementation is complete, run `/ui-review` to validate the entire UI end-to-end.
+
 ## Files
 
 > **Note**: This is the canonical file list. The `## Implementation Plan` section below references these same files with detailed implementation instructions.
@@ -39,6 +41,7 @@ Remove all non-PRD SaaS starter-kit features (organizations, Stripe billing, pas
 
 ### Files to Edit
 
+- `ai_review/user_stories/e2e-full.yaml`
 - `apps/api/lib/app.ts`
 - `apps/api/lib/auth.ts`
 - `apps/api/lib/env.ts`
@@ -196,6 +199,35 @@ N/A - pure codebase cleanup.
 ---
 
 ## Implementation Plan
+
+### ai_review/user_stories/e2e-full.yaml [edit]
+
+**Purpose**: Update comprehensive E2E user stories to cover ALL post-cleanup UI screens and functionality. This file is the test harness for `/ui-review` validation.
+**TOTAL CHANGES**: 1
+
+**Changes**:
+
+1. **Replace entire file** with comprehensive user stories covering:
+   - Landing page hero section and CTA (verify no Pricing/Features/About nav links, no broken footer links)
+   - Auth signup page (email/password + Google OAuth, NO passkey button)
+   - Auth login page (email/password + Google OAuth, NO passkey button)
+   - Dev auto-login flow (OTP auto-fills)
+   - Sidebar navigation (only Journal + Insights, NO Dashboard/Settings/Reports/Users)
+   - Header (NO non-functional settings gear icon)
+   - Journal mood selector UI (visual icons/cards for moods)
+   - Journal contextual tags (multi-select chips)
+   - Journal reflective note (50-char threshold)
+   - Journal full CRUD: create entry, view detail, edit, delete
+   - Timeline with date grouping and color-coded mood cards
+   - AI vibe check appears after 50+ char entry
+   - Analytics page shows ONLY weekly mood bar chart (NO Trend/Tags tabs)
+   - Removed pages return 404: /settings, /reports, /users, /pricing
+   - Responsive design on mobile (375px) and tablet (768px)
+
+**Dependencies**: none (must be done FIRST before any code changes)
+**Provides**: Test harness for final `/ui-review` validation
+
+---
 
 ### apps/app/routes/(app)/dashboard.tsx [delete]
 
@@ -2471,6 +2503,7 @@ Also update line 113: `Copy .env to .env.local and fill in real credentials. See
 
 | Phase | File                                                      | Action | Depends On                                                                                                                                              |
 | ----- | --------------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0     | `ai_review/user_stories/e2e-full.yaml`                    | edit   | -- (FIRST: update E2E test harness before any code changes)                                                                                             |
 | 1     | `apps/app/routes/(app)/dashboard.tsx`                     | delete | --                                                                                                                                                      |
 | 1     | `apps/app/routes/(app)/users.tsx`                         | delete | --                                                                                                                                                      |
 | 1     | `apps/app/routes/(app)/reports.tsx`                       | delete | --                                                                                                                                                      |
@@ -2533,6 +2566,7 @@ bun typecheck               # tsc --build across all workspaces
 
 ### Success Conditions
 
+- [ ] `ai_review/user_stories/e2e-full.yaml` updated with comprehensive post-cleanup UI test coverage
 - [ ] All 23 files deleted
 - [ ] All 24 files edited successfully
 - [ ] `bun typecheck` passes (exit code 0)
@@ -2545,12 +2579,29 @@ bun typecheck               # tsc --build across all workspaces
 - [ ] README.md has no passkey/Stripe references
 - [ ] .env.example uses Serene-specific values (port 5434, APP_NAME=Serene)
 - [ ] Route tree auto-regenerates after route deletions (verified by typecheck)
+- [ ] `/ui-review` passes against `ai_review/user_stories/e2e-full.yaml` — all 20 user stories pass
 
 ### Verification Script
 
 ```bash
 bun typecheck && bun test --run && bun lint
 ```
+
+### Post-Implementation: UI Validation
+
+After all code changes pass typecheck/test/lint and dev servers are running (`bun dev`), run the comprehensive UI validation:
+
+```bash
+/ui-review
+```
+
+This executes all 20 user stories in `ai_review/user_stories/e2e-full.yaml` against the running app, covering:
+
+- Landing page, auth forms, sidebar nav, journal CRUD, mood selector, tags, AI vibe check, analytics chart, removed pages return 404, responsive design.
+
+All stories must pass before considering the cleanup complete.
+
+---
 
 ### Post-Implementation: Database Migration
 
