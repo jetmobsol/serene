@@ -37,7 +37,6 @@ vi.mock("@/lib/auth", () => ({
         .fn()
         .mockResolvedValue({ data: null, error: null }),
     },
-    forgetPassword: vi.fn().mockResolvedValue({ data: null, error: null }),
   },
 }));
 
