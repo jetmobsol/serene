@@ -17,7 +17,7 @@ A private, AI-powered wellness journal that helps you track your mood, reflect o
 | ------------ | -------------------------------------------------------------- |
 | **Runtime**  | Bun, Cloudflare Workers, TypeScript 5.9                        |
 | **Frontend** | React 19, TanStack Router, Tailwind CSS v4, shadcn/ui, Jotai   |
-| **Backend**  | Hono, tRPC, Better Auth (email OTP, passkey, Google OAuth)     |
+| **Backend**  | Hono, tRPC, Better Auth (email/password, Google OAuth)         |
 | **Database** | Drizzle ORM, Neon PostgreSQL, Cloudflare Hyperdrive            |
 | **AI**       | Anthropic Claude (via AI SDK) for empathetic journal responses |
 | **Email**    | React Email, Resend                                            |
@@ -71,8 +71,8 @@ cd serene
 bun install
 
 # Configure environment
-cp .env .env.local
-# Edit .env.local with your ANTHROPIC_API_KEY and any other credentials
+cp .env.example .env
+# Edit .env with your ANTHROPIC_API_KEY and any other credentials
 
 # Start everything (Docker DB + dev servers)
 just start
@@ -108,9 +108,8 @@ docker-compose up
 | `GOOGLE_CLIENT_ID`     | No       | Google OAuth client ID                                                           |
 | `GOOGLE_CLIENT_SECRET` | No       | Google OAuth client secret                                                       |
 | `RESEND_API_KEY`       | No       | Resend API key for transactional emails                                          |
-| `STRIPE_SECRET_KEY`    | No       | Stripe key (billing features, optional)                                          |
 
-Copy `.env` to `.env.local` and fill in real credentials. See `.env.example` for all available variables.
+Copy `.env.example` to `.env` and fill in real credentials.
 
 ## Development
 

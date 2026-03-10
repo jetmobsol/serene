@@ -38,8 +38,6 @@ export const user = pgTable("user", {
   email: text().notNull().unique(),
   emailVerified: boolean().default(false).notNull(),
   image: text(),
-  isAnonymous: boolean().default(false).notNull(),
-  stripeCustomerId: text(),
   createdAt: timestamp({ withTimezone: true, mode: "date" })
     .defaultNow()
     .notNull(),
@@ -76,12 +74,8 @@ export const session = pgTable(
     userId: text()
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
-    activeOrganizationId: text(),
   },
-  (table) => [
-    index("session_user_id_idx").on(table.userId),
-    index("session_active_org_id_idx").on(table.activeOrganizationId),
-  ],
+  (table) => [index("session_user_id_idx").on(table.userId)],
 );
 
 export type Session = typeof session.$inferSelect;

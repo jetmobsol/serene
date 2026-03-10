@@ -30,7 +30,6 @@ vi.mock("@/lib/auth", () => ({
     signIn: {
       email: vi.fn().mockResolvedValue({ data: null, error: null }),
       social: vi.fn().mockResolvedValue({ data: null, error: null }),
-      passkey: vi.fn().mockResolvedValue({ data: null, error: null }),
     },
     emailOtp: {
       sendVerificationOtp: vi
@@ -43,9 +42,7 @@ vi.mock("@/lib/auth", () => ({
 // Mock auth-config
 vi.mock("@/lib/auth-config", () => ({
   authConfig: {
-    passkey: { enableConditionalUI: false },
     errors: {
-      passkeyNotSupported: "Passkeys not supported",
       networkError: "Network error",
       genericError: "Something went wrong",
     },
@@ -182,15 +179,6 @@ describe("AuthForm - Login Mode", () => {
     });
     expect(
       screen.getByRole("button", { name: /email code/i }),
-    ).toBeInTheDocument();
-  });
-
-  it("renders passkey login button", () => {
-    render(<AuthForm mode="login" onSuccess={mockOnSuccess} />, {
-      wrapper: createWrapper(),
-    });
-    expect(
-      screen.getByRole("button", { name: /passkey/i }),
     ).toBeInTheDocument();
   });
 

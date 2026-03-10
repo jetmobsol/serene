@@ -1,19 +1,18 @@
-import { passkey } from "@better-auth/passkey";
-// TS2742: explicit import so TypeScript can name the inferred return type of createAuth
-import type {} from "@simplewebauthn/server";
-import { stripe } from "@better-auth/stripe";
-import { schema as Db, generateAuthId, type AuthModel } from "@repo/db";
+import {
+  generateAuthId,
+  identity,
+  session as sessionTable,
+  user as userTable,
+  verification as verificationTable,
+  type AuthModel,
+} from "@repo/db";
 import { betterAuth } from "better-auth";
 import type { DB } from "better-auth/adapters/drizzle";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { createAuthMiddleware } from "better-auth/api";
-import { anonymous, organization } from "better-auth/plugins";
 import { emailOTP } from "better-auth/plugins/email-otp";
-import { and, eq } from "drizzle-orm";
 import { sendOTP, sendPasswordReset, sendVerificationEmail } from "./email";
 import type { Env } from "./env";
-import { planLimits } from "./billing/plans.js";
-import { createStripeClient } from "./billing/stripe.js";
 
 // Auth hint cookie for edge routing (see docs/adr/001-auth-hint-cookie.md)
 // NOT a security boundary - false positives are acceptable (causes one redirect)
@@ -34,79 +33,17 @@ type AuthEnv = Pick<
   | "GOOGLE_CLIENT_SECRET"
   | "RESEND_API_KEY"
   | "RESEND_EMAIL_FROM"
-  | "STRIPE_SECRET_KEY"
-  | "STRIPE_WEBHOOK_SECRET"
-  | "STRIPE_STARTER_PRICE_ID"
-  | "STRIPE_PRO_PRICE_ID"
-  | "STRIPE_PRO_ANNUAL_PRICE_ID"
 >;
 
 /**
- * Stripe billing plugin — only enabled when all required env vars are set.
- * Without Stripe config, the app works but billing endpoints return 404.
- */
-function stripePlugin(db: DB, env: AuthEnv) {
-  if (
-    !env.STRIPE_SECRET_KEY ||
-    !env.STRIPE_WEBHOOK_SECRET ||
-    !env.STRIPE_STARTER_PRICE_ID ||
-    !env.STRIPE_PRO_PRICE_ID
-  ) {
-    return [];
-  }
-
-  return [
-    stripe({
-      stripeClient: createStripeClient(env),
-      stripeWebhookSecret: env.STRIPE_WEBHOOK_SECRET,
-      createCustomerOnSignUp: true,
-      subscription: {
-        enabled: true,
-        plans: [
-          {
-            name: "starter",
-            priceId: env.STRIPE_STARTER_PRICE_ID,
-            limits: planLimits.starter,
-          },
-          {
-            name: "pro",
-            priceId: env.STRIPE_PRO_PRICE_ID,
-            annualDiscountPriceId: env.STRIPE_PRO_ANNUAL_PRICE_ID,
-            limits: planLimits.pro,
-            freeTrial: { days: 14 },
-          },
-        ],
-        // Personal billing: user can manage their own subscription.
-        // Organization billing: only owner/admin can manage.
-        authorizeReference: async ({ user, referenceId }) => {
-          if (referenceId === user.id) return true;
-          const [row] = await db
-            .select({ role: Db.member.role })
-            .from(Db.member)
-            .where(
-              and(
-                eq(Db.member.organizationId, referenceId),
-                eq(Db.member.userId, user.id),
-              ),
-            );
-          return row?.role === "owner" || row?.role === "admin";
-        },
-      },
-      organization: { enabled: true },
-    }),
-  ];
-}
-
-/**
- * Creates a Better Auth instance configured for multi-tenant SaaS with organization support.
+ * Creates a Better Auth instance configured for personal journaling.
  *
  * Key behaviors:
  * - Uses custom 'identity' table instead of default 'account' model for OAuth accounts
- * - Allows users to create up to 5 organizations with 'owner' role as creator
  * - Generates prefixed CUID2 IDs at application level (e.g. usr_..., ses_...)
- * - Supports anonymous authentication alongside email/password and Google OAuth
+ * - Supports email/password, Google OAuth, and email OTP authentication
  *
- * @param db Drizzle database instance - must include all required auth tables (user, session, identity, organization, member, invitation, verification)
+ * @param db Drizzle database instance - must include all required auth tables (user, session, identity, verification)
  * @param env Environment variables containing auth secrets and OAuth credentials
  * @returns Configured Better Auth instance with email/password and Google OAuth
  * @remarks Missing database tables will cause runtime errors when auth endpoints are called.
@@ -126,10 +63,6 @@ export function createAuth(db: DB, env: AuthEnv) {
   // inject it into the send-verification-otp response for automated QA.
   let lastDevOtp: string | undefined;
 
-  // Extract domain from APP_ORIGIN for passkey rpID
-  const appUrl = new URL(env.APP_ORIGIN);
-  const rpID = appUrl.hostname;
-
   return betterAuth({
     baseURL: `${env.APP_ORIGIN}/api/auth`,
     trustedOrigins: [env.APP_ORIGIN],
@@ -138,15 +71,10 @@ export function createAuth(db: DB, env: AuthEnv) {
       provider: "pg",
 
       schema: {
-        identity: Db.identity,
-        invitation: Db.invitation,
-        member: Db.member,
-        organization: Db.organization,
-        passkey: Db.passkey,
-        session: Db.session,
-        subscription: Db.subscription,
-        user: Db.user,
-        verification: Db.verification,
+        identity,
+        session: sessionTable,
+        user: userTable,
+        verification: verificationTable,
       },
     }),
 
@@ -178,20 +106,6 @@ export function createAuth(db: DB, env: AuthEnv) {
     },
 
     plugins: [
-      anonymous(),
-      organization({
-        allowUserToCreateOrganization: true,
-        organizationLimit: 5,
-        creatorRole: "owner",
-      }),
-      passkey({
-        // rpID: Relying Party ID - domain name in production, 'localhost' for dev
-        rpID,
-        // rpName: Human-readable name for your app
-        rpName: env.APP_NAME,
-        // origin: URL where auth occurs (no trailing slash)
-        origin: env.APP_ORIGIN,
-      }),
       emailOTP({
         async sendVerificationOTP({ email, otp, type }) {
           if (isDev) lastDevOtp = otp;
@@ -201,7 +115,6 @@ export function createAuth(db: DB, env: AuthEnv) {
         expiresIn: 300, // 5 minutes
         allowedAttempts: 3,
       }),
-      ...stripePlugin(db, env),
     ],
 
     advanced: {

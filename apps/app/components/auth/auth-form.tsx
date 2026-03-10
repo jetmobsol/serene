@@ -5,7 +5,6 @@ import type { ComponentProps, FormEvent } from "react";
 import { useState } from "react";
 import { GoogleLogin } from "./google-login";
 import { OtpVerification } from "./otp-verification";
-import { PasskeyLogin } from "./passkey-login";
 import { PasswordInput } from "./password-input";
 import { useAuthForm } from "./use-auth-form";
 
@@ -28,28 +27,6 @@ function BackLink({
       <ArrowLeft className="h-4 w-4" />
       {children}
     </button>
-  );
-}
-
-function SignupTerms() {
-  return (
-    <p className="text-xs text-muted-foreground text-center text-balance">
-      By signing up, you agree to our{" "}
-      <a
-        href="/terms"
-        className="underline underline-offset-4 hover:text-primary"
-      >
-        Terms of Service
-      </a>{" "}
-      and{" "}
-      <a
-        href="/privacy"
-        className="underline underline-offset-4 hover:text-primary"
-      >
-        Privacy Policy
-      </a>
-      .
-    </p>
   );
 }
 
@@ -186,7 +163,6 @@ export function AuthForm({
           onSubmit={isSignup ? signUpWithPassword : signInWithPassword}
           onForgotPassword={handleForgotPassword}
           onOtpClick={goToOtpFlow}
-          onPasskeySuccess={onAuthSuccess}
           onError={setError}
           onLoadingChange={setChildBusy}
           returnTo={returnTo}
@@ -234,7 +210,6 @@ interface PasswordFormProps {
   onSubmit: (e?: FormEvent) => void;
   onForgotPassword: () => void;
   onOtpClick: () => void;
-  onPasskeySuccess: () => void;
   onError: (error: string | null) => void;
   onLoadingChange: (loading: boolean) => void;
   returnTo?: string;
@@ -252,7 +227,6 @@ function PasswordForm({
   onSubmit,
   onForgotPassword,
   onOtpClick,
-  onPasskeySuccess,
   onError,
   onLoadingChange,
   returnTo,
@@ -359,29 +333,18 @@ function PasswordForm({
 
         {/* OTP alternative (login only) */}
         {!isSignup && (
-          <>
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full"
-              onClick={onOtpClick}
-              disabled={isDisabled}
-            >
-              <Mail className="mr-2 h-4 w-4" />
-              Use email code instead
-            </Button>
-
-            <PasskeyLogin
-              onSuccess={onPasskeySuccess}
-              onError={onError}
-              onLoadingChange={onLoadingChange}
-              isDisabled={isDisabled}
-            />
-          </>
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={onOtpClick}
+            disabled={isDisabled}
+          >
+            <Mail className="mr-2 h-4 w-4" />
+            Use email code instead
+          </Button>
         )}
       </div>
-
-      {isSignup && <SignupTerms />}
 
       {/* Account switch link */}
       <p className="text-sm text-muted-foreground text-center">

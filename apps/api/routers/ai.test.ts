@@ -51,7 +51,6 @@ function testCtx({
       userId,
       expiresAt: new Date(Date.now() + 60_000),
       token: "token",
-      activeOrganizationId: undefined,
     },
     user: {
       id: userId,
@@ -60,7 +59,6 @@ function testCtx({
       email: "test@example.com",
       emailVerified: true,
       name: "Test User",
-      isAnonymous: false,
     },
     db: {
       query: {

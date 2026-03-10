@@ -28,21 +28,6 @@ export const userRouter = router({
       };
     }),
 
-  list: protectedProcedure
-    .input(
-      z.object({
-        limit: z.number().min(1).max(100).default(10),
-        cursor: z.string().optional(),
-      }),
-    )
-    .query(() => {
-      // TODO: Implement user listing logic
-      return {
-        users: [],
-        nextCursor: null,
-      };
-    }),
-
   exportData: protectedProcedure.query(async ({ ctx }) => {
     const entries = await ctx.db.query.journalEntry.findMany({
       where: (table, { eq: whereEq }) => whereEq(table.userId, ctx.user.id),
