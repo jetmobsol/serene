@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import { truncate } from "@/lib/utils/text";
 import { AnimatePresence, motion } from "motion/react";
 import { Sparkles } from "lucide-react";
 import { SafetyBanner } from "./safety-banner";
@@ -26,7 +25,7 @@ export function AiResponse({
   }
 
   const isLoading = isStreaming && displayText === "";
-  const text = variant === "compact" ? truncate(displayText, 100) : displayText;
+  const text = displayText;
 
   return (
     <motion.div

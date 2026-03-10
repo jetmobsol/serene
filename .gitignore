@@ -82,3 +82,4 @@ screenshots/
 __pycache__/
 *.pyc
 /db/logs/
+/apps/app/logs/

@@ -43,20 +43,18 @@ describe("AiResponse", () => {
     expect(screen.getByText("Full AI insight")).toBeInTheDocument();
   });
 
-  it("truncates text in compact variant", () => {
+  it("shows full text in both variants", () => {
     const longText = "A".repeat(150);
-    render(
+    const { unmount } = render(
       <AiResponse
         response={longText}
         hasCrisisContent={false}
         variant="compact"
       />,
     );
-    expect(screen.getByText("A".repeat(100) + "...")).toBeInTheDocument();
-  });
+    expect(screen.getByText(longText)).toBeInTheDocument();
+    unmount();
 
-  it("shows full text in full variant", () => {
-    const longText = "A".repeat(150);
     render(
       <AiResponse
         response={longText}
