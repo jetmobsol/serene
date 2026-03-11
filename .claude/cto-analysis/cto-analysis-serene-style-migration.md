@@ -3,6 +3,7 @@
 > Source: `ai_docs/index.html` → Full App Reskin Plan
 > Date: 2026-03-11
 > Revised: 2026-03-11 (post-validation with codebase audit)
+> Revised: 2026-03-11 (CTO validation fixes applied — see "Resolved Flaws" table)
 
 ---
 
@@ -14,8 +15,8 @@
 | ----------------- | ----------------------------------------- | --------------------------------------------------------- |
 | **Background**    | Near-white `oklch(0.99)`                  | Warm parchment (oklch equivalent)                         |
 | **Primary color** | Generic sage oklch                        | Specific sage oklch (from `#5B7B6A`)                      |
-| **Heading font**  | System/generic sans                       | Cormorant Garamond (serif, editorial) — self-hosted       |
-| **Body font**     | System sans                               | DM Sans (clean geometric) — self-hosted                   |
+| **Heading font**  | Lora (serif, Google Fonts) + Inter (sans) | Cormorant Garamond (serif, editorial) — self-hosted       |
+| **Body font**     | Inter (sans, Google Fonts)                | DM Sans (clean geometric) — self-hosted                   |
 | **Card radius**   | 0.625rem base                             | 0.875rem base (derivations stay dynamic via `calc()`)     |
 | **Shadows**       | Tailwind defaults                         | Custom warm-tinted soft shadows                           |
 | **Sidebar**       | Collapsible toggle                        | Fixed 260px desktop, slide-out mobile                     |
@@ -110,6 +111,35 @@ The target palette from `index.html` translated to oklch (modern color system pr
 
 ---
 
+## Accent Color Semantic Shift — Awareness Note
+
+The current `--accent` is purple/pink (`oklch(0.92 0.03 300)`). The new palette changes it to
+terracotta (`oklch(0.96 0.018 42)`). This affects every component using `bg-accent`,
+`hover:bg-accent`, `text-accent-foreground`, and `via-accent/*`:
+
+- **sidebar-nav.tsx:** `hover:bg-accent hover:text-accent-foreground` and `bg-accent text-accent-foreground` (active state) — these shift from purple to terracotta. Acceptable since Step 3 replaces this styling entirely with `border-l` active state.
+- **ai-response.tsx:** `via-accent/6` and `via-accent/3` in shimmer/static gradients — shifts from purple-tinted to terracotta-tinted. The effect is subtle at 3-6% opacity. Visually acceptable — warm tone aligns with the parchment palette.
+- **tag-chips.tsx:** `hover:bg-accent hover:text-accent-foreground` — Step 7 replaces this styling entirely.
+
+**No code changes required** — the semantic shift is intentional and all affected components
+are either reskinned in later steps or produce acceptable results at low opacity.
+
+---
+
+## Chart Colors — Hardcoded in @repo/core, Not CSS Variables
+
+The Recharts bar chart (`mood-bar-chart.tsx`) and entry cards use `MOOD_COLORS` from `@repo/core`
+with **hardcoded hex/color values**, not CSS `--chart-*` variables. The `--chart-*` variable
+changes in Step 1 only affect components that reference them via Tailwind classes (e.g.,
+`bg-chart-1`). Recharts fills use `MOOD_COLORS[mood].light` directly.
+
+**Action:** The `--chart-*` CSS variables are still useful for any future chart components that
+use Tailwind classes, but they do **not** change existing Recharts visualizations. If chart
+colors need updating to match the new palette, that's a separate change to `@repo/core`'s
+`MOOD_COLORS` object — out of scope for this reskin.
+
+---
+
 ## CSP Audit — Critical Finding
 
 **File checked:** `apps/web/_headers` line 6:
@@ -157,13 +187,55 @@ the button — clear ownership, no indirection.
 
 ## Implementation Plan (Revised Sequential)
 
-### Step 0 — Self-Host Fonts (NEW prerequisite)
+### Step 0 — Self-Host Fonts + Clean Up Google Fonts (prerequisite)
 
-**Files:** `apps/app/package.json`, `apps/app/styles/globals.css`, `apps/app/public/_headers`
+**Files:** `apps/app/package.json`, `apps/app/styles/globals.css`, `apps/app/index.html`, `apps/app/public/_headers`
 **Impact: HIGH** — all typography depends on this; must ship before Step 1 visual changes
 
 ```bash
 bun add @fontsource/cormorant-garamond @fontsource/dm-sans
+```
+
+**Remove Google Fonts from `apps/app/index.html`:**
+
+The current `index.html` loads Inter + Lora from Google Fonts via `<link>` tags. These must be
+removed to prevent duplicate font loading (self-hosted via CSS + external via HTML) and to
+eliminate external network requests that would fail under CSP.
+
+Remove these lines from `<head>`:
+
+```html
+<!-- DELETE these 4 lines -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@400;500;600;700&display=swap"
+/>
+```
+
+**Update `<meta name="theme-color">` in `apps/app/index.html`:**
+
+Current value `#8B9E7C` doesn't match the new sage primary (`#5B7B6A`). Mobile browser chrome
+will show the wrong color.
+
+```html
+<!-- Change from -->
+<meta name="theme-color" content="#8B9E7C" />
+<!-- Change to -->
+<meta name="theme-color" content="#5B7B6A" />
+```
+
+**Update Lora reference in `apps/app/components/auth/auth-form.tsx`:**
+
+The auth form's "Serene" title uses an inline `fontFamily: "Lora, serif"`. Since Lora is being
+removed, update this to the new heading font:
+
+```tsx
+// Change from:
+style={{ fontFamily: "Lora, serif" }}
+// Change to:
+style={{ fontFamily: "'Cormorant Garamond', serif" }}
 ```
 
 In `globals.css` (top, before `:root`):
@@ -173,13 +245,24 @@ In `globals.css` (top, before `:root`):
 @import "@fontsource/cormorant-garamond/300.css";
 @import "@fontsource/cormorant-garamond/400.css";
 @import "@fontsource/cormorant-garamond/500.css";
+@import "@fontsource/cormorant-garamond/600.css";
 @import "@fontsource/cormorant-garamond/300-italic.css";
 @import "@fontsource/cormorant-garamond/400-italic.css";
 @import "@fontsource/dm-sans/300.css";
 @import "@fontsource/dm-sans/400.css";
 @import "@fontsource/dm-sans/500.css";
 @import "@fontsource/dm-sans/600.css";
+@import "@fontsource/dm-sans/700.css";
 ```
+
+**Font weight audit:** Headings in the codebase use `font-semibold` (600) and `font-bold` (700).
+Cormorant Garamond's original import maxed at weight 500 — the browser would fake-bold it,
+which looks bad on serif fonts. Added weight 600 above. DM Sans added weight 700 for the same
+reason. These cover all `font-bold`/`font-semibold` usage found in the codebase:
+
+- `h1/h2` headings: `font-bold` (700) in routes and error boundaries
+- `h3` subheadings: `font-semibold` (600) in journal, timeline, entry-form
+- Safety banner: `font-bold` (700) on phone numbers
 
 Create `apps/app/public/_headers`:
 
@@ -426,23 +509,15 @@ export function Header({ isSidebarOpen, onMenuToggle }: HeaderProps) {
 ```
 
 ```tsx
-// dark-mode-toggle.tsx (new file, ~20 lines)
+// dark-mode-toggle.tsx (new file, ~30 lines)
 import { Moon, Sun } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export function DarkModeToggle() {
-  const [dark, setDark] = useState(() =>
-    document.documentElement.classList.contains("dark"),
-  );
+  // Initialize as null to avoid flash-of-wrong-theme.
+  // The useEffect resolves the correct theme before first meaningful paint.
+  const [dark, setDark] = useState<boolean | null>(null);
 
-  const toggle = () => {
-    const next = !dark;
-    setDark(next);
-    document.documentElement.classList.toggle("dark", next);
-    localStorage.setItem("theme", next ? "dark" : "light");
-  };
-
-  // Respect system preference on first load
   useEffect(() => {
     const saved = localStorage.getItem("theme");
     const prefersDark = window.matchMedia(
@@ -452,6 +527,16 @@ export function DarkModeToggle() {
     setDark(isDark);
     document.documentElement.classList.toggle("dark", isDark);
   }, []);
+
+  const toggle = () => {
+    const next = !dark;
+    setDark(next);
+    document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("theme", next ? "dark" : "light");
+  };
+
+  // Don't render until theme is resolved — prevents icon flicker
+  if (dark === null) return <div className="w-8 h-8" />;
 
   return (
     <button
@@ -465,8 +550,104 @@ export function DarkModeToggle() {
 }
 ```
 
-**Layout adjustment:** Root layout wrapper needs `lg:pl-64 pt-14` on the main content area
-to account for fixed sidebar (260px) and fixed header (56px).
+**Optional early theme script:** To prevent any flash of light theme on dark-preference users,
+add this inline script to `apps/app/index.html` inside `<head>`, before any CSS loads:
+
+```html
+<script>
+  (function () {
+    var t = localStorage.getItem("theme");
+    var d =
+      t === "dark" || (!t && matchMedia("(prefers-color-scheme:dark)").matches);
+    if (d) document.documentElement.classList.add("dark");
+  })();
+</script>
+```
+
+This runs synchronously before React mounts, so the correct theme class is applied before
+the first paint. The `DarkModeToggle` useEffect then syncs React state with the already-applied
+class. **Note:** If adding a CSP with `script-src`, this inline script needs a nonce or hash.
+
+---
+
+### Step 3+4 Prerequisite — Layout Wrapper Refactor
+
+**File:** `apps/app/components/layout/index.tsx`
+**Impact: HIGH** — this is the parent of both sidebar and header; must be updated in the same PR
+
+The sidebar changes from flex-flow width collapse to fixed positioning. The header becomes
+fixed as well. The layout wrapper must change from `flex` to a simple container with padding
+offsets.
+
+**Current layout (flex-based, width collapse):**
+
+```tsx
+<div className="h-screen flex bg-background">
+  <Sidebar isOpen={sidebarOpen} />
+  <div className="flex-1 flex flex-col overflow-hidden">
+    <Header ... />
+    <main className="flex-1 overflow-auto">
+      <div className="h-full">{children}</div>
+    </main>
+  </div>
+</div>
+```
+
+**New layout (fixed sidebar + header, padding offsets):**
+
+```tsx
+import { useState, useCallback } from "react";
+import { Header } from "./header";
+import { Sidebar } from "./sidebar";
+
+interface LayoutProps {
+  children: React.ReactNode;
+}
+
+export function Layout({ children }: LayoutProps) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const closeSidebar = useCallback(() => setSidebarOpen(false), []);
+
+  return (
+    <>
+      <Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
+
+      <Header
+        isSidebarOpen={sidebarOpen}
+        onMenuToggle={() => setSidebarOpen((prev) => !prev)}
+      />
+
+      {/* Main content — offset by fixed sidebar (lg) and fixed header */}
+      <main className="lg:pl-64 pt-14 min-h-screen bg-background">
+        <div className="h-full">{children}</div>
+      </main>
+    </>
+  );
+}
+```
+
+**Key changes from current:**
+
+- `sidebarOpen` defaults to `false` (mobile-first; desktop shows via `lg:translate-x-0`)
+- Sidebar receives `onClose` callback — used by the overlay click and optionally by route navigation
+- Flex layout replaced with fixed elements + padding offsets (`lg:pl-64` = 256px = sidebar width, `pt-14` = 56px = header height)
+- No `overflow-hidden` on outer container — scrolling is natural on `<main>`
+
+**Sidebar `onClose` prop wiring** (update to Step 3 sidebar code):
+
+```tsx
+// sidebar.tsx — add onClose to overlay
+{
+  isOpen && (
+    <div
+      className="fixed inset-0 bg-black/20 z-30 lg:hidden"
+      onClick={onClose}
+      aria-hidden="true"
+    />
+  );
+}
+```
 
 ---
 
@@ -568,36 +749,46 @@ That is the entire change to this file.
 
 ## File Change Summary
 
-| File                                              | Change Type                                       | Effort | Risk   |
-| ------------------------------------------------- | ------------------------------------------------- | ------ | ------ |
-| `apps/app/package.json`                           | Add `@fontsource/*` deps                          | 5 min  | None   |
-| `apps/app/styles/globals.css`                     | oklch palette + fonts + dark mode                 | 45 min | Low    |
-| `apps/app/public/_headers`                        | Create (new file)                                 | 10 min | None   |
-| `apps/app/tailwind.config.css`                    | **No changes**                                    | 0 min  | None   |
-| `apps/app/components/layout/sidebar.tsx`          | Fixed layout + mobile transform + remove UserMenu | 45 min | Medium |
-| `apps/app/components/layout/sidebar-nav.tsx`      | Left-border active state only                     | 15 min | Low    |
-| `apps/app/components/layout/header.tsx`           | Frosted glass + auth wiring + UserMenu inline     | 30 min | Medium |
-| `apps/app/components/layout/dark-mode-toggle.tsx` | New component (~25 lines)                         | 15 min | Low    |
-| `apps/app/components/user-menu.tsx`               | Delete (logic absorbed by header)                 | 5 min  | Low    |
-| Root layout wrapper                               | Add `lg:pl-64 pt-14`                              | 10 min | Low    |
-| `apps/app/components/journal/entry-card.tsx`      | hover + shadow + tag pill                         | 20 min | Low    |
-| `apps/app/components/journal/mood-selector.tsx`   | className strings only                            | 20 min | Low    |
-| `apps/app/components/journal/tag-chips.tsx`       | className strings only                            | 15 min | Low    |
-| `apps/app/components/journal/ai-response.tsx`     | One `bg-secondary/30` class                       | 5 min  | None   |
+| File                                              | Change Type                                                     | Effort | Risk   |
+| ------------------------------------------------- | --------------------------------------------------------------- | ------ | ------ |
+| `apps/app/package.json`                           | Add `@fontsource/*` deps                                        | 5 min  | None   |
+| `apps/app/index.html`                             | Remove Google Fonts links, update theme-color, add theme script | 10 min | Low    |
+| `apps/app/styles/globals.css`                     | oklch palette + font imports + dark mode                        | 45 min | Low    |
+| `apps/app/public/_headers`                        | Create (new file)                                               | 10 min | None   |
+| `apps/app/tailwind.config.css`                    | **No changes**                                                  | 0 min  | None   |
+| `apps/app/components/auth/auth-form.tsx`          | Replace `Lora` → `Cormorant Garamond` font-family               | 2 min  | None   |
+| `apps/app/components/layout/index.tsx`            | Full refactor: flex → fixed positioning + padding offsets       | 20 min | Medium |
+| `apps/app/components/layout/sidebar.tsx`          | Fixed layout + mobile transform + overlay onClose               | 45 min | Medium |
+| `apps/app/components/layout/sidebar-nav.tsx`      | Left-border active state only                                   | 15 min | Low    |
+| `apps/app/components/layout/header.tsx`           | Frosted glass + auth wiring + UserMenu inline                   | 30 min | Medium |
+| `apps/app/components/layout/dark-mode-toggle.tsx` | New component (~30 lines, null-init pattern)                    | 15 min | Low    |
+| `apps/app/components/user-menu.tsx`               | Delete (logic absorbed by header)                               | 5 min  | Low    |
+| `apps/app/components/journal/entry-card.tsx`      | hover + shadow + tag pill                                       | 20 min | Low    |
+| `apps/app/components/journal/mood-selector.tsx`   | className strings only                                          | 20 min | Low    |
+| `apps/app/components/journal/tag-chips.tsx`       | className strings only                                          | 15 min | Low    |
+| `apps/app/components/journal/ai-response.tsx`     | One `bg-secondary/30` class                                     | 5 min  | None   |
 
-**Revised total estimate: ~4.5 hours** (was 3.5 hours; delta = dark mode parity, font setup, mobile sidebar, auth relocation, dark mode toggle)
+**Revised total estimate: ~4.5 hours** (unchanged — new items are small; layout wrapper was already implicit)
 
 ---
 
 ## Execution Order
 
-1. **Step 0** — `bun add @fontsource/cormorant-garamond @fontsource/dm-sans`, create `apps/app/public/_headers`. Verify fonts render in dev. No visual change yet.
-2. **Step 1** — CSS variables + typography. `bun app:dev` → instant warm palette. Verify dark mode class toggle works visually.
-3. **Step 2** — Verify radius cascaded from Step 1 automatically. No file edit expected. Spot-check Card, Button, Input corners.
-4. **Steps 3 + 4** — Single PR: sidebar + header together (coupled via `isOpen` state + UserMenu relocation). Test mobile breakpoint. Test sign-out. Test dark mode toggle.
-5. **Steps 5–8** — Journal components. Low risk. Each independently verifiable.
+1. **Step 0** — Install `@fontsource/*`, remove Google Fonts from `index.html`, update theme-color, add theme script, update auth-form Lora→Cormorant, create `_headers`. Verify: fonts render in dev, zero requests to `fonts.googleapis.com` in Network tab, no console CSP violations.
 
-Staging deploy after Step 1 to verify CSP + self-hosted fonts work in the Cloudflare environment before proceeding to layout changes.
+   **STAGING DEPLOY after Step 0** — Font self-hosting is the highest-risk infrastructure change (CSP, Cloudflare assets pipeline, woff2 caching). Deploy fonts alone first, verify zero network errors in staging, THEN proceed to visual changes.
+
+2. **Step 1** — CSS variables + typography. `bun app:dev` → instant warm palette. Verify dark mode class toggle works visually (`document.documentElement.classList.add("dark")` in console).
+
+   **Visual QA gate:** Screenshot at 3 breakpoints (375px, 768px, 1440px) × 2 modes (light, dark) = 6 screenshots. Compare against `ai_docs/index.html` for palette alignment.
+
+3. **Step 2** — Verify radius cascaded from Step 1 automatically. No file edit expected. Spot-check Card, Button, Input corners.
+
+4. **Steps 3 + 4** — Single PR: layout wrapper + sidebar + header together (all three are coupled via `isOpen` state, fixed positioning, and UserMenu relocation). Test: mobile overlay opens/closes, overlay click closes sidebar, sign-out works, dark mode toggle works, no layout shift on resize between mobile↔desktop.
+
+   **Visual QA gate:** Same 6-screenshot matrix. Verify sidebar is 260px fixed on desktop, hidden on mobile, slide-in on toggle.
+
+5. **Steps 5–8** — Journal components. Low risk. Each independently verifiable.
 
 ---
 
@@ -611,3 +802,22 @@ Staging deploy after Step 1 to verify CSP + self-hosted fonts work in the Cloudf
 | Radius system fragmentation      | `tailwind.config.css` untouched. `--radius` bump in Step 1 cascades via existing `calc()`.  |
 | Google Fonts CSP blocked         | `font-src 'self'` in `apps/web/_headers` confirmed blocking. Self-hosted via `@fontsource`. |
 | UserMenu auth wiring loss        | `signOut(queryClient)` inlined in header. Single owner, no indirection.                     |
+
+### Resolved Flaws (from CTO validation)
+
+| Flaw                                     | Resolution                                                                                                        |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Font setup mischaracterized              | Corrected: current app uses Inter + Lora (Google Fonts), not "system/generic sans".                               |
+| Google Fonts `<link>` tags not removed   | Step 0 now explicitly removes all Google Fonts links + preconnects from `index.html`.                             |
+| Lora usage in auth-form.tsx              | Step 0 now includes `fontFamily: "Lora"` → `"Cormorant Garamond"` update in auth-form.                            |
+| Font weight gaps (fake-bold on serif)    | Added Cormorant Garamond 600 + DM Sans 700 to imports. Audit of all `font-bold`/`font-semibold` usage documented. |
+| Theme-color meta tag mismatch            | Step 0 now updates `<meta name="theme-color">` from `#8B9E7C` to `#5B7B6A`.                                       |
+| DarkModeToggle hydration risk            | Rewritten with `null` initial state pattern. Renders placeholder until theme resolves. No flash-of-wrong-theme.   |
+| Layout wrapper refactor buried           | New explicit "Step 3+4 Prerequisite" section with full `layout/index.tsx` code and rationale.                     |
+| Sidebar overlay not closeable            | Layout wrapper passes `onClose` to Sidebar. Overlay `onClick` closes sidebar.                                     |
+| Sidebar `isOpen` default wrong           | Changed from `true` to `false` (mobile-first; desktop forced visible via `lg:translate-x-0`).                     |
+| Accent color semantic shift undocumented | New section documenting purple→terracotta shift across all affected components.                                   |
+| Chart colors assumed CSS-variable-driven | New section documenting that Recharts uses hardcoded `MOOD_COLORS` from `@repo/core`, not CSS vars.               |
+| No visual QA strategy                    | Added QA gates: 6-screenshot matrix (3 breakpoints × 2 modes) after Steps 0–1 and Steps 3–4.                      |
+| Staging deploy timing wrong              | Moved staging deploy from "after Step 1" to "after Step 0" (font infra verified before visuals).                  |
+| Early theme script for flash prevention  | Added optional `<script>` in `index.html` `<head>` for synchronous dark class application.                        |
