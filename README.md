@@ -62,7 +62,7 @@ For detailed architecture documentation, see [docs/architecture/overview.md](doc
 
 - [Bun](https://bun.sh/) v1.3+
 - [Docker](https://www.docker.com/) (for local PostgreSQL)
-- [just](https://github.com/casey/just) (task runner, optional but recommended)
+- [just](https://github.com/casey/just) (task runner, optional -- shell scripts provided as alternative)
 
 ### Local Development
 
@@ -79,10 +79,9 @@ cp .env.example .env.local
 # Start everything (Docker DB + dev servers)
 just start
 
-# Or start manually:
-bun db:push     # Push schema to database
-bun db:seed     # Seed development data
-bun dev         # Start all dev servers
+# Without just installed:
+./scripts/start-dev.sh      # Start DB + dev servers
+./scripts/stop-dev.sh       # Stop everything
 ```
 
 ### Docker (Full Stack)
