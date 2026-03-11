@@ -156,6 +156,22 @@ describe("isGibberish", () => {
   it("handles punctuation in words", () => {
     expect(isGibberish("feeling good, really great today!")).toBe(false);
   });
+
+  it("returns false for entries with typos or uncommon words", () => {
+    expect(
+      isGibberish("Today I'm very excisted to pass my certification exam."),
+    ).toBe(false);
+  });
+
+  it("returns true for consonant-only keyboard mashing", () => {
+    expect(isGibberish("bcd fgh jkl mnp qrs")).toBe(true);
+  });
+
+  it("returns false for entries with domain-specific vocabulary", () => {
+    expect(
+      isGibberish("Started meditation practice, feeling more centered"),
+    ).toBe(false);
+  });
 });
 
 // ---------------------------------------------------------------------------

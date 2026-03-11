@@ -13,46 +13,46 @@ A private, AI-powered wellness journal that helps you track your mood, reflect o
 
 ## Tech Stack
 
-| Layer        | Technologies                                                   |
-| ------------ | -------------------------------------------------------------- |
-| **Runtime**  | Bun, Cloudflare Workers, TypeScript 5.9                        |
-| **Frontend** | React 19, TanStack Router, Tailwind CSS v4, shadcn/ui, Jotai   |
-| **Backend**  | Hono, tRPC, Better Auth (email/password, Google OAuth)         |
-| **Database** | Drizzle ORM, Neon PostgreSQL, Cloudflare Hyperdrive            |
-| **AI**       | Anthropic Claude (via AI SDK) for empathetic journal responses |
-| **Email**    | React Email, Resend                                            |
-| **Deploy**   | Cloudflare Workers, Terraform                                  |
+| Layer        | Technologies                                                 |
+| ------------ | ------------------------------------------------------------ |
+| **Runtime**  | Bun, Cloudflare Workers, TypeScript 5.9                      |
+| **Frontend** | React 19, TanStack Router, Tailwind CSS v4, shadcn/ui, Jotai |
+| **Backend**  | Hono, tRPC 11, Better Auth (email OTP, Google OAuth)         |
+| **Database** | Drizzle ORM, Neon PostgreSQL, Cloudflare Hyperdrive          |
+| **AI**       | Anthropic Claude for empathetic journal responses            |
+| **Email**    | React Email, Resend                                          |
+| **Infra**    | Cloudflare Workers, Terraform, Wrangler CLI                  |
 
 ## Architecture
 
-```
-                        Internet
-                           |
-                    +------+------+
-                    | serene-web  |  Astro edge router
-                    | (Cloudflare)|  Routes traffic via
-                    +--+-------+--+  service bindings
-                       |       |
-              +--------+       +--------+
-              v                         v
-      +-------+------+         +-------+------+
-      |  serene-app  |         |  serene-api  |
-      | React 19 SPA |         | Hono + tRPC  |
-      | (static)     |         | Better Auth  |
-      +--------------+         +------+-------+
-                                     |
-                              +------+------+
-                              |  Hyperdrive |
-                              | (conn pool) |
-                              +------+------+
-                                     |
-                              +------+------+
-                              |    Neon     |
-                              | PostgreSQL  |
-                              +-------------+
+```mermaid
+graph TB
+    Internet((Internet))
+    Internet --> Web
+
+    subgraph Cloudflare["Cloudflare Edge"]
+        Web["serene-web<br/><i>Hono edge router</i>"]
+        App["serene-app<br/><i>React 19 SPA</i>"]
+        API["serene-api<br/><i>Hono + tRPC + Better Auth</i>"]
+        HD["Hyperdrive<br/><i>Connection pooler</i>"]
+        KV["KV Namespace<br/><i>AI rate limiting</i>"]
+
+        Web -- "/api/*" --> API
+        Web -- "app routes" --> App
+        Web -- "static/*" --> Assets["Astro Assets<br/><i>Marketing pages</i>"]
+        API --> HD
+        API --> KV
+    end
+
+    HD --> Neon["Neon PostgreSQL"]
+    API -. "OTP emails" .-> Resend["Resend"]
+    API -. "vibe check" .-> Anthropic["Anthropic Claude"]
+    App -. "OAuth" .-> Google["Google OAuth"]
 ```
 
-Three Cloudflare Workers connected via service bindings. The web worker is the public-facing edge router that directs `/api/*` requests to the API worker and app routes to the App worker. No cross-worker public URLs are needed.
+Three Cloudflare Workers connected via [service bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/service-bindings/) (no public cross-worker URLs). The web worker is the only public-facing endpoint -- it routes all traffic internally.
+
+For detailed architecture documentation, see [docs/architecture/overview.md](docs/architecture/overview.md).
 
 ## Quick Start
 
@@ -60,7 +60,7 @@ Three Cloudflare Workers connected via service bindings. The web worker is the p
 
 - [Bun](https://bun.sh/) v1.3+
 - [Docker](https://www.docker.com/) (for local PostgreSQL)
-- [Anthropic API key](https://console.anthropic.com/) (for AI vibe check responses)
+- [just](https://github.com/casey/just) (task runner, optional but recommended)
 
 ### Local Development
 
@@ -71,8 +71,8 @@ cd serene
 bun install
 
 # Configure environment
-cp .env.example .env
-# Edit .env with your ANTHROPIC_API_KEY and any other credentials
+cp .env.example .env.local
+# Edit .env.local with your credentials (DATABASE_URL, BETTER_AUTH_SECRET, etc.)
 
 # Start everything (Docker DB + dev servers)
 just start
@@ -86,7 +86,7 @@ bun dev         # Start all dev servers
 ### Docker (Full Stack)
 
 ```bash
-docker-compose up
+just docker-start
 ```
 
 ### Local Ports
@@ -100,64 +100,92 @@ docker-compose up
 
 ### Dev Auth (Auto-Login)
 
-In development mode, email OTP login is fully automatic — no manual code entry needed:
+In development mode, email OTP login is fully automatic -- no manual code entry needed:
 
 - The API returns the OTP in the response body (`devOtp` field) and logs it to the server console.
 - The frontend auto-fills and auto-submits the OTP code.
-- **For browser automation (Playwright, Chrome MCP, bowser QA):** after clicking "Continue with email" and submitting an email address, wait a few seconds for the auto-login to complete. The OTP screen will appear briefly then auto-submit and redirect to the dashboard. Do not try to manually enter an OTP code — it happens automatically.
-- Any email address works (e.g., `test@test.com`) — the email OTP flow auto-creates accounts for unknown addresses.
+- Any email address works (e.g., `test@test.com`) -- the email OTP flow auto-creates accounts.
 - Email delivery is not required (Resend errors are swallowed in dev).
 
-**Note:** Auto-login is a dev-only convenience feature. Production deployments require users to manually enter OTP codes.
+**Note:** Auto-login is dev-only. Production requires manual OTP entry via email.
 
 ## Environment Variables
 
-| Variable               | Required | Description                                                                      |
-| ---------------------- | -------- | -------------------------------------------------------------------------------- |
-| `ANTHROPIC_API_KEY`    | Yes      | Anthropic API key for AI vibe check responses                                    |
-| `DATABASE_URL`         | Yes      | PostgreSQL connection string                                                     |
-| `BETTER_AUTH_SECRET`   | Yes      | Secret for session signing (generate with `bunx @better-auth/cli@latest secret`) |
-| `GOOGLE_CLIENT_ID`     | No       | Google OAuth client ID                                                           |
-| `GOOGLE_CLIENT_SECRET` | No       | Google OAuth client secret                                                       |
-| `RESEND_API_KEY`       | No       | Resend API key for transactional emails                                          |
+| Variable               | Required | Description                                           |
+| ---------------------- | -------- | ----------------------------------------------------- |
+| `DATABASE_URL`         | Yes      | PostgreSQL connection string                          |
+| `BETTER_AUTH_SECRET`   | Yes      | Session signing secret (`openssl rand -hex 32`)       |
+| `GOOGLE_CLIENT_ID`     | Yes\*    | Google OAuth client ID                                |
+| `GOOGLE_CLIENT_SECRET` | Yes\*    | Google OAuth client secret                            |
+| `RESEND_API_KEY`       | No       | Resend API key for transactional emails               |
+| `ANTHROPIC_API_KEY`    | No       | Anthropic API key (AI vibe check disabled without it) |
 
-Copy `.env.example` to `.env` and fill in real credentials.
+\* Required by the API worker's Zod schema (`apps/api/lib/env.ts`). The worker crashes on startup without them.
 
-## Development
+Copy `.env.example` to `.env.local` and fill in real credentials. `.env.local` is git-ignored.
+
+## Development Commands
 
 ```bash
-bun dev                # Start all dev servers concurrently
-bun test               # Run tests (watch mode)
-bun test --run         # Run tests once
-bun lint               # ESLint with cache
-bun typecheck          # TypeScript type checking
-bun db:push            # Push schema to database
-bun db:seed            # Seed development data
-bun db:studio          # Open Drizzle Studio (database GUI)
-bun ui:add <component> # Add shadcn/ui component
+# Task runner
+just start              # Docker DB + native dev servers
+just stop               # Stop everything
+just dev                # Tmux session with separate windows per service
+just check-all          # Tests + typecheck + lint + format
+
+# Bun scripts
+bun dev                 # Start all dev servers concurrently
+bun run build           # Build all workspaces (email → web → api → app)
+bun run test            # Run tests (watch mode)
+bun run test --run      # Run tests once
+bun lint                # ESLint with cache
+bun typecheck           # TypeScript type checking
+bun db:push             # Push schema to database
+bun db:seed             # Seed development data
+bun db:studio           # Open Drizzle Studio (database GUI)
+bun ui:add <component>  # Add shadcn/ui component
 ```
 
 ## Deployment
 
-Serene deploys as three Cloudflare Workers backed by Neon PostgreSQL. See the [deployment guide](docs/deployment/serene-deployment-guide.md) for step-by-step instructions and the [infrastructure reference](docs/deployment/serene-infrastructure-reference.md) for Terraform and Cloudflare configuration details.
+Serene deploys as three Cloudflare Workers backed by Neon PostgreSQL via Hyperdrive.
+
+```bash
+just deploy-prod        # Build + deploy all workers to production
+```
+
+See the [deployment guide](docs/deployment/serene-deployment-guide.md) for full step-by-step instructions and the [infrastructure reference](docs/deployment/serene-infrastructure-reference.md) for Terraform details.
 
 ## Project Structure
 
 ```
 serene/
-+-- apps/
-|   +-- web/           Astro edge router (public entry point, service bindings)
-|   +-- app/           React 19 SPA (TanStack Router, Tailwind, shadcn/ui)
-|   +-- api/           Hono + tRPC API (Better Auth, Drizzle, AI vibe check)
-|   +-- email/         React Email templates
-+-- packages/
-|   +-- ui/            shadcn/ui components (new-york style)
-|   +-- core/          Shared types and utilities
-+-- db/                Drizzle ORM schemas, migrations, seed data
-+-- infra/             Terraform (Cloudflare Workers, Hyperdrive, DNS)
-+-- docs/              Documentation and architecture decision records
-+-- ai_review/         Bowser QA test definitions
+├── apps/
+│   ├── web/            Hono edge router (public entry, service bindings)
+│   ├── app/            React 19 SPA (TanStack Router, Tailwind, shadcn/ui)
+│   ├── api/            Hono + tRPC API (Better Auth, Drizzle, AI vibe check)
+│   └── email/          React Email templates (@repo/email)
+├── packages/
+│   ├── ui/             shadcn/ui components (new-york style)
+│   ├── core/           Shared types and utilities
+│   └── ws-protocol/    WebSocket protocol definitions
+├── db/                 Drizzle ORM schemas, migrations, seed data
+├── infra/              Terraform (Cloudflare Workers, Hyperdrive, DNS)
+├── docs/               Documentation and architecture decision records
+│   ├── architecture/   System architecture docs
+│   ├── deployment/     Deployment and infrastructure guides
+│   └── adr/            Architecture decision records
+└── ai_review/          Bowser QA user story tests
 ```
+
+## Documentation
+
+| Document                                                                       | Description                                      |
+| ------------------------------------------------------------------------------ | ------------------------------------------------ |
+| [Architecture Overview](docs/architecture/overview.md)                         | System design, request flow, component breakdown |
+| [Deployment Guide](docs/deployment/serene-deployment-guide.md)                 | Step-by-step production deployment               |
+| [Infrastructure Reference](docs/deployment/serene-infrastructure-reference.md) | Terraform, Cloudflare, and DNS configuration     |
+| [Auth Hint Cookie (ADR-001)](docs/adr/001-auth-hint-cookie.md)                 | Why the web worker uses a cookie for routing     |
 
 ## License
 

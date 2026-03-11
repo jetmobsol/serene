@@ -67,14 +67,17 @@ export function stripCrisisMarker(responseText: string): string {
 }
 
 /**
- * Detects gibberish input by counting "real" words.
+ * Detects gibberish input using structural heuristics.
  *
- * A word is considered "real" if it is longer than 2 characters and
- * appears in a basic set of common English words. If fewer than 3 real
- * words are found, the input is considered gibberish.
+ * Checks for two signals:
+ * 1. The input must contain at least 3 words longer than 2 characters.
+ * 2. At least 3 of those words must look like real words — containing
+ *    a vowel and being mostly alphabetic. This catches keyboard mashing
+ *    (e.g., "asdfgh qwerty zxcvbn") while passing real words with typos
+ *    (e.g., "excisted" still has vowels and letter patterns).
  *
- * This is a heuristic — not meant to be exhaustive. The threshold is
- * generous enough to pass most legitimate journal entries.
+ * The 50-character minimum on the frontend already gates short/empty
+ * input, so this layer only needs to catch truly nonsensical strings.
  */
 export function isGibberish(note: string): boolean {
   const words = note
@@ -86,9 +89,8 @@ export function isGibberish(note: string): boolean {
 
   let realWordCount = 0;
   for (const word of words) {
-    // Strip common punctuation for matching
     const clean = word.replace(/[^a-z']/g, "");
-    if (clean.length > 2 && COMMON_WORDS.has(clean)) {
+    if (clean.length > 2 && looksLikeWord(clean)) {
       realWordCount++;
       if (realWordCount >= 3) return false;
     }
@@ -98,275 +100,19 @@ export function isGibberish(note: string): boolean {
 }
 
 /**
+ * Checks if a string looks like a real word (vs keyboard mashing).
+ *
+ * A word looks real if it contains at least one vowel and is mostly
+ * alphabetic characters. This passes misspelled words, uncommon words,
+ * and proper nouns — only blocking consonant-only gibberish.
+ */
+function looksLikeWord(word: string): boolean {
+  return /[aeiouy]/.test(word);
+}
+
+/**
  * Prepends the crisis safety disclaimer to an AI response.
  */
 export function prependCrisisDisclaimer(response: string): string {
   return CRISIS_DISCLAIMER + response;
 }
-
-/**
- * Common English words for gibberish detection.
- *
- * This set covers the most frequently used English words — sufficient
- * to distinguish real journal entries from random character sequences.
- * Not exhaustive by design: the 3-word threshold compensates for gaps.
- */
-const COMMON_WORDS = new Set([
-  "the",
-  "and",
-  "for",
-  "are",
-  "but",
-  "not",
-  "you",
-  "all",
-  "can",
-  "had",
-  "her",
-  "was",
-  "one",
-  "our",
-  "out",
-  "day",
-  "get",
-  "has",
-  "him",
-  "his",
-  "how",
-  "its",
-  "let",
-  "may",
-  "new",
-  "now",
-  "old",
-  "see",
-  "way",
-  "who",
-  "did",
-  "got",
-  "say",
-  "she",
-  "too",
-  "use",
-  "about",
-  "after",
-  "again",
-  "been",
-  "being",
-  "came",
-  "come",
-  "could",
-  "each",
-  "even",
-  "feel",
-  "feeling",
-  "felt",
-  "find",
-  "first",
-  "from",
-  "give",
-  "good",
-  "great",
-  "have",
-  "help",
-  "here",
-  "into",
-  "just",
-  "keep",
-  "know",
-  "last",
-  "life",
-  "like",
-  "long",
-  "look",
-  "made",
-  "make",
-  "many",
-  "more",
-  "most",
-  "much",
-  "must",
-  "need",
-  "never",
-  "next",
-  "only",
-  "over",
-  "part",
-  "people",
-  "place",
-  "really",
-  "right",
-  "said",
-  "same",
-  "some",
-  "still",
-  "such",
-  "take",
-  "tell",
-  "than",
-  "that",
-  "them",
-  "then",
-  "there",
-  "these",
-  "they",
-  "thing",
-  "things",
-  "think",
-  "this",
-  "time",
-  "today",
-  "very",
-  "want",
-  "well",
-  "went",
-  "were",
-  "what",
-  "when",
-  "where",
-  "which",
-  "while",
-  "will",
-  "with",
-  "work",
-  "would",
-  "year",
-  "your",
-  "also",
-  "back",
-  "because",
-  "before",
-  "between",
-  "both",
-  "call",
-  "down",
-  "every",
-  "hand",
-  "head",
-  "home",
-  "house",
-  "left",
-  "little",
-  "might",
-  "mind",
-  "morning",
-  "night",
-  "nothing",
-  "other",
-  "own",
-  "quite",
-  "small",
-  "something",
-  "start",
-  "started",
-  "through",
-  "together",
-  "under",
-  "until",
-  "upon",
-  "without",
-  "world",
-  "young",
-  "always",
-  "another",
-  "around",
-  "away",
-  "better",
-  "best",
-  "body",
-  "done",
-  "enough",
-  "ever",
-  "family",
-  "few",
-  "found",
-  "friend",
-  "friends",
-  "hard",
-  "happy",
-  "heart",
-  "high",
-  "hope",
-  "kind",
-  "known",
-  "large",
-  "later",
-  "live",
-  "love",
-  "man",
-  "men",
-  "money",
-  "name",
-  "open",
-  "point",
-  "power",
-  "put",
-  "read",
-  "real",
-  "room",
-  "run",
-  "school",
-  "set",
-  "show",
-  "side",
-  "since",
-  "state",
-  "story",
-  "sure",
-  "taken",
-  "talk",
-  "three",
-  "times",
-  "turn",
-  "turned",
-  "used",
-  "using",
-  "water",
-  "woman",
-  "women",
-  "words",
-  "working",
-  "bad",
-  "calm",
-  "sad",
-  "angry",
-  "anxious",
-  "stressed",
-  "tired",
-  "exhausted",
-  "overwhelmed",
-  "sleep",
-  "slept",
-  "ate",
-  "exercise",
-  "walked",
-  "talked",
-  "cried",
-  "laughed",
-  "worried",
-  "scared",
-  "lonely",
-  "grateful",
-  "thankful",
-  "relaxed",
-  "peaceful",
-  "journal",
-  "mood",
-  "energy",
-  "thought",
-  "thoughts",
-  "rough",
-  "tough",
-  "okay",
-  "fine",
-  "awful",
-  "terrible",
-  "wonderful",
-  "amazing",
-  "difficult",
-  "easy",
-  "struggled",
-  "managed",
-  "tried",
-  "trying",
-]);

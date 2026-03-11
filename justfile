@@ -61,6 +61,22 @@ check-all:
     bun prettier --check .
 
 # ============================================
+# DEPLOYMENT
+# ============================================
+
+# Build and deploy all workers to production (api → app → web)
+deploy-prod:
+    @echo "Building all workspaces..."
+    bun run build
+    @echo "Deploying API worker..."
+    bun run api:deploy
+    @echo "Deploying App worker..."
+    bun run app:deploy
+    @echo "Deploying Web worker..."
+    bun run web:deploy
+    @echo "All workers deployed. Verify: curl -i https://serene.linktalentsbot.work/api"
+
+# ============================================
 # COMMIT HELPERS
 # ============================================
 commit:
