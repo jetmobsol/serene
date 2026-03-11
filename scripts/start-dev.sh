@@ -5,6 +5,9 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
+echo "Installing dependencies..."
+bun install --force
+
 echo "Starting PostgreSQL..."
 docker compose up -d db
 

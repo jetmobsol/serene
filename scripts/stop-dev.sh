@@ -9,6 +9,6 @@ echo "Stopping dev servers..."
 pkill -f "bun.*dev" || true
 
 echo "Stopping database..."
-docker compose down db
+docker compose stop db
 
 echo "Stopped."

@@ -21,7 +21,7 @@ start:
 # Stop dev servers and the database container
 stop:
     -pkill -f "bun.*dev" || true
-    docker compose down db
+    docker compose stop db
 
 # Start all services (db, web, api, app) via Docker Compose
 docker-start:
