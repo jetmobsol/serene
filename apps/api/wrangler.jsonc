@@ -21,12 +21,12 @@
   },
   // prettier-ignore
   "hyperdrive": [
-    { "binding": "HYPERDRIVE_CACHED", "id": "your-hyperdrive-cached-id-here" },
-    { "binding": "HYPERDRIVE_DIRECT", "id": "your-hyperdrive-direct-id-here" }
+    { "binding": "HYPERDRIVE_CACHED", "id": "8ddebffa8c83495f89e184507dea53df" },
+    { "binding": "HYPERDRIVE_DIRECT", "id": "8ddebffa8c83495f89e184507dea53df" }
   ],
   // prettier-ignore
   "kv_namespaces": [
-    { "binding": "AI_RATE_LIMIT", "id": "your-ai-rate-limit-kv-id-here" }
+    { "binding": "AI_RATE_LIMIT", "id": "0b3dd3af83f34ec0bb2319b817604968" }
   ],
 
   "env": {
