@@ -1,0 +1,39 @@
+stories:
+  - name: "Entry cards have mood-colored left border"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Verify journal entry cards are visible
+      Verify each entry card has a colored left border (approximately 4px wide)
+      Verify the left border color corresponds to the entry's mood (different moods have different colors)
+
+  - name: "Entry cards have hover effect"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Hover over a journal entry card
+      Verify the card shifts slightly to the right on hover (translateX effect)
+      Verify the card shows a subtle warm shadow on hover
+      Verify the transition is smooth and not jarring
+
+  - name: "Entry card tags are pill-shaped"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Find an entry card that has tags displayed
+      Verify tags appear as pill-shaped elements (fully rounded ends)
+      Verify tags have a subtle border and muted text color
+      Verify tags have a light background (not the primary color)
+
+  - name: "Entry card dropdown appears on hover"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Find a journal entry card
+      Verify the action menu (three dots or dropdown trigger) is NOT visible by default
+      Hover over the entry card
+      Verify the action menu fades in (opacity transition)

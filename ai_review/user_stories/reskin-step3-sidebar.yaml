@@ -1,0 +1,52 @@
+stories:
+  - name: "Desktop sidebar is fixed 260px width"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Resize the browser window to at least 1024px wide (desktop breakpoint)
+      Verify the sidebar is always visible on the left side, approximately 260px wide
+      Verify the sidebar does NOT have a collapse/toggle button on desktop
+      Verify the main content area is offset to the right of the sidebar
+
+  - name: "Mobile sidebar slides in and out"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Resize the browser window to below 768px (mobile breakpoint)
+      Verify the sidebar is initially hidden (not visible)
+      Click the hamburger/menu icon in the header
+      Verify the sidebar slides in from the left with a smooth animation
+      Verify a dark overlay appears behind the sidebar
+      Click the overlay (outside the sidebar)
+      Verify the sidebar slides back out and the overlay disappears
+
+  - name: "Sidebar logo uses Cormorant Garamond with terracotta dot"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Verify the sidebar shows "Serene" in a serif font (Cormorant Garamond)
+      Verify there is a small colored dot (terracotta/warm accent) after or near the "Serene" text
+      Verify the logo text is sage green colored
+
+  - name: "Sidebar nav uses left-border active state"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Verify the active navigation item has a visible left border (approximately 3px) in sage green
+      Verify the active item has a sage-tinted background
+      Verify inactive items do NOT have a left border
+      Click a different navigation item
+      Verify the left border moves to the newly active item
+
+  - name: "Sidebar does not show UserMenu at bottom"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Scroll to the bottom of the sidebar
+      Verify there is NO user avatar, email, or sign-out button at the bottom of the sidebar
+      The sidebar should contain only the logo and navigation items

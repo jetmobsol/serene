@@ -1,0 +1,49 @@
+stories:
+  - name: "Warm parchment background visible"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Verify the main background is a warm parchment/beige tone, NOT a cold white or pure gray
+      Verify cards and content areas appear slightly lighter than the background (off-white warmth)
+      The overall feel should be warm and inviting, like aged paper
+
+  - name: "Sage green primary color applied"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Verify primary buttons, active navigation states, and interactive elements use a muted sage green color
+      The green should be natural and muted (not bright or neon), similar to a dusty sage herb
+      Verify text links or primary accents are sage green, not blue or generic
+
+  - name: "Dark mode palette is warm-tinted"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Toggle dark mode using the dark mode button in the header
+      Verify the background becomes a dark warm tone (not pure black or cold dark gray)
+      Verify text is a warm off-white (not pure bright white)
+      Verify the sage green primary color is still visible but slightly lighter/brighter for dark mode contrast
+      Verify borders are subtle and not harsh white lines
+
+  - name: "Light mode palette consistency across pages"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Verify warm parchment background on the journal page
+      Navigate to the analytics/insights page
+      Verify the same warm parchment background is consistent
+      Verify card backgrounds are consistent warm off-white on both pages
+
+  - name: "Border radius appears rounded and soft"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Verify cards have noticeably rounded corners (approximately 14px radius)
+      Verify buttons have rounded corners
+      Verify input fields have rounded corners
+      The overall UI should feel soft and approachable, not sharp or boxy

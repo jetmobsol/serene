@@ -1,0 +1,48 @@
+stories:
+  - name: "Mood selector cards have rounded corners and border"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Navigate to create a new journal entry
+      Verify mood selector cards are visible in a grid layout
+      Verify each mood card has noticeably rounded corners (approximately 14px)
+      Verify unselected cards have a subtle border
+
+  - name: "Mood selector hover lifts card"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Navigate to create a new journal entry
+      Hover over an unselected mood card
+      Verify the card lifts slightly upward on hover (translateY effect)
+      Verify the card border becomes slightly sage-tinted on hover
+      Verify a subtle shadow appears on hover
+
+  - name: "Mood selector selected state uses sage primary"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Navigate to create a new journal entry
+      Click on a mood card to select it
+      Verify the selected card has a sage green border (primary color, approximately 2px)
+      Verify the selected card has a sage-pale background
+      Click a different mood card
+      Verify the previous card loses its selected styling
+      Verify the new card gains the sage green border and pale background
+
+  - name: "Mood selector keyboard navigation preserved"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Navigate to create a new journal entry
+      Click on a mood card to focus the mood selector
+      Press the right arrow key
+      Verify focus moves to the next mood card
+      Press Enter or Space
+      Verify the focused mood card becomes selected
+      Press the left arrow key
+      Verify focus moves to the previous mood card

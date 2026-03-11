@@ -1,0 +1,45 @@
+stories:
+  - name: "AI response compact variant has warm background"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Find a journal entry card that shows an AI response preview (compact variant)
+      Verify the AI response area has a very subtle warm/sage-tinted background
+      Verify the sparkle icon is visible
+      Verify the AI response text is readable with muted foreground color
+
+  - name: "AI response streaming animation preserved"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Create a new journal entry with a mood, tags, and notes
+      Submit the entry
+      Verify the AI response shows a loading state with animated bouncing dots
+      Verify the text "Reflecting on your entry" or similar loading message appears
+      Verify the streaming shimmer gradient animation plays during generation
+      Verify a blinking cursor appears as text streams in
+      Verify the final AI response text is fully visible after streaming completes
+
+  - name: "AI response colors use new sage palette"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Find a completed journal entry with an AI response
+      Click into the entry detail to see the full AI response
+      Verify the AI response area uses sage-tinted colors (not blue or purple)
+      Verify the sparkle icon is sage green
+      Verify the overall color scheme is warm and consistent with the rest of the app
+
+  - name: "AI response dark mode appearance"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Toggle dark mode using the header toggle
+      Find a journal entry with an AI response
+      Verify the AI response area is visible and readable in dark mode
+      Verify the gradient background is subtle and warm-tinted in dark mode
+      Verify text contrast is sufficient for readability

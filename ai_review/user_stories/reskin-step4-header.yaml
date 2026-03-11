@@ -1,0 +1,56 @@
+stories:
+  - name: "Header has frosted glass effect"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Verify the header bar at the top has a semi-transparent/frosted glass appearance
+      Scroll the main content area down
+      Verify that content scrolling behind the header shows a blur effect (backdrop blur)
+      Verify the header border is subtle (not a harsh solid line)
+
+  - name: "Dark mode toggle in header works"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Verify there is a dark mode toggle button in the header (moon or sun icon)
+      Click the dark mode toggle
+      Verify the entire app switches to dark mode (dark background, light text)
+      Click the toggle again
+      Verify the app switches back to light mode (warm parchment background, dark text)
+      Refresh the page
+      Verify the last selected theme persists after refresh
+
+  - name: "User avatar and sign-out in header"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Verify the header shows a circular user avatar on the right side with the user's initial
+      Verify there is a "Sign out" button near the avatar
+      Click the "Sign out" button
+      Verify the user is redirected to the login page
+      Verify the user is actually signed out (navigating to / should redirect to login)
+
+  - name: "Header is fixed and offset from sidebar on desktop"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Resize the browser to desktop width (1024px+)
+      Verify the header starts to the right of the sidebar (not overlapping)
+      Scroll the main content
+      Verify the header stays fixed at the top while content scrolls underneath
+
+  - name: "Mobile header shows menu toggle"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Resize the browser to mobile width (below 768px)
+      Verify the header spans the full width
+      Verify a hamburger/menu icon is visible on the left side of the header
+      Click the menu icon
+      Verify the sidebar opens
+      Verify the menu icon changes to an X (close) icon

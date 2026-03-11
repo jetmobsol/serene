@@ -1,0 +1,34 @@
+stories:
+  - name: "No Google Fonts external requests"
+    url: "http://localhost:5173/login"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Open browser developer tools Network tab
+      Verify there are NO requests to fonts.googleapis.com
+      Verify there are NO requests to fonts.gstatic.com
+      Verify the page loads without any font-related CSP errors in the console
+
+  - name: "Self-hosted fonts render on login page"
+    url: "http://localhost:5173/login"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Verify the "Serene" heading text renders in a serif font (Cormorant Garamond), not a generic sans-serif
+      Verify the body text and form labels render in a clean geometric sans-serif font (DM Sans), not the browser default
+      Verify there is no flash of unstyled text (FOUT) — fonts should load quickly from local assets
+
+  - name: "Self-hosted fonts render on dashboard"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Verify heading elements (h1, h2, h3) render in a serif font (Cormorant Garamond)
+      Verify body text, navigation labels, and buttons render in DM Sans (geometric sans-serif)
+      Verify the sidebar "Serene" logo text uses the serif font
+
+  - name: "Auth form uses Cormorant Garamond not Lora"
+    url: "http://localhost:5173/login"
+    workflow: |
+      Navigate to http://localhost:5173/login
+      Verify the "Serene" branding text on the auth form renders in a serif font
+      Verify the serif font is Cormorant Garamond (elegant, high-contrast serif) not Lora (a different, rounder serif)
+      The text should appear refined and editorial in style

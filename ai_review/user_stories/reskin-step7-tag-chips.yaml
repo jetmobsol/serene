@@ -1,0 +1,35 @@
+stories:
+  - name: "Tag chips are pill-shaped with proper styling"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Navigate to create a new journal entry
+      Select a mood to advance to the tags step
+      Verify tag chips are fully rounded (pill shape)
+      Verify unselected tags have a subtle border and muted text
+      Verify unselected tags have a light card background
+
+  - name: "Tag chip selection toggles primary style"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Navigate to create a new journal entry
+      Select a mood to advance to the tags step
+      Click a tag chip to select it
+      Verify the selected tag fills with sage green primary color
+      Verify the selected tag text becomes white (primary-foreground)
+      Click the same tag again to deselect
+      Verify it returns to the unselected style (border, muted text)
+
+  - name: "Tag chips hover state on unselected"
+    url: "http://localhost:5173/"
+    workflow: |
+      Navigate to http://localhost:5173/
+      Log in with test@test.com (wait for auto-login to complete)
+      Navigate to create a new journal entry
+      Select a mood to advance to the tags step
+      Hover over an unselected tag chip
+      Verify the border becomes slightly sage-tinted on hover
+      Verify the transition is smooth

@@ -790,6 +790,70 @@ That is the entire change to this file.
 
 5. **Steps 5–8** — Journal components. Low risk. Each independently verifiable.
 
+   **Visual QA gate:** Run full cross-cutting stories after all journal steps complete.
+
+---
+
+## Automated Visual Verification (via `/ui-review`)
+
+Each implementation phase has dedicated user story YAML files in `ai_review/user_stories/` that
+can be executed automatically via the `/ui-review` command. These stories drive headless browser
+automation to validate the reskin without manual QA.
+
+**How to use:** After completing a step, run `/ui-review` — it discovers YAML stories by pattern
+and fans out parallel browser agents to validate each scenario. Failed stories indicate visual
+regressions or missing styling.
+
+### Pitstop Schedule
+
+The plan executor (`/essentials:plan-creator` → `/essentials:plan-loop` or `/essentials:plan-swarm`)
+should include these verification pitstops as explicit plan steps:
+
+| After Step | Pitstop Action                                  | Story Files                                                 |
+| ---------- | ----------------------------------------------- | ----------------------------------------------------------- |
+| Step 0     | `/ui-review` — fonts + CSP only                 | `reskin-step0-fonts.yaml`                                   |
+| Step 1     | `/ui-review` — palette + typography + dark mode | `reskin-step1-palette.yaml`, `reskin-step0-fonts.yaml`      |
+| Steps 3+4  | `/ui-review` — layout + sidebar + header + auth | `reskin-step3-sidebar.yaml`, `reskin-step4-header.yaml`     |
+| Step 5     | `/ui-review` — entry cards                      | `reskin-step5-entry-cards.yaml`                             |
+| Step 6     | `/ui-review` — mood selector                    | `reskin-step6-mood-selector.yaml`                           |
+| Step 7     | `/ui-review` — tag chips                        | `reskin-step7-tag-chips.yaml`                               |
+| Step 8     | `/ui-review` — AI response                      | `reskin-step8-ai-response.yaml`                             |
+| Final      | `/ui-review` — full regression pass             | `reskin-cross-cutting.yaml` + ALL `reskin-step*.yaml` files |
+
+### Story File Inventory
+
+```
+ai_review/user_stories/
+├── reskin-step0-fonts.yaml          # 4 stories: no Google Fonts requests, self-hosted render, auth font
+├── reskin-step1-palette.yaml        # 5 stories: warm background, sage green, dark mode, radius
+├── reskin-step3-sidebar.yaml        # 5 stories: fixed width, mobile slide, logo, nav active, no UserMenu
+├── reskin-step4-header.yaml         # 5 stories: frosted glass, dark toggle, avatar, sign-out, mobile menu
+├── reskin-step5-entry-cards.yaml    # 4 stories: mood border, hover effect, pill tags, dropdown fade
+├── reskin-step6-mood-selector.yaml  # 4 stories: rounded cards, hover lift, selected state, keyboard nav
+├── reskin-step7-tag-chips.yaml      # 3 stories: pill shape, selection toggle, hover state
+├── reskin-step8-ai-response.yaml    # 4 stories: compact bg, streaming preserved, sage colors, dark mode
+└── reskin-cross-cutting.yaml        # 5 stories: full dark mode, responsive, layout overlap, theme persist, full flow
+```
+
+**Total: 39 automated verification scenarios** covering every visual change in the reskin.
+
+### Integration with Plan Executor
+
+When this analysis is passed to `/essentials:plan-creator`, include these instructions in each
+plan step's exit criteria:
+
+```
+Exit criteria for Step N:
+1. Code changes compile without errors (`bun typecheck`)
+2. Dev server renders correctly (`bun app:dev`)
+3. `/ui-review` passes for the corresponding reskin-stepN story files
+4. No regressions in previously-passing story files
+```
+
+The plan executor should treat `/ui-review` failures as blocking — do not proceed to the next
+step until all stories for the current step pass. This prevents cascading visual regressions
+where a later step masks a problem introduced earlier.
+
 ---
 
 ## Resolved Flaws (from validation report)
