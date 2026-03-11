@@ -13,7 +13,7 @@ x-shared: &shared
     dockerfile: Dockerfile.dev
   volumes:
     - .:/app
-    - /app/node_modules
+    - node_modules:/app/node_modules
   environment: &shared-env
     HUSKY: "0"
 
@@ -37,7 +37,7 @@ services:
   setup:
     <<: *shared
     command: >
-      sh -c "bun install --frozen-lockfile &&
+      sh -c "bun install --force &&
              bun --cwd apps/email build &&
              bun db:push"
     depends_on:
@@ -93,3 +93,4 @@ services:
 
 volumes:
   pgdata:
+  node_modules:
