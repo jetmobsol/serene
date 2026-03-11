@@ -134,7 +134,7 @@ Only imported in `apps/app/components/layout/sidebar.tsx` line 1.
 
 ### Task
 
-Transform the Serene app visual identity from a generic sage/purple theme to a warm parchment/sage design system. This involves self-hosting fonts, updating the entire CSS variable system, restructuring the layout from flex-based to fixed positioning, redesigning the sidebar and header, and updating journal component styling. Each step has automated visual verification via `/ui-review` YAML story files.
+Transform the Serene app visual identity from a generic sage/purple theme to a warm parchment/sage design system. This involves self-hosting fonts, updating the entire CSS variable system, restructuring the layout from flex-based to fixed positioning, redesigning the sidebar and header, and updating journal component styling. Each step has automated visual verification via `/ui-review` YAML story files (runs headless via `playwright-bowser-agent` by default; pass `headed` to fall back to Chrome MCP).
 
 ### Architecture
 
@@ -1415,7 +1415,15 @@ variant === "compact" ? "gap-2.5 p-2.5 bg-secondary/30" : "gap-3 p-4",
 | 4-V   | **VERIFICATION: Step 8**                          | `/ui-review reskin-step8-ai-response.yaml`                       | ai-response.tsx complete                                                          |
 | 5-V   | **VERIFICATION: Final**                           | `/ui-review reskin-cross-cutting.yaml + ALL reskin-step*.yaml`   | ALL phases complete                                                               |
 
-**Note on verification phases**: The `-V` phases are verification-only steps. They do not produce code changes but are blocking gates. If `/ui-review` fails, the preceding code changes must be fixed before proceeding.
+**Note on verification phases**: The `-V` phases are verification-only steps. They are **blocking gates** with a fix-and-recheck loop:
+**Note on verification phases**: The `-V` phases are verification-only steps. They are **blocking gates** with a fix-and-recheck loop:
+
+1. Run `/ui-review` with the specified story files.
+2. If **all stories pass** → proceed to the next implementation phase.
+3. If **any story fails** → analyze the failure output, fix the relevant code in the preceding phase's files, then **re-run `/ui-review`** for the same story files.
+4. Repeat steps 2–3 until all stories pass. **Do not proceed to the next phase with failing stories.**
+
+This fix-and-recheck loop applies to every `-V` gate, including the final regression pass. There is no limit on iterations — keep fixing and rechecking until the gate is green.
 
 **Simplified dependency graph (code changes only)**:
 
@@ -1441,14 +1449,14 @@ variant === "compact" ? "gap-2.5 p-2.5 bg-secondary/30" : "gap-3 p-4",
 
 ## Verification Pitstop Schedule
 
-Each verification step is a blocking gate. Do not proceed to the next implementation phase until all stories for the current step pass.
+Each verification step is a **blocking gate with a fix-and-recheck loop**. Do not proceed to the next implementation phase until all stories for the current step pass. If any story fails, fix the issue and re-run `/ui-review` until the gate is green.
 
-| After Phase             | Verification Action          | Story Files                                                                                                                        | Exit Criteria                                                                                        |
-| ----------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| Phase 2                 | Step 0 + Step 1 verification | `reskin-step0-fonts.yaml`, `reskin-step1-palette.yaml`                                                                             | `bun typecheck` passes, `/ui-review` passes for both story files                                     |
-| Phase 3                 | Steps 3+4 verification       | `reskin-step3-sidebar.yaml`, `reskin-step4-header.yaml`                                                                            | `bun typecheck` passes, `/ui-review` passes for both story files, no regressions in step 0/1 stories |
-| Phase 4 (per component) | Steps 5-8 verification       | `reskin-step5-entry-cards.yaml`, `reskin-step6-mood-selector.yaml`, `reskin-step7-tag-chips.yaml`, `reskin-step8-ai-response.yaml` | `bun typecheck` passes, `/ui-review` passes for each story file                                      |
-| All phases              | Final regression pass        | `reskin-cross-cutting.yaml` + ALL `reskin-step*.yaml` files                                                                        | All 39 stories pass, `bun typecheck` passes, `bun test --run` passes                                 |
+| After Phase             | Verification Action          | Story Files                                                                                                                        | Exit Criteria                                                                                        | On Failure                                                                                             |
+| ----------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Phase 2                 | Step 0 + Step 1 verification | `reskin-step0-fonts.yaml`, `reskin-step1-palette.yaml`                                                                             | `bun typecheck` passes, `/ui-review` passes for both story files                                     | Fix Phase 2 files (globals.css, index.html, auth-form.tsx), re-run `/ui-review` until all stories pass |
+| Phase 3                 | Steps 3+4 verification       | `reskin-step3-sidebar.yaml`, `reskin-step4-header.yaml`                                                                            | `bun typecheck` passes, `/ui-review` passes for both story files, no regressions in step 0/1 stories | Fix Phase 3 files (layout/, sidebar, header), re-run `/ui-review` until all stories pass               |
+| Phase 4 (per component) | Steps 5-8 verification       | `reskin-step5-entry-cards.yaml`, `reskin-step6-mood-selector.yaml`, `reskin-step7-tag-chips.yaml`, `reskin-step8-ai-response.yaml` | `bun typecheck` passes, `/ui-review` passes for each story file                                      | Fix the specific journal component that failed, re-run its `/ui-review` story until it passes          |
+| All phases              | Final regression pass        | `reskin-cross-cutting.yaml` + ALL `reskin-step*.yaml` files                                                                        | All 39 stories pass, `bun typecheck` passes, `bun test --run` passes                                 | Identify which phase introduced the regression, fix it, re-run full `/ui-review` suite until all pass  |
 
 ---
 

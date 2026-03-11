@@ -1,3 +1,15 @@
+/* Self-hosted via @fontsource — CSP-safe, no external fetch */
+@import "@fontsource/cormorant-garamond/300.css";
+@import "@fontsource/cormorant-garamond/400.css";
+@import "@fontsource/cormorant-garamond/500.css";
+@import "@fontsource/cormorant-garamond/600.css";
+@import "@fontsource/cormorant-garamond/300-italic.css";
+@import "@fontsource/cormorant-garamond/400-italic.css";
+@import "@fontsource/dm-sans/300.css";
+@import "@fontsource/dm-sans/400.css";
+@import "@fontsource/dm-sans/500.css";
+@import "@fontsource/dm-sans/600.css";
+@import "@fontsource/dm-sans/700.css";
 @import "../tailwind.config.css";
 
 /**
@@ -11,74 +23,82 @@
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklch
  */
 :root {
-  --radius: 0.625rem;
-  --background: oklch(0.99 0.01 90);
-  --foreground: oklch(0.18 0.02 90);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.02 90);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.02 90);
-  --primary: oklch(0.45 0.08 155);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.95 0.02 155);
-  --secondary-foreground: oklch(0.25 0.04 155);
-  --muted: oklch(0.96 0.01 90);
-  --muted-foreground: oklch(0.5 0.02 90);
-  --accent: oklch(0.92 0.03 300);
-  --accent-foreground: oklch(0.3 0.05 300);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.9 0.01 90);
-  --input: oklch(0.9 0.01 90);
-  --ring: oklch(0.55 0.08 155);
-  --chart-1: oklch(0.55 0.1 155);
-  --chart-2: oklch(0.6 0.08 220);
-  --chart-3: oklch(0.5 0.06 300);
-  --chart-4: oklch(0.7 0.1 90);
-  --chart-5: oklch(0.65 0.08 45);
-  --sidebar: oklch(0.97 0.01 90);
-  --sidebar-foreground: oklch(0.18 0.02 90);
-  --sidebar-primary: oklch(0.45 0.08 155);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.92 0.03 155);
-  --sidebar-accent-foreground: oklch(0.25 0.04 155);
-  --sidebar-border: oklch(0.9 0.01 90);
-  --sidebar-ring: oklch(0.55 0.08 155);
+  --radius: 0.875rem;
+
+  --background: oklch(0.96 0.013 82);
+  --foreground: oklch(0.22 0.003 250);
+  --card: oklch(0.99 0.006 82);
+  --card-foreground: oklch(0.22 0.003 250);
+  --popover: oklch(0.99 0.006 82);
+  --popover-foreground: oklch(0.22 0.003 250);
+
+  --primary: oklch(0.5 0.065 155);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.94 0.022 155);
+  --secondary-foreground: oklch(0.5 0.065 155);
+
+  --muted: oklch(0.93 0.016 82);
+  --muted-foreground: oklch(0.47 0.01 60);
+
+  --accent: oklch(0.96 0.018 42);
+  --accent-foreground: oklch(0.62 0.12 42);
+
+  --destructive: oklch(0.62 0.12 42);
+  --destructive-foreground: oklch(0.99 0 0);
+
+  --border: oklch(0.88 0.014 82);
+  --input: oklch(0.88 0.014 82);
+  --ring: oklch(0.5 0.065 155);
+
+  --chart-1: oklch(0.72 0.1 82);
+  --chart-2: oklch(0.5 0.065 155);
+  --chart-3: oklch(0.62 0.12 42);
+  --chart-4: oklch(0.62 0.075 0);
+  --chart-5: oklch(0.55 0.075 295);
+
+  --sidebar: oklch(0.99 0.006 82);
+  --sidebar-foreground: oklch(0.22 0.003 250);
+  --sidebar-primary: oklch(0.5 0.065 155);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.94 0.022 155);
+  --sidebar-accent-foreground: oklch(0.5 0.065 155);
+  --sidebar-border: oklch(0.22 0.003 250 / 6%);
+  --sidebar-ring: oklch(0.5 0.065 155);
 }
 
 .dark {
-  --background: oklch(0.16 0.01 90);
-  --foreground: oklch(0.93 0.01 90);
-  --card: oklch(0.2 0.01 90);
-  --card-foreground: oklch(0.93 0.01 90);
-  --popover: oklch(0.2 0.01 90);
-  --popover-foreground: oklch(0.93 0.01 90);
-  --primary: oklch(0.7 0.08 155);
+  --background: oklch(0.16 0.01 82);
+  --card: oklch(0.2 0.01 82);
+  --foreground: oklch(0.93 0.005 82);
+  --card-foreground: oklch(0.93 0.005 82);
+  --popover: oklch(0.2 0.01 82);
+  --popover-foreground: oklch(0.93 0.005 82);
+  --primary: oklch(0.68 0.065 155);
   --primary-foreground: oklch(0.15 0.02 155);
-  --secondary: oklch(0.25 0.03 155);
-  --secondary-foreground: oklch(0.9 0.02 155);
-  --muted: oklch(0.25 0.01 90);
-  --muted-foreground: oklch(0.65 0.02 90);
-  --accent: oklch(0.3 0.04 300);
-  --accent-foreground: oklch(0.9 0.03 300);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.55 0.08 155);
-  --chart-1: oklch(0.6 0.1 155);
-  --chart-2: oklch(0.55 0.08 220);
-  --chart-3: oklch(0.65 0.06 300);
-  --chart-4: oklch(0.55 0.1 90);
-  --chart-5: oklch(0.6 0.08 45);
-  --sidebar: oklch(0.2 0.01 90);
-  --sidebar-foreground: oklch(0.93 0.01 90);
-  --sidebar-primary: oklch(0.65 0.08 155);
-  --sidebar-primary-foreground: oklch(0.93 0.01 90);
-  --sidebar-accent: oklch(0.25 0.03 155);
-  --sidebar-accent-foreground: oklch(0.9 0.02 155);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.55 0.08 155);
+  --secondary: oklch(0.26 0.028 155);
+  --secondary-foreground: oklch(0.9 0.022 155);
+  --muted: oklch(0.25 0.01 82);
+  --muted-foreground: oklch(0.65 0.008 60);
+  --accent: oklch(0.28 0.04 42);
+  --accent-foreground: oklch(0.9 0.03 42);
+  --destructive: oklch(0.68 0.12 42);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.99 0 0 / 10%);
+  --input: oklch(0.99 0 0 / 15%);
+  --ring: oklch(0.62 0.065 155);
+  --chart-1: oklch(0.75 0.1 82);
+  --chart-2: oklch(0.68 0.065 155);
+  --chart-3: oklch(0.68 0.12 42);
+  --chart-4: oklch(0.68 0.075 0);
+  --chart-5: oklch(0.62 0.075 295);
+  --sidebar: oklch(0.2 0.01 82);
+  --sidebar-foreground: oklch(0.93 0.005 82);
+  --sidebar-primary: oklch(0.68 0.065 155);
+  --sidebar-primary-foreground: oklch(0.93 0.005 82);
+  --sidebar-accent: oklch(0.26 0.028 155);
+  --sidebar-accent-foreground: oklch(0.9 0.022 155);
+  --sidebar-border: oklch(0.99 0 0 / 10%);
+  --sidebar-ring: oklch(0.62 0.065 155);
 }
 
 @layer base {
@@ -87,6 +107,16 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: "DM Sans", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: "Cormorant Garamond", serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
   }
 }
 

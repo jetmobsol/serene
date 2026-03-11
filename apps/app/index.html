@@ -13,19 +13,22 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="" />
     <meta property="og:image" content="" />
-    <meta name="theme-color" content="#8B9E7C" />
+    <meta name="theme-color" content="#5B7B6A" />
 
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/logo192.png" />
 
     <link rel="manifest" href="/site.manifest" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@400;500;600;700&display=swap"
-    />
+    <script>
+      (function () {
+        var t = localStorage.getItem("theme");
+        var d =
+          t === "dark" ||
+          (!t && matchMedia("(prefers-color-scheme:dark)").matches);
+        if (d) document.documentElement.classList.add("dark");
+      })();
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

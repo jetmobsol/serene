@@ -118,7 +118,7 @@ export function AuthForm({
         <Link to="/" aria-label="Go to homepage">
           <span
             className="text-2xl font-semibold tracking-tight text-primary"
-            style={{ fontFamily: "Lora, serif" }}
+            style={{ fontFamily: "'Cormorant Garamond', serif" }}
           >
             Serene
           </span>
