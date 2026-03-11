@@ -2,6 +2,8 @@
 
 A private, AI-powered wellness journal that helps you track your mood, reflect on your day, and receive gentle encouragement -- all in under 60 seconds.
 
+**Live:** [serene.linktalentsbot.work](https://serene.linktalentsbot.work)
+
 ## Features
 
 - **Mood journaling** -- Log how you feel with six intuitive mood options and contextual tags
