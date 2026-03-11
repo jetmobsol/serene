@@ -104,26 +104,33 @@ export function NoteEditor({
         ref={textareaRef}
         value={localValue}
         onChange={handleChange}
-        placeholder="Write about your day... (50 characters for AI insight)"
-        className="min-h-[120px] resize-none"
+        placeholder="Write freely about how you're feeling, what happened today, or anything on your mind..."
+        className="min-h-[100px] lg:min-h-[140px] resize-none text-sm lg:text-base placeholder:text-sm placeholder:font-normal placeholder:text-muted-foreground/40"
         maxLength={maxLength}
       />
-      <div className="flex items-center gap-2 text-sm">
-        {meetsThreshold && <CheckCircle2 className="h-4 w-4 text-green-600" />}
-        <span
-          className={
-            atLimit
-              ? "text-destructive"
-              : meetsThreshold
-                ? "text-green-600"
-                : "text-muted-foreground"
-          }
-        >
-          {charCount}
-          {meetsThreshold
-            ? " / AI insight will be generated"
-            : ` / ${AI_INSIGHT_THRESHOLD} min for AI insight`}
-        </span>
+      <div
+        className={`flex items-center justify-end gap-2 text-xs transition-all duration-300 ${
+          meetsThreshold
+            ? "bg-primary/8 border border-primary/20 rounded-full px-3 py-1.5"
+            : ""
+        }`}
+      >
+        {meetsThreshold ? (
+          <>
+            <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
+            <span
+              className={
+                atLimit ? "text-destructive" : "text-primary font-medium"
+              }
+            >
+              AI insight will be generated after saving
+            </span>
+          </>
+        ) : (
+          <span className="text-muted-foreground/50">
+            {charCount} / {AI_INSIGHT_THRESHOLD} characters to unlock AI insight
+          </span>
+        )}
       </div>
     </div>
   );

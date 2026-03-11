@@ -31,8 +31,29 @@ vi.mock("recharts", () => ({
   YAxis: () => <div data-testid="y-axis" />,
   CartesianGrid: () => <div data-testid="cartesian-grid" />,
   Tooltip: () => <div data-testid="tooltip" />,
+  Legend: () => <div data-testid="legend" />,
   Cell: () => <div data-testid="cell" />,
 }));
+
+vi.mock("@repo/ui", async (importOriginal) => {
+  const actual = (await importOriginal()) as Record<string, unknown>;
+  return {
+    ...actual,
+    ChartContainer: ({
+      children,
+      className,
+    }: {
+      children: React.ReactNode;
+      className?: string;
+    }) => (
+      <div data-testid="chart-container" className={className}>
+        {children}
+      </div>
+    ),
+    ChartTooltip: () => <div data-testid="chart-tooltip" />,
+    ChartTooltipContent: () => <div data-testid="chart-tooltip-content" />,
+  };
+});
 
 function createWrapper() {
   const queryClient = new QueryClient({

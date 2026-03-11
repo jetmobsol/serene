@@ -25,12 +25,15 @@ const app = import.meta.env.DEV ? 'http://localhost:5173' : '';
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+
     <!-- Primary Meta Tags -->
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site ?? Astro.url)} />
@@ -47,37 +50,11 @@ const app = import.meta.env.DEV ? 'http://localhost:5173' : '';
   <body>
     <div class="min-h-screen flex flex-col">
       <!-- Header -->
-      <header class="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex h-16 items-center justify-between">
-            <div class="flex items-center space-x-4">
-              <a href="/" class="text-xl font-bold text-primary">
-                Serene
-              </a>
-            </div>
-            <nav class="hidden md:flex items-center space-x-6">
-              <a href="/" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                Home
-              </a>
-              <a href="/about" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                About
-              </a>
-            </nav>
-            <div class="flex items-center space-x-2">
-              <a
-                href={`${app}/login`}
-                class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-8 rounded-md px-3"
-              >
-                Log In
-              </a>
-              <a
-                href={`${app}/signup`}
-                class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-8 px-3"
-              >
-                Get Started
-              </a>
-            </div>
-          </div>
+      <header id="site-header" class="site-header">
+        <a href="/" class="site-logo">Serene<span class="logo-dot"></span></a>
+        <div class="site-nav">
+          <a href={`${app}/login`} class="nav-ghost-btn">Log in</a>
+          <a href={`${app}/signup`} class="nav-pill-btn">Get started free</a>
         </div>
       </header>
 
@@ -87,43 +64,11 @@ const app = import.meta.env.DEV ? 'http://localhost:5173' : '';
       </main>
 
       <!-- Footer -->
-      <footer class="border-t bg-background/95">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="space-y-3">
-              <h3 class="font-semibold">Serene</h3>
-              <p class="text-sm text-muted-foreground">
-                Your AI-powered wellness journal. Track your mood, reflect, and grow.
-              </p>
-            </div>
-            <div class="space-y-3">
-              <h4 class="font-medium">Account</h4>
-              <ul class="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <a href={`${app}/login`} class="hover:text-foreground transition-colors">
-                    Log In
-                  </a>
-                </li>
-                <li>
-                  <a href={`${app}/signup`} class="hover:text-foreground transition-colors">
-                    Sign Up
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="border-t mt-6 pt-6">
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-2">
-              <p class="text-sm text-muted-foreground">
-                © {new Date().getFullYear()} Serene. All rights reserved.
-              </p>
-              <p class="text-sm text-muted-foreground">
-                Serene is not a substitute for professional mental health care.
-              </p>
-              <p class="text-sm text-muted-foreground">
-                If you are in crisis, call or text 988.
-              </p>
-            </div>
+      <footer class="site-footer">
+        <div class="site-footer-inner">
+          <p class="footer-copy">&copy; {new Date().getFullYear()} Serene. Made with quietude.</p>
+          <div class="footer-links">
+            <a href="/about">About</a>
           </div>
         </div>
       </footer>

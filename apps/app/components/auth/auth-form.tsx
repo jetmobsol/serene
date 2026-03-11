@@ -238,7 +238,7 @@ function PasswordForm({
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-2xl font-bold text-center">{heading}</h1>
+      <h1 className="text-3xl text-center">{heading}</h1>
 
       <form onSubmit={onSubmit} className="flex flex-col gap-4">
         {/* Name field (signup only) */}
@@ -392,9 +392,7 @@ function EmailInput({
 }: EmailInputProps) {
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-2xl font-bold text-center">
-        Sign in with email code
-      </h1>
+      <h1 className="text-3xl text-center">Sign in with email code</h1>
 
       <form onSubmit={onSubmit} className="flex flex-col gap-3">
         <Input
@@ -449,7 +447,7 @@ function OtpStep({
   return (
     <div className="flex flex-col gap-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold">Check your email</h1>
+        <h1 className="text-3xl">Check your email</h1>
         <p className="text-muted-foreground mt-1">
           We sent a code to <strong>{email}</strong>
         </p>

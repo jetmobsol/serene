@@ -4,29 +4,28 @@ import { EntryForm } from "@/components/journal/entry-form";
 import {
   useDeleteJournalMutation,
   useJournalByIdQuery,
+  journalQueryKeys,
 } from "@/lib/queries/journal";
 import { getMoodIcon } from "@/lib/utils/mood-icons";
 import { formatRelativeTime } from "@/lib/utils/relative-time";
 import { MOOD_COLORS, type MoodType, type TagType } from "@repo/core";
-import {
-  Badge,
-  Button,
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  Separator,
-  Skeleton,
-} from "@repo/ui";
+import { Button, Skeleton } from "@repo/ui";
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { streamingEntryIdAtom, useSseStream } from "@/lib/hooks/use-sse-stream";
+import { useSseStream } from "@/lib/hooks/use-sse-stream";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
-import { useAtomValue } from "jotai";
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+
+type EntrySearchParams = {
+  edit?: boolean;
+};
 
 export const Route = createFileRoute("/(app)/journal/$entryId")({
   component: EntryDetail,
+  validateSearch: (search: Record<string, unknown>): EntrySearchParams => ({
+    edit: search.edit === true || search.edit === "true",
+  }),
 });
 
 function EntryDetail() {
@@ -35,13 +34,31 @@ function EntryDetail() {
   const navigate = useNavigate();
   const deleteMutation = useDeleteJournalMutation();
 
-  const [isEditing, setIsEditing] = useState(false);
+  const { edit } = Route.useSearch();
+  const [isEditing, setIsEditing] = useState(edit ?? false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const streamingEntryId = useAtomValue(streamingEntryIdAtom);
-  const streamState = useSseStream(
-    streamingEntryId === entryId ? entryId : null,
-  );
-  const isStreaming = streamingEntryId === entryId && streamState.isStreaming;
+  const [streamingId, setStreamingId] = useState<string | null>(null);
+  const streamState = useSseStream(streamingId);
+  const isStreaming = streamState.isStreaming;
+  const queryClient = useQueryClient();
+
+  // When AI stream completes, refetch entry to get the persisted AI response
+  useEffect(() => {
+    if (streamState.isComplete && streamingId) {
+      // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
+      setStreamingId(null);
+      queryClient.invalidateQueries({
+        queryKey: journalQueryKeys.detail(streamingId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: journalQueryKeys.lists(),
+      });
+    }
+  }, [streamState.isComplete, streamingId, queryClient]);
+
+  const handleSaveWithAi = useCallback((id: string) => {
+    setStreamingId(id);
+  }, []);
 
   function handleDelete() {
     deleteMutation.mutate(entryId, {
@@ -53,23 +70,32 @@ function EntryDetail() {
 
   if (isLoading) {
     return (
-      <div className="p-6 space-y-4">
-        <Skeleton className="h-8 w-32" />
-        <Skeleton className="h-64 w-full rounded-xl" />
+      <div className="max-w-4xl mx-auto px-6 lg:px-10 py-10 space-y-6">
+        <Skeleton className="h-5 w-28" />
+        <Skeleton className="h-48 w-full rounded-2xl" />
       </div>
     );
   }
 
   if (!entry) {
     return (
-      <div className="p-6 text-center space-y-4">
-        <h2 className="text-xl font-semibold">Entry not found</h2>
-        <p className="text-muted-foreground">
+      <div className="max-w-2xl mx-auto px-6 py-16 text-center space-y-4">
+        <h2
+          className="text-2xl text-foreground/70"
+          style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400 }}
+        >
+          Entry not found
+        </h2>
+        <p className="text-sm text-muted-foreground">
           This entry may have been deleted.
         </p>
-        <Button asChild variant="outline">
-          <Link to="/journal">Back to Journal</Link>
-        </Button>
+        <Link
+          to="/journal"
+          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" />
+          Back to Journal
+        </Link>
       </div>
     );
   }
@@ -80,90 +106,115 @@ function EntryDetail() {
 
   if (isEditing) {
     return (
-      <div className="p-6 space-y-4">
-        <Button variant="ghost" size="sm" onClick={() => setIsEditing(false)}>
-          <ArrowLeft className="h-4 w-4 mr-2" />
+      <div className="max-w-4xl mx-auto px-6 lg:px-10 py-10 space-y-6">
+        <button
+          onClick={() => setIsEditing(false)}
+          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" />
           Cancel editing
-        </Button>
-        <Card>
-          <CardContent className="pt-6">
-            <EntryForm
-              entryId={entryId}
-              defaultValues={{
-                mood,
-                tags: entry.tags as TagType[],
-                note: entry.note ?? "",
-              }}
-              onSuccess={() => setIsEditing(false)}
-            />
-          </CardContent>
-        </Card>
+        </button>
+        <div className="bg-card rounded-2xl border border-border/50 shadow-sm p-8">
+          <EntryForm
+            entryId={entryId}
+            defaultValues={{
+              mood,
+              tags: entry.tags as TagType[],
+              note: entry.note ?? "",
+            }}
+            onSuccess={() => setIsEditing(false)}
+            onSaveWithAi={handleSaveWithAi}
+          />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="p-6 space-y-4">
-      <Button asChild variant="ghost" size="sm">
-        <Link to="/journal">
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Journal
-        </Link>
-      </Button>
+    <div className="max-w-4xl mx-auto px-6 lg:px-10 py-10 space-y-6">
+      {/* Back link */}
+      <Link
+        to="/journal"
+        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <ArrowLeft className="h-3.5 w-3.5" />
+        Back to Journal
+      </Link>
 
-      <Card style={{ borderLeftWidth: "4px", borderLeftColor: moodColor }}>
-        <CardHeader className="flex flex-row items-center justify-between">
+      {/* Entry card */}
+      <div
+        className="bg-card rounded-2xl border border-border/50 shadow-sm overflow-hidden"
+        style={{ borderLeftWidth: "4px", borderLeftColor: moodColor }}
+      >
+        {/* Header */}
+        <div className="flex items-start justify-between px-8 pt-7 pb-5">
           <div className="flex items-center gap-3">
-            {MoodIcon && <MoodIcon className="h-6 w-6 text-muted-foreground" />}
+            {MoodIcon && (
+              <MoodIcon className="h-5 w-5 text-muted-foreground/60 shrink-0" />
+            )}
             <div>
-              <h2 className="text-xl font-semibold">{mood}</h2>
-              <p className="text-sm text-muted-foreground">
+              <h1
+                className="text-2xl text-foreground leading-none"
+                style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontWeight: 400,
+                }}
+              >
+                {mood}
+              </h1>
+              <p className="text-xs text-muted-foreground/60 mt-1">
                 {formatRelativeTime(new Date(entry.createdAt))}
               </p>
             </div>
           </div>
-          <div className="flex gap-2">
+
+          <div className="flex items-center gap-2">
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={() => setIsEditing(true)}
+              className="text-muted-foreground hover:text-foreground h-8 px-3 text-xs gap-1.5"
             >
-              <Pencil className="h-4 w-4 mr-2" />
+              <Pencil className="h-3.5 w-3.5" />
               Edit
             </Button>
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={() => setShowDeleteDialog(true)}
-              className="text-destructive hover:text-destructive"
+              className="text-muted-foreground/60 hover:text-destructive h-8 px-3 text-xs gap-1.5"
             >
-              <Trash2 className="h-4 w-4 mr-2" />
+              <Trash2 className="h-3.5 w-3.5" />
               Delete
             </Button>
           </div>
-        </CardHeader>
+        </div>
 
-        <CardContent className="space-y-4">
-          {entry.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {entry.tags.map((tag: string) => (
-                <Badge key={tag} variant="secondary">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          )}
+        {/* Tags */}
+        {entry.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 px-8 pb-5">
+            {entry.tags.map((tag: string) => (
+              <span
+                key={tag}
+                className="px-2.5 py-0.5 rounded-full bg-background border border-border/60 text-xs text-muted-foreground/70"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
 
-          {entry.note && (
-            <>
-              <Separator />
-              <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                {entry.note}
-              </p>
-            </>
-          )}
-        </CardContent>
+        {/* Note */}
+        {entry.note && (
+          <div className="px-8 pb-6">
+            <div className="h-px bg-border/40 mb-5" />
+            <p className="text-sm text-foreground/80 leading-relaxed whitespace-pre-wrap">
+              {entry.note}
+            </p>
+          </div>
+        )}
 
+        {/* AI Response */}
         <AnimatePresence>
           {(entry.aiResponse || isStreaming) && (
             <motion.div
@@ -172,7 +223,7 @@ function EntryDetail() {
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
-              <CardFooter>
+              <div className="px-6 pb-6">
                 <AiResponse
                   response={entry.aiResponse?.response ?? null}
                   hasCrisisContent={
@@ -183,11 +234,11 @@ function EntryDetail() {
                   streamedText={streamState.streamedText}
                   variant="full"
                 />
-              </CardFooter>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
-      </Card>
+      </div>
 
       <DeleteEntryDialog
         open={showDeleteDialog}

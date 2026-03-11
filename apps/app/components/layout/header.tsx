@@ -1,7 +1,11 @@
+import { helpDialogOpenAtom } from "@/components/layout/help-dialog";
+import { newEntryDialogOpenAtom } from "@/components/journal/new-entry-dialog";
 import { signOut, useSessionQuery } from "@/lib/queries/session";
 import { useQueryClient } from "@tanstack/react-query";
-import { Menu, X } from "lucide-react";
+import { useSetAtom } from "jotai";
+import { HelpCircle, Menu, PenLine, X } from "lucide-react";
 import { DarkModeToggle } from "./dark-mode-toggle";
+import { FontSizeToggle } from "./font-size-toggle";
 
 interface HeaderProps {
   isSidebarOpen: boolean;
@@ -11,8 +15,9 @@ interface HeaderProps {
 export function Header({ isSidebarOpen, onMenuToggle }: HeaderProps) {
   const queryClient = useQueryClient();
   const { data: session } = useSessionQuery();
+  const setNewEntryOpen = useSetAtom(newEntryDialogOpenAtom);
+  const setHelpOpen = useSetAtom(helpDialogOpenAtom);
   const user = session?.user;
-  const initials = user?.name?.[0]?.toUpperCase() ?? "?";
 
   return (
     <header
@@ -38,6 +43,20 @@ export function Header({ isSidebarOpen, onMenuToggle }: HeaderProps) {
       <div className="flex-1" />
 
       <div className="flex items-center gap-2.5">
+        {user && (
+          <button
+            onClick={() => setNewEntryOpen(true)}
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-1.5
+              text-xs font-medium text-primary-foreground
+              hover:bg-primary/90 transition-all shadow-sm"
+          >
+            <PenLine className="h-3.5 w-3.5" />
+            New Entry
+          </button>
+        )}
+
+        <FontSizeToggle />
+
         <DarkModeToggle />
 
         {user && (
@@ -52,15 +71,16 @@ export function Header({ isSidebarOpen, onMenuToggle }: HeaderProps) {
           </button>
         )}
 
-        {user && (
-          <div
-            className="w-8 h-8 rounded-full bg-primary text-primary-foreground
-              flex items-center justify-center text-xs font-semibold shrink-0"
-            title={user.name ?? user.email}
-          >
-            {initials}
-          </div>
-        )}
+        <button
+          onClick={() => setHelpOpen(true)}
+          className="w-8 h-8 rounded-full bg-primary text-primary-foreground
+            flex items-center justify-center shrink-0
+            hover:bg-primary/90 transition-all shadow-sm"
+          aria-label="Help"
+          title="Help"
+        >
+          <HelpCircle className="h-4 w-4" />
+        </button>
       </div>
     </header>
   );

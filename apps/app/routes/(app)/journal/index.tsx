@@ -1,6 +1,4 @@
-import { EntryForm } from "@/components/journal/entry-form";
 import { Timeline } from "@/components/journal/timeline";
-import { Card, CardContent, CardHeader, CardTitle, Separator } from "@repo/ui";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(app)/journal/")({
@@ -8,28 +6,35 @@ export const Route = createFileRoute("/(app)/journal/")({
 });
 
 function Journal() {
+  const { user } = Route.useRouteContext();
+  const firstName = user?.name?.split(" ")[0] ?? null;
+  const hour = new Date().getHours();
+  const greeting =
+    hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+
   return (
-    <div className="p-6 space-y-8">
+    <div className="max-w-4xl mx-auto px-6 lg:px-10 py-6 lg:py-10 space-y-6 lg:space-y-8">
+      {/* Page header */}
       <div>
-        <h2 className="text-2xl font-bold">Journal</h2>
-        <p className="text-muted-foreground">
-          How are you feeling today? Record your mood and thoughts.
+        <h1
+          className="text-4xl lg:text-5xl text-foreground"
+          style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontWeight: 400,
+          }}
+        >
+          {firstName ? `${greeting}, ${firstName}` : greeting}
+        </h1>
+        <p className="text-base text-muted-foreground mt-2">
+          How are you feeling today?
         </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>New Entry</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <EntryForm />
-        </CardContent>
-      </Card>
-
-      <Separator />
-
+      {/* Timeline section */}
       <div>
-        <h2 className="text-xl font-semibold mb-4">Your Entries</h2>
+        <p className="text-xs uppercase tracking-widest text-muted-foreground/50 font-medium mb-6">
+          Your Entries
+        </p>
         <Timeline />
       </div>
     </div>

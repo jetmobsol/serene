@@ -53,19 +53,55 @@ function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-gradient-to-b from-background to-secondary/30 p-6 md:p-10">
-      <div className="mb-6 text-center">
-        <p className="text-sm text-muted-foreground max-w-xs">
+    <div className="auth-split-layout">
+      {/* Left decorative panel */}
+      <aside className="auth-left-panel">
+        <div className="auth-left-blob auth-left-blob-1" />
+        <div className="auth-left-blob auth-left-blob-2" />
+        <div className="auth-left-blob auth-left-blob-3" />
+        <div className="auth-left-inner">
+          <a href="/" className="auth-left-logo">
+            Serene
+            <span className="auth-left-dot" />
+          </a>
+          <div className="auth-left-body">
+            <blockquote className="auth-left-quote">
+              "The quieter you become,
+              <br />
+              the more you can hear."
+            </blockquote>
+            <div className="auth-left-features">
+              <div className="auth-left-feature">
+                <span className="auth-left-check">✓</span>
+                Private & encrypted journal
+              </div>
+              <div className="auth-left-feature">
+                <span className="auth-left-check">✓</span>
+                Empathetic AI vibe checks
+              </div>
+              <div className="auth-left-feature">
+                <span className="auth-left-check">✓</span>
+                Mood patterns & weekly insights
+              </div>
+            </div>
+          </div>
+          <p className="auth-left-footer">Your thoughts, entirely yours.</p>
+        </div>
+      </aside>
+
+      {/* Right form panel */}
+      <div className="auth-right-panel">
+        <p className="auth-right-tagline">
           Track your mood, reflect on your day, and receive personalized AI
           insights.
         </p>
-      </div>
-      <div className="w-full max-w-sm rounded-xl bg-card p-8 shadow-sm ring-1 ring-border/50">
-        <AuthForm
-          mode="login"
-          onSuccess={handleSuccess}
-          returnTo={search.returnTo}
-        />
+        <div className="auth-form-card">
+          <AuthForm
+            mode="login"
+            onSuccess={handleSuccess}
+            returnTo={search.returnTo}
+          />
+        </div>
       </div>
     </div>
   );

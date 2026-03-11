@@ -1,6 +1,14 @@
-import { getMoodIcon } from "@/lib/utils/mood-icons";
 import { MOODS, MOOD_COLORS, type MoodType } from "@repo/core";
 import { useCallback, useRef, useState } from "react";
+
+const MOOD_EMOJIS: Record<MoodType, string> = {
+  Happy: "😊",
+  Calm: "😌",
+  Anxious: "😰",
+  Sad: "😢",
+  Overwhelmed: "😩",
+  Angry: "😠",
+};
 
 interface MoodSelectorProps {
   value: MoodType | null;
@@ -56,7 +64,6 @@ export function MoodSelector({ value, onChange }: MoodSelectorProps) {
       className="grid grid-cols-2 md:grid-cols-3 gap-3"
     >
       {MOODS.map((mood, index) => {
-        const Icon = getMoodIcon(mood);
         const isSelected = value === mood;
         const colors = MOOD_COLORS[mood];
 
@@ -79,17 +86,23 @@ export function MoodSelector({ value, onChange }: MoodSelectorProps) {
               focusedIndexRef.current = index;
               setFocusedIndex(index);
             }}
-            className={`flex flex-col items-center justify-center gap-2 rounded-[14px] p-5 cursor-pointer transition-all duration-150 select-none border-2 ${
+            className={`flex flex-col items-center justify-center gap-1.5 rounded-[14px] p-3 lg:p-5 cursor-pointer transition-all duration-150 select-none border-2 ${
               isSelected
-                ? "border-primary bg-secondary"
-                : "border-border bg-card hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md"
+                ? "border-primary/30 bg-secondary shadow-sm"
+                : "border-border bg-card hover:border-primary/20 hover:bg-muted/30"
             }`}
-            style={{
-              backgroundColor: isSelected ? undefined : colors.light,
-            }}
+            style={isSelected ? { borderLeftColor: colors.light } : undefined}
           >
-            {Icon && <Icon className="h-12 w-12 text-foreground/80" />}
-            <span className="text-sm font-medium text-foreground/90">
+            <span
+              className="text-2xl lg:text-3xl"
+              role="img"
+              aria-hidden="true"
+            >
+              {MOOD_EMOJIS[mood]}
+            </span>
+            <span
+              className={`text-sm font-medium ${isSelected ? "text-foreground" : "text-muted-foreground"}`}
+            >
               {mood}
             </span>
           </div>

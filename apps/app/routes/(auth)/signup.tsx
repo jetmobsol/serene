@@ -53,19 +53,53 @@ function SignupPage() {
   }
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-gradient-to-b from-background to-secondary/30 p-6 md:p-10">
-      <div className="mb-6 text-center">
-        <p className="text-sm text-muted-foreground max-w-xs">
+    <div className="auth-split-layout">
+      {/* Left decorative panel */}
+      <aside className="auth-left-panel">
+        <div className="auth-left-blob auth-left-blob-1" />
+        <div className="auth-left-blob auth-left-blob-2" />
+        <div className="auth-left-blob auth-left-blob-3" />
+        <div className="auth-left-inner">
+          <a href="/" className="auth-left-logo">
+            Serene
+            <span className="auth-left-dot" />
+          </a>
+          <div className="auth-left-body">
+            <blockquote className="auth-left-quote">
+              "Knowing yourself is the beginning of all wisdom."
+            </blockquote>
+            <div className="auth-left-features">
+              <div className="auth-left-feature">
+                <span className="auth-left-check">✓</span>
+                Free — no credit card required
+              </div>
+              <div className="auth-left-feature">
+                <span className="auth-left-check">✓</span>
+                Journal in under 60 seconds
+              </div>
+              <div className="auth-left-feature">
+                <span className="auth-left-check">✓</span>
+                Gentle AI encouragement after each entry
+              </div>
+            </div>
+          </div>
+          <p className="auth-left-footer">Your quiet place awaits.</p>
+        </div>
+      </aside>
+
+      {/* Right form panel */}
+      <div className="auth-right-panel">
+        <p className="auth-right-tagline">
           Begin your wellness journey with AI-powered mood tracking and
           personalized insights.
         </p>
-      </div>
-      <div className="w-full max-w-sm rounded-xl bg-card p-8 shadow-sm ring-1 ring-border/50">
-        <AuthForm
-          mode="signup"
-          onSuccess={handleSuccess}
-          returnTo={search.returnTo}
-        />
+        <div className="auth-form-card">
+          <AuthForm
+            mode="signup"
+            onSuccess={handleSuccess}
+            returnTo={search.returnTo}
+          />
+        </div>
       </div>
     </div>
   );

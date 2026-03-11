@@ -1,165 +1,944 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui';
 
 const app = import.meta.env.DEV ? 'http://localhost:5173' : '';
 
 const features = [
   {
-    title: "Mood Tracking",
-    description: "Log how you feel with six intuitive mood options",
-    content: "Happy, Calm, Anxious, Sad, Overwhelmed, or Angry. Quick check-ins that take seconds, not minutes."
+    icon: '🎭',
+    bg: '#e8f0eb',
+    fg: '#5b7b6a',
+    title: 'Mood Tracking',
+    desc: 'Choose from expressive mood cards that capture nuance — not just "good" or "bad," but the full spectrum of your emotional world.',
   },
   {
-    title: "AI Companion",
-    description: "Receive personalized encouragement after each entry",
-    content: "Serene's AI responds with warm, contextual support. It acknowledges your feelings without judgment."
+    icon: '✦',
+    bg: '#fbf0eb',
+    fg: '#c4785b',
+    title: 'AI Vibe Check',
+    desc: 'Receive an empathetic, real-time response after each entry. Like a wise friend who always knows what to say — supportive, never clinical.',
   },
   {
-    title: "Private Journal",
-    description: "Write reflections that are yours and yours alone",
-    content: "Your entries are encrypted and private. Add optional tags to categorize your thoughts."
+    icon: '📊',
+    bg: '#ede8f5',
+    fg: '#8b7ba8',
+    title: 'Visual Insights',
+    desc: 'See your emotional patterns unfold over weeks. Understand your rhythms, discover triggers, and celebrate the moments of calm.',
   },
   {
-    title: "Weekly Insights",
-    description: "Discover patterns in your emotional well-being",
-    content: "Visual mood trends and tag correlations help you understand what affects your mood."
+    icon: '🏷️',
+    bg: '#f5edd4',
+    fg: '#c9a84c',
+    title: 'Context Tags',
+    desc: 'Tag entries with activities like Work, Sleep, or Fitness. Over time, see which activities correlate with your best moods.',
   },
   {
-    title: "Effortless Habit",
-    description: "Build a journaling streak in under 60 seconds",
-    content: "Designed for consistency, not perfection. Even a quick mood check-in counts."
+    icon: '🔒',
+    bg: '#f5e8ec',
+    fg: '#b87a8a',
+    title: 'Private by Design',
+    desc: 'Your journal is encrypted and accessible only to you. No sharing, no social features — just your thoughts, protected.',
   },
   {
-    title: "Crisis Support",
-    description: "Safety resources when you need them most",
-    content: "If Serene detects distress, it surfaces crisis helpline information alongside its response."
-  }
+    icon: '📱',
+    bg: '#e4eff5',
+    fg: '#6a8fa8',
+    title: 'Beautiful Timeline',
+    desc: 'Browse past entries on a color-coded timeline. Each entry is a brushstroke in the painting of your emotional journey.',
+  },
+];
+
+const testimonials = [
+  {
+    quote:
+      "I've tried a dozen journaling apps. Serene is the first one that felt like it actually understood what I was trying to say. The AI responses are surprisingly thoughtful.",
+    name: 'Amara Lin',
+    role: 'Product designer',
+    initials: 'AL',
+    bg: '#5b7b6a',
+  },
+  {
+    quote:
+      "The mood patterns feature helped me realize my anxiety spikes on Sundays. Now I plan calming activities and it's made a real difference.",
+    name: 'Marcus Keller',
+    role: 'Software engineer',
+    initials: 'MK',
+    bg: '#c4785b',
+  },
+  {
+    quote:
+      "It's the privacy for me. Knowing my thoughts are truly private lets me be more honest. And that honesty has been transformative.",
+    name: 'Jade Sawyer',
+    role: 'Therapist',
+    initials: 'JS',
+    bg: '#8b7ba8',
+  },
 ];
 ---
 
-<BaseLayout>
-  <!-- Hero Section -->
-  <section class="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background to-secondary/20">
-    <div class="container mx-auto text-center">
-      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-        Find Your Calm.<br />One Entry at a Time.
-      </h1>
-      <p class="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
-        Serene is your private AI-powered wellness journal. Log your mood,
-        write your thoughts, and receive gentle encouragement — all in under
-        60 seconds.
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <Button size="lg" asChild>
-          <a href={`${app}/signup`}>
-            Start Journaling
-          </a>
-        </Button>
-        <Button variant="outline" size="lg" asChild>
-          <a href="#how-it-works">
-            Learn More
-          </a>
-        </Button>
-      </div>
+<BaseLayout title="Serene — Your Private Mood Journal">
+  <!-- ─── HERO ─── -->
+  <section class="lp-hero">
+    <div class="lp-hero-bg">
+      <div class="lp-blob lp-blob-1"></div>
+      <div class="lp-blob lp-blob-2"></div>
+      <div class="lp-blob lp-blob-3"></div>
     </div>
-  </section>
-
-  <!-- How It Works Section -->
-  <section id="how-it-works" class="py-20 px-4 sm:px-6 lg:px-8">
-    <div class="container mx-auto">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl font-bold tracking-tight mb-4">
-          How Serene Works
-        </h2>
-        <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
-          Three simple steps to a more mindful day
+    <div class="lp-hero-content">
+      <div class="lp-hero-text">
+        <div class="lp-badge">Private & Secure</div>
+        <h1>Your mind deserves a <em>quiet place</em> to breathe</h1>
+        <p class="lp-hero-sub">
+          Serene is a private mood journal with empathetic AI insights. Log how
+          you feel, discover patterns, and receive gentle encouragement — all in
+          a space that's entirely yours.
         </p>
+        <div class="lp-hero-ctas">
+          <a href={`${app}/signup`} class="lp-btn lp-btn-primary lp-btn-lg"
+            >Start journaling free</a
+          >
+          <a href={`${app}/login`} class="lp-btn lp-btn-outline">Log in</a>
+        </div>
+        <div class="lp-social-proof">
+          <div class="lp-avatar-stack">
+            <div class="lp-avatar" style="background:#5b7b6a">AL</div>
+            <div class="lp-avatar" style="background:#c4785b">MK</div>
+            <div class="lp-avatar" style="background:#8b7ba8">JS</div>
+            <div class="lp-avatar" style="background:#c9a84c">RW</div>
+          </div>
+          <p><strong>2,400+</strong> people journaling<br />with Serene this week</p>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-        <div class="text-center space-y-3">
-          <div class="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
-            <span class="text-lg font-semibold text-primary">1</span>
+      <div class="lp-hero-preview">
+        <div class="lp-float-tag lp-float-1">🧘 Meditation</div>
+        <div class="lp-float-tag lp-float-2">✦ AI Insight</div>
+        <div class="lp-preview-card">
+          <div class="lp-mood-row">
+            <div
+              class="lp-mood-pill"
+              style="background:#e8f0eb;color:#5b7b6a"
+            >
+              😌 Calm
+            </div>
+            <div
+              class="lp-mood-pill"
+              style="background:#f5edd4;color:#c9a84c"
+            >
+              🏃 Fitness
+            </div>
           </div>
-          <h3 class="font-semibold">Log Your Mood</h3>
-          <p class="text-sm text-muted-foreground">
-            Choose how you're feeling from six mood options. It takes just a tap.
-          </p>
-        </div>
-        <div class="text-center space-y-3">
-          <div class="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
-            <span class="text-lg font-semibold text-primary">2</span>
+          <div class="lp-preview-text">
+            "Morning run helped clear my head. Feeling more focused than I have
+            in days. The fresh air and movement really shifted something."
           </div>
-          <h3 class="font-semibold">Write a Reflection</h3>
-          <p class="text-sm text-muted-foreground">
-            Add a few words about your day. Tag what's on your mind.
-          </p>
-        </div>
-        <div class="text-center space-y-3">
-          <div class="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
-            <span class="text-lg font-semibold text-primary">3</span>
+          <div class="lp-preview-ai">
+            <div class="lp-preview-ai-icon">✦</div>
+            <p>
+              Beautiful — you're noticing how movement shifts your inner
+              landscape. That awareness is a superpower. Keep honoring what your
+              body tells you.
+            </p>
           </div>
-          <h3 class="font-semibold">Get AI Insight</h3>
-          <p class="text-sm text-muted-foreground">
-            Receive personalized encouragement from your AI companion.
-          </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Features Section -->
-  <section class="py-20 px-4 sm:px-6 lg:px-8 bg-muted/20">
-    <div class="container mx-auto">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl font-bold tracking-tight mb-4">
-          Built for Your Well-Being
-        </h2>
-        <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
-          Everything you need for a meaningful journaling practice
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {features.map((feature) => (
-          <Card>
-            <CardHeader>
-              <CardTitle>{feature.title}</CardTitle>
-              <CardDescription>{feature.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p class="text-sm text-muted-foreground">{feature.content}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+  <!-- ─── FEATURES ─── -->
+  <section class="lp-features">
+    <p class="lp-section-label">Why Serene</p>
+    <h2 class="lp-section-title">Built for your inner world</h2>
+    <p class="lp-section-sub">
+      A thoughtfully crafted space where reflection meets gentle insight — no
+      judgment, just understanding.
+    </p>
+    <div class="lp-features-grid">
+      {
+        features.map((f) => (
+          <div class="lp-feature-card">
+            <div
+              class="lp-feature-icon"
+              style={`background:${f.bg};color:${f.fg}`}
+            >
+              {f.icon}
+            </div>
+            <h3>{f.title}</h3>
+            <p>{f.desc}</p>
+          </div>
+        ))
+      }
     </div>
   </section>
 
-  <!-- CTA Section -->
-  <section class="py-20 px-4 sm:px-6 lg:px-8">
-    <div class="container mx-auto text-center">
-      <h2 class="text-3xl font-bold tracking-tight mb-4">
-        Begin Your Wellness Journey
-      </h2>
-      <p class="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
-        Join Serene and start building a mindful journaling habit today.
-        Your first entry is waiting.
+  <!-- ─── HOW IT WORKS ─── -->
+  <section class="lp-how">
+    <div class="lp-how-inner">
+      <p class="lp-section-label" style="text-align:center">How it works</p>
+      <h2 class="lp-section-title" style="text-align:center">Three gentle steps</h2>
+      <p class="lp-section-sub" style="text-align:center;margin-left:auto;margin-right:auto;margin-bottom:60px">
+        No setup, no complexity. Just open, reflect, and grow.
       </p>
-
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <Button size="lg" asChild>
-          <a href={`${app}/signup`}>
-            Start Journaling Free
-          </a>
-        </Button>
-        <Button variant="outline" size="lg" asChild>
-          <a href="/about">
-            Learn More
-          </a>
-        </Button>
+      <div class="lp-steps">
+        <div class="lp-step">
+          <div class="lp-step-num">1</div>
+          <h3>Choose your mood</h3>
+          <p>
+            Select from beautifully crafted mood cards that capture exactly how
+            you're feeling right now.
+          </p>
+        </div>
+        <div class="lp-step">
+          <div class="lp-step-num">2</div>
+          <h3>Write & reflect</h3>
+          <p>
+            Add context tags and write freely. Your words are the seeds of
+            self-understanding.
+          </p>
+        </div>
+        <div class="lp-step">
+          <div class="lp-step-num">3</div>
+          <h3>Receive insight</h3>
+          <p>
+            Get an empathetic AI vibe check that validates your feelings and
+            offers gentle perspective.
+          </p>
+        </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ─── TESTIMONIALS ─── -->
+  <section class="lp-testimonials">
+    <p class="lp-section-label">What people say</p>
+    <h2 class="lp-section-title">Voices from the quiet</h2>
+    <p class="lp-section-sub">
+      Real experiences from people who've made Serene part of their daily
+      practice.
+    </p>
+    <div class="lp-testimonials-grid">
+      {
+        testimonials.map((t) => (
+          <div class="lp-testimonial-card">
+            <div class="lp-stars">★★★★★</div>
+            <blockquote>"{t.quote}"</blockquote>
+            <div class="lp-testimonial-author">
+              <div class="lp-avatar" style={`background:${t.bg}`}>
+                {t.initials}
+              </div>
+              <div>
+                <div class="lp-author-name">{t.name}</div>
+                <div class="lp-author-role">{t.role}</div>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ─── CTA ─── -->
+  <section class="lp-cta-section">
+    <div class="lp-cta-box">
+      <h2>Your quiet place awaits</h2>
+      <p>
+        Start your free journaling practice today. No credit card required, no
+        limits on entries. Just you and your thoughts.
+      </p>
+      <a href={`${app}/signup`} class="lp-btn lp-btn-white lp-btn-lg"
+        >Begin your journey</a
+      >
     </div>
   </section>
 </BaseLayout>
+
+<style is:global>
+  /* ─────────────────────────────────────────
+     LANDING PAGE DESIGN TOKENS
+  ───────────────────────────────────────── */
+  :root {
+    --lp-bg: #f5f0e8;
+    --lp-bg-warm: #ede7db;
+    --lp-bg-card: #fffcf7;
+    --lp-text: #2c2c2c;
+    --lp-text-secondary: #6b6560;
+    --lp-text-muted: #9e958c;
+    --lp-sage: #5b7b6a;
+    --lp-sage-light: #7a9b89;
+    --lp-sage-pale: #e8f0eb;
+    --lp-terracotta: #c4785b;
+    --lp-terracotta-pale: #fbf0eb;
+    --lp-gold: #c9a84c;
+    --lp-gold-pale: #f5edd4;
+    --lp-lavender-pale: #ede8f5;
+    --lp-shadow-md: 0 4px 20px rgba(44, 44, 44, 0.06);
+    --lp-shadow-lg: 0 8px 40px rgba(44, 44, 44, 0.08);
+    --lp-shadow-hover: 0 8px 30px rgba(44, 44, 44, 0.1);
+    --lp-r-sm: 8px;
+    --lp-r-md: 14px;
+    --lp-r-lg: 22px;
+    --lp-r-xl: 32px;
+    --lp-ease: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Override page background for this page */
+  body {
+    background: var(--lp-bg) !important;
+    color: var(--lp-text);
+  }
+
+  /* ─── BUTTONS ─── */
+  .lp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--lp-ease);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  .lp-btn-primary {
+    background: var(--lp-sage);
+    color: #fff;
+  }
+  .lp-btn-primary:hover {
+    background: #4a6a59;
+    transform: translateY(-1px);
+    box-shadow: var(--lp-shadow-hover);
+  }
+  .lp-btn-outline {
+    background: transparent;
+    color: var(--lp-sage);
+    border: 1.5px solid var(--lp-sage);
+  }
+  .lp-btn-outline:hover {
+    background: var(--lp-sage-pale);
+  }
+  .lp-btn-white {
+    background: #fff;
+    color: var(--lp-sage);
+  }
+  .lp-btn-white:hover {
+    background: var(--lp-bg);
+    transform: translateY(-2px);
+  }
+  .lp-btn-lg {
+    padding: 16px 40px;
+    font-size: 1rem;
+  }
+
+  /* ─── HERO ─── */
+  .lp-hero {
+    min-height: calc(100vh - 64px);
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 80px 40px 80px;
+  }
+  .lp-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .lp-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    animation: lpBlobFloat 20s ease-in-out infinite;
+  }
+  .lp-blob-1 {
+    width: 500px;
+    height: 500px;
+    background: var(--lp-sage-pale);
+    top: -10%;
+    right: -5%;
+    animation-delay: 0s;
+  }
+  .lp-blob-2 {
+    width: 400px;
+    height: 400px;
+    background: var(--lp-terracotta-pale);
+    bottom: -10%;
+    left: 10%;
+    animation-delay: -7s;
+  }
+  .lp-blob-3 {
+    width: 300px;
+    height: 300px;
+    background: var(--lp-gold-pale);
+    top: 30%;
+    left: 50%;
+    animation-delay: -14s;
+  }
+  @keyframes lpBlobFloat {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    25% {
+      transform: translate(30px, -20px) scale(1.05);
+    }
+    50% {
+      transform: translate(-20px, 20px) scale(0.95);
+    }
+    75% {
+      transform: translate(20px, 10px) scale(1.02);
+    }
+  }
+  .lp-hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .lp-hero-text {
+    max-width: 560px;
+  }
+  .lp-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    background: var(--lp-sage-pale);
+    border-radius: 100px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--lp-sage);
+    margin-bottom: 28px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    animation: lpFadeUp 0.8s ease both;
+  }
+  .lp-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--lp-sage);
+    animation: lpPulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  .lp-hero h1 {
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    line-height: 1.1;
+    margin-bottom: 24px;
+    color: var(--lp-text);
+    animation: lpFadeUp 0.8s ease 0.1s both;
+  }
+  .lp-hero h1 em {
+    font-style: italic;
+    color: var(--lp-sage);
+  }
+  .lp-hero-sub {
+    font-size: 1.1rem;
+    color: var(--lp-text-secondary);
+    line-height: 1.7;
+    margin-bottom: 36px;
+    max-width: 440px;
+    animation: lpFadeUp 0.8s ease 0.2s both;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .lp-hero-ctas {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    animation: lpFadeUp 0.8s ease 0.3s both;
+  }
+  .lp-social-proof {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 48px;
+    animation: lpFadeUp 0.8s ease 0.4s both;
+  }
+  .lp-avatar-stack {
+    display: flex;
+  }
+  .lp-avatar-stack .lp-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--lp-bg);
+    margin-left: -10px;
+  }
+  .lp-avatar-stack .lp-avatar:first-child {
+    margin-left: 0;
+  }
+  .lp-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .lp-social-proof p {
+    font-size: 0.82rem;
+    color: var(--lp-text-muted);
+    line-height: 1.4;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .lp-social-proof strong {
+    color: var(--lp-text);
+  }
+
+  /* Hero preview card */
+  .lp-hero-preview {
+    position: relative;
+    animation: lpFadeUp 0.8s ease 0.3s both;
+  }
+  .lp-preview-card {
+    background: var(--lp-bg-card);
+    border-radius: var(--lp-r-lg);
+    padding: 32px;
+    box-shadow: var(--lp-shadow-lg);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transform: rotate(-1deg);
+    transition: transform var(--lp-ease);
+  }
+  .lp-preview-card:hover {
+    transform: rotate(0deg);
+  }
+  .lp-mood-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .lp-mood-pill {
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-size: 0.82rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .lp-preview-text {
+    font-size: 0.92rem;
+    color: var(--lp-text-secondary);
+    line-height: 1.7;
+    margin-bottom: 20px;
+    padding: 16px;
+    background: var(--lp-bg);
+    border-radius: var(--lp-r-sm);
+    border-left: 3px solid var(--lp-sage-light);
+    font-family: 'DM Sans', sans-serif;
+  }
+  .lp-preview-ai {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    background: var(--lp-sage-pale);
+    border-radius: var(--lp-r-md);
+  }
+  .lp-preview-ai-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--lp-sage);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #fff;
+    font-size: 0.8rem;
+  }
+  .lp-preview-ai p {
+    font-size: 0.85rem;
+    color: var(--lp-sage);
+    line-height: 1.6;
+    font-style: italic;
+    font-family: 'DM Sans', sans-serif;
+    margin: 0;
+  }
+  .lp-float-tag {
+    position: absolute;
+    background: var(--lp-bg-card);
+    padding: 10px 18px;
+    border-radius: 100px;
+    box-shadow: var(--lp-shadow-md);
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    animation: lpFloat 6s ease-in-out infinite;
+    font-family: 'DM Sans', sans-serif;
+    z-index: 2;
+  }
+  .lp-float-1 {
+    top: -14px;
+    right: -24px;
+    color: var(--lp-terracotta);
+    animation-delay: -2s;
+  }
+  .lp-float-2 {
+    bottom: 36px;
+    left: -32px;
+    color: var(--lp-sage);
+    animation-delay: -4s;
+  }
+
+  /* ─── FEATURES ─── */
+  .lp-features {
+    padding: 120px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .lp-section-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--lp-sage);
+    margin-bottom: 16px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .lp-section-title {
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    margin-bottom: 16px;
+    line-height: 1.15;
+    color: var(--lp-text);
+  }
+  .lp-section-sub {
+    font-size: 1.05rem;
+    color: var(--lp-text-secondary);
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 60px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .lp-features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .lp-feature-card {
+    background: var(--lp-bg-card);
+    border-radius: var(--lp-r-lg);
+    padding: 36px 32px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: all var(--lp-ease);
+    position: relative;
+    overflow: hidden;
+  }
+  .lp-feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--lp-sage);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .lp-feature-card:hover::before {
+    transform: scaleX(1);
+  }
+  .lp-feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--lp-shadow-hover);
+  }
+  .lp-feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--lp-r-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+  }
+  .lp-feature-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: var(--lp-text);
+  }
+  .lp-feature-card p {
+    font-size: 0.88rem;
+    color: var(--lp-text-secondary);
+    line-height: 1.65;
+    font-family: 'DM Sans', sans-serif;
+    margin: 0;
+  }
+
+  /* ─── HOW IT WORKS ─── */
+  .lp-how {
+    padding: 120px 40px;
+    background: var(--lp-bg-warm);
+    position: relative;
+  }
+  .lp-how-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .lp-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    position: relative;
+  }
+  .lp-steps::before {
+    content: '';
+    position: absolute;
+    top: 36px;
+    left: 15%;
+    right: 15%;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--lp-sage-light),
+      transparent
+    );
+  }
+  .lp-step {
+    text-align: center;
+    position: relative;
+  }
+  .lp-step-num {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--lp-bg-card);
+    border: 2px solid var(--lp-sage-pale);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: var(--lp-sage);
+    position: relative;
+    z-index: 1;
+  }
+  .lp-step h3 {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    color: var(--lp-text);
+  }
+  .lp-step p {
+    font-size: 0.88rem;
+    color: var(--lp-text-secondary);
+    line-height: 1.65;
+    max-width: 280px;
+    margin: 0 auto;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* ─── TESTIMONIALS ─── */
+  .lp-testimonials {
+    padding: 120px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .lp-testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .lp-testimonial-card {
+    background: var(--lp-bg-card);
+    border-radius: var(--lp-r-lg);
+    padding: 32px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }
+  .lp-stars {
+    color: var(--lp-gold);
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+  .lp-testimonial-card blockquote {
+    font-size: 0.92rem;
+    color: var(--lp-text-secondary);
+    line-height: 1.7;
+    margin-bottom: 20px;
+    font-style: italic;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .lp-testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .lp-testimonial-author .lp-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 0.75rem;
+  }
+  .lp-author-name {
+    font-weight: 500;
+    font-size: 0.88rem;
+    color: var(--lp-text);
+    font-family: 'DM Sans', sans-serif;
+  }
+  .lp-author-role {
+    font-size: 0.78rem;
+    color: var(--lp-text-muted);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* ─── CTA ─── */
+  .lp-cta-section {
+    padding: 80px 40px 120px;
+    text-align: center;
+  }
+  .lp-cta-box {
+    max-width: 680px;
+    margin: 0 auto;
+    background: var(--lp-sage);
+    border-radius: var(--lp-r-xl);
+    padding: 72px 60px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .lp-cta-box::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    top: -100px;
+    right: -80px;
+  }
+  .lp-cta-box::after {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    bottom: -60px;
+    left: -40px;
+  }
+  .lp-cta-box h2 {
+    font-size: 2.4rem;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+    color: #fff;
+  }
+  .lp-cta-box p {
+    font-size: 1.05rem;
+    opacity: 0.85;
+    margin-bottom: 32px;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .lp-cta-box .lp-btn {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes lpFadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes lpFloat {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  @keyframes lpPulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .lp-hero {
+      padding: 60px 24px 60px;
+    }
+    .lp-hero-content {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .lp-hero-preview {
+      display: none;
+    }
+    .lp-features {
+      padding: 80px 24px;
+    }
+    .lp-features-grid {
+      grid-template-columns: 1fr;
+    }
+    .lp-how {
+      padding: 80px 24px;
+    }
+    .lp-steps {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .lp-steps::before {
+      display: none;
+    }
+    .lp-testimonials {
+      padding: 80px 24px;
+    }
+    .lp-testimonials-grid {
+      grid-template-columns: 1fr;
+    }
+    .lp-cta-section {
+      padding: 60px 24px 80px;
+    }
+    .lp-cta-box {
+      padding: 48px 32px;
+    }
+  }
+
+  /* Scroll shrink for header */
+  @media (prefers-reduced-motion: no-preference) {
+    .lp-hero-text,
+    .lp-hero-preview {
+      will-change: opacity, transform;
+    }
+  }
+</style>
+
+<script>
+  // Header scroll shrink effect
+  const header = document.getElementById('site-header');
+  if (header) {
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+  }
+</script>

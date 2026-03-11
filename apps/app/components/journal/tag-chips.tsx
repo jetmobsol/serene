@@ -2,7 +2,6 @@ import { TAGS, TAG_ICONS, type TagType } from "@repo/core";
 import type { LucideIcon } from "lucide-react";
 import {
   Briefcase,
-  Check,
   Dumbbell,
   Heart,
   Moon,
@@ -38,7 +37,11 @@ export function TagChips({ value, onChange }: TagChipsProps) {
   }
 
   return (
-    <div role="group" aria-label="Select tags" className="flex flex-wrap gap-2">
+    <div
+      role="group"
+      aria-label="Select tags"
+      className="flex flex-wrap gap-2.5"
+    >
       {TAGS.map((tag) => {
         const Icon = ICON_MAP[TAG_ICONS[tag]];
         const isSelected = value.includes(tag);
@@ -49,14 +52,17 @@ export function TagChips({ value, onChange }: TagChipsProps) {
             type="button"
             aria-pressed={isSelected}
             onClick={() => handleToggle(tag)}
-            className={`inline-flex items-center gap-1.5 rounded-full px-[18px] py-2 text-sm font-medium transition-all ${
+            className={`inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium transition-all border ${
               isSelected
-                ? "bg-primary border-2 border-primary text-primary-foreground"
-                : "border border-border bg-card text-muted-foreground hover:border-primary/40"
+                ? "bg-primary/10 border-primary/30 text-primary"
+                : "border-border bg-card text-muted-foreground/70 hover:border-primary/20 hover:text-foreground"
             }`}
           >
-            {isSelected && <Check className="h-3.5 w-3.5" />}
-            {Icon && <Icon className="h-4 w-4" />}
+            {Icon && (
+              <Icon
+                className={`h-3.5 w-3.5 ${isSelected ? "text-primary" : "text-muted-foreground/50"}`}
+              />
+            )}
             {tag}
           </button>
         );

@@ -26,6 +26,17 @@ export * from "./components/tabs";
 export * from "./components/textarea";
 export * from "./components/tooltip";
 
+// Export chart components
+export {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+  ChartStyle,
+} from "./components/chart";
+export type { ChartConfig } from "./components/chart";
+
 // Export utilities
 export * from "./lib/utils";
 

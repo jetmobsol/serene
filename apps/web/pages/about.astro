@@ -1,111 +1,508 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, Separator } from '@repo/ui';
 
-const title = "About — Serene";
-const description = "Learn about Serene, your AI-powered wellness journal for mood tracking and personalized insights.";
+const title = 'About — Serene';
+const description =
+  'Learn about Serene, your private mood journal with empathetic AI insights for emotional well-being.';
+
+const values = [
+  {
+    icon: '🌱',
+    bg: '#e8f0eb',
+    fg: '#5b7b6a',
+    title: 'Gentle by design',
+    desc: 'Every interaction is crafted to feel warm and human — never clinical or judgmental. Serene meets you where you are.',
+  },
+  {
+    icon: '🔒',
+    bg: '#f5e8ec',
+    fg: '#b87a8a',
+    title: 'Privacy first',
+    desc: 'Your journal entries are encrypted and accessible only to you. We never share your reflections with anyone.',
+  },
+  {
+    icon: '✦',
+    bg: '#fbf0eb',
+    fg: '#c4785b',
+    title: 'AI with empathy',
+    desc: 'Our AI companion is trained to respond with care, not advice. It validates your feelings and offers gentle perspective.',
+  },
+];
 ---
 
 <BaseLayout title={title} description={description}>
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
-    <div class="text-center mb-16">
-      <h1 class="text-4xl font-bold tracking-tight mb-6">About Serene</h1>
-      <p class="text-xl text-muted-foreground max-w-3xl mx-auto">
-        Serene is your private AI-powered wellness journal. Track your mood,
-        write reflections, and receive gentle, personalized encouragement to
-        support your emotional well-being.
+  <!-- ─── ABOUT HERO ─── -->
+  <section class="ab-hero">
+    <div class="ab-hero-blob ab-blob-1"></div>
+    <div class="ab-hero-blob ab-blob-2"></div>
+    <div class="ab-hero-inner">
+      <p class="lp-section-label" style="text-align:center">Our story</p>
+      <h1 class="ab-hero-title">A quieter way to <em>know yourself</em></h1>
+      <p class="ab-hero-sub">
+        Serene was born from a simple belief: that small, consistent acts of
+        self-reflection can transform how we understand ourselves. We built the
+        space we wished existed — private, warm, and genuinely insightful.
       </p>
     </div>
+  </section>
 
-    <section class="mb-20">
-      <Card>
-        <CardHeader>
-          <CardTitle class="text-2xl">Our Mission</CardTitle>
-          <CardDescription>Making mindful self-reflection accessible to everyone</CardDescription>
-        </CardHeader>
-        <CardContent class="space-y-4">
-          <p class="text-muted-foreground">
-            We believe that small, consistent acts of self-reflection can have a
-            profound impact on emotional well-being. Serene was created to make
-            journaling effortless and rewarding.
-          </p>
-          <p class="text-muted-foreground">
-            By combining mood tracking with AI-powered insights, Serene helps you
-            notice patterns, celebrate progress, and navigate difficult moments
-            with greater self-awareness.
-          </p>
-        </CardContent>
-      </Card>
-    </section>
-
-    <section class="mb-20">
-      <h2 class="text-3xl font-bold tracking-tight mb-8 text-center">
-        How Serene Works
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>1. Log Your Mood</CardTitle>
-            <CardDescription>Choose how you're feeling</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p class="text-sm text-muted-foreground">
-              Select from six mood options: Happy, Calm, Anxious, Sad,
-              Overwhelmed, or Angry. Quick check-ins that take seconds.
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>2. Write a Reflection</CardTitle>
-            <CardDescription>Share your thoughts</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p class="text-sm text-muted-foreground">
-              Add context with optional tags and a brief note. There's no right
-              or wrong way to journal.
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>3. Receive Insights</CardTitle>
-            <CardDescription>Get personalized support</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p class="text-sm text-muted-foreground">
-              Serene's AI companion responds with gentle, contextual encouragement
-              that acknowledges your feelings without judgment.
-            </p>
-          </CardContent>
-        </Card>
+  <!-- ─── MISSION ─── -->
+  <section class="ab-section ab-mission-section">
+    <div class="ab-section-inner ab-mission-grid">
+      <div class="ab-mission-text">
+        <p class="lp-section-label">Our mission</p>
+        <h2 class="lp-section-title">Making self-reflection<br /><em>effortless and rewarding</em></h2>
+        <p class="ab-body-text">
+          We believe that journaling shouldn't require discipline, time, or
+          perfect prose. A single mood check-in — 30 seconds of honesty — is
+          enough to start understanding yourself.
+        </p>
+        <p class="ab-body-text">
+          By pairing mood tracking with empathetic AI, Serene helps you notice
+          patterns, celebrate progress, and navigate difficult moments with
+          greater self-awareness.
+        </p>
       </div>
-    </section>
+      <div class="ab-mission-card">
+        <div class="ab-quote-card">
+          <div class="ab-quote-mark">"</div>
+          <blockquote>
+            Small, consistent moments of reflection compound into
+            profound self-knowledge over time.
+          </blockquote>
+          <div class="ab-quote-author">
+            <div class="ab-quote-dot"></div>
+            The Serene philosophy
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <section class="mb-20">
-      <Card>
-        <CardHeader>
-          <CardTitle class="text-2xl">Your Privacy Matters</CardTitle>
-          <CardDescription>Your journal entries are private and secure</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p class="text-muted-foreground">
+  <!-- ─── VALUES ─── -->
+  <section class="ab-values-section">
+    <div class="ab-section-inner">
+      <p class="lp-section-label" style="text-align:center">What we stand for</p>
+      <h2 class="lp-section-title" style="text-align:center">Built on three principles</h2>
+      <div class="ab-values-grid">
+        {
+          values.map((v) => (
+            <div class="ab-value-card">
+              <div
+                class="lp-feature-icon"
+                style={`background:${v.bg};color:${v.fg}`}
+              >
+                {v.icon}
+              </div>
+              <h3>{v.title}</h3>
+              <p>{v.desc}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── HOW IT WORKS ─── -->
+  <section class="lp-how">
+    <div class="lp-how-inner">
+      <p class="lp-section-label" style="text-align:center">How it works</p>
+      <h2 class="lp-section-title" style="text-align:center">Three gentle steps</h2>
+      <p
+        class="lp-section-sub"
+        style="text-align:center;margin-left:auto;margin-right:auto;margin-bottom:60px"
+      >
+        No setup required. Just open Serene and start.
+      </p>
+      <div class="lp-steps">
+        <div class="lp-step">
+          <div class="lp-step-num">1</div>
+          <h3>Log your mood</h3>
+          <p>
+            Select from six mood options — Happy, Calm, Anxious, Sad,
+            Overwhelmed, or Angry. Quick check-ins that take seconds.
+          </p>
+        </div>
+        <div class="lp-step">
+          <div class="lp-step-num">2</div>
+          <h3>Write a reflection</h3>
+          <p>
+            Add context with optional tags and a brief note. There's no right
+            or wrong way to journal here.
+          </p>
+        </div>
+        <div class="lp-step">
+          <div class="lp-step-num">3</div>
+          <h3>Receive insights</h3>
+          <p>
+            Serene's AI companion responds with gentle, contextual encouragement
+            that acknowledges your feelings without judgment.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PRIVACY ─── -->
+  <section class="ab-section ab-privacy-section">
+    <div class="ab-section-inner">
+      <div class="ab-privacy-card">
+        <div class="ab-privacy-icon">🔒</div>
+        <div class="ab-privacy-content">
+          <p class="lp-section-label">Your privacy matters</p>
+          <h2 class="lp-section-title" style="margin-bottom:16px">
+            Your thoughts are yours alone
+          </h2>
+          <p class="ab-body-text" style="max-width:560px">
             Every journal entry is accessible only to you. We never share your
             personal reflections with third parties. You can export or delete
-            your data at any time.
+            your data at any time — no questions asked.
           </p>
-        </CardContent>
-      </Card>
-    </section>
+          <div class="ab-privacy-features">
+            <div class="ab-privacy-feature">
+              <span class="ab-check">✓</span> End-to-end encryption
+            </div>
+            <div class="ab-privacy-feature">
+              <span class="ab-check">✓</span> No third-party data sharing
+            </div>
+            <div class="ab-privacy-feature">
+              <span class="ab-check">✓</span> Export or delete anytime
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <Separator class="my-12" />
-
-    <section class="text-center">
-      <p class="text-sm text-muted-foreground max-w-2xl mx-auto">
+  <!-- ─── CRISIS NOTE ─── -->
+  <section class="ab-crisis-section">
+    <div class="ab-crisis-inner">
+      <div class="ab-crisis-icon">💚</div>
+      <p>
         Serene is not a substitute for professional mental health care. If you
-        are in crisis, please contact the 988 Suicide and Crisis Lifeline
-        (call or text 988) or the Crisis Text Line (text HOME to 741741).
+        are in crisis, please contact the
+        <strong>988 Suicide and Crisis Lifeline</strong> (call or text 988) or
+        the <strong>Crisis Text Line</strong> (text HOME to 741741).
       </p>
-    </section>
-  </div>
+    </div>
+  </section>
 </BaseLayout>
+
+<style is:global>
+  /* ─────────────────────────────────────────
+     ABOUT PAGE STYLES
+  ───────────────────────────────────────── */
+
+  /* ─── HERO ─── */
+  .ab-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 80px 40px 100px;
+    text-align: center;
+    background: var(--lp-bg);
+  }
+  .ab-hero-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .ab-blob-1 {
+    width: 500px;
+    height: 500px;
+    background: var(--lp-sage-pale);
+    top: -120px;
+    right: -100px;
+    animation: lpBlobFloat 22s ease-in-out infinite;
+  }
+  .ab-blob-2 {
+    width: 350px;
+    height: 350px;
+    background: var(--lp-terracotta-pale);
+    bottom: -80px;
+    left: -60px;
+    animation: lpBlobFloat 18s ease-in-out infinite;
+    animation-delay: -8s;
+  }
+  .ab-hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .ab-hero-title {
+    font-size: clamp(2.8rem, 5vw, 4rem);
+    line-height: 1.1;
+    color: var(--lp-text);
+    margin-bottom: 24px;
+    animation: lpFadeUp 0.8s ease 0.1s both;
+  }
+  .ab-hero-title em {
+    font-style: italic;
+    color: var(--lp-sage);
+  }
+  .ab-hero-sub {
+    font-size: 1.1rem;
+    color: var(--lp-text-secondary);
+    line-height: 1.75;
+    max-width: 580px;
+    margin: 0 auto;
+    font-family: 'DM Sans', sans-serif;
+    animation: lpFadeUp 0.8s ease 0.2s both;
+  }
+
+  /* ─── SHARED SECTION STRUCTURE ─── */
+  .ab-section {
+    padding: 100px 40px;
+  }
+  .ab-section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .ab-body-text {
+    font-size: 1rem;
+    color: var(--lp-text-secondary);
+    line-height: 1.8;
+    font-family: 'DM Sans', sans-serif;
+    margin-bottom: 20px;
+    max-width: 520px;
+  }
+
+  /* ─── MISSION ─── */
+  .ab-mission-section {
+    background: var(--lp-bg);
+  }
+  .ab-mission-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .ab-mission-text .lp-section-title {
+    margin-bottom: 28px;
+  }
+  .ab-mission-text .lp-section-title em {
+    font-style: italic;
+    color: var(--lp-sage);
+  }
+  .ab-quote-card {
+    background: var(--lp-bg-card);
+    border-radius: var(--lp-r-lg);
+    padding: 48px 40px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: var(--lp-shadow-lg);
+    position: relative;
+  }
+  .ab-quote-mark {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 7rem;
+    line-height: 0.6;
+    color: var(--lp-sage-pale);
+    margin-bottom: 20px;
+    display: block;
+    user-select: none;
+  }
+  .ab-quote-card blockquote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-style: italic;
+    color: var(--lp-text);
+    line-height: 1.5;
+    margin-bottom: 28px;
+  }
+  .ab-quote-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--lp-text-muted);
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .ab-quote-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--lp-sage);
+    flex-shrink: 0;
+  }
+
+  /* ─── VALUES ─── */
+  .ab-values-section {
+    padding: 100px 40px;
+    background: var(--lp-bg-warm);
+  }
+  .ab-values-section .lp-section-title {
+    margin-bottom: 60px;
+  }
+  .ab-values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .ab-value-card {
+    background: var(--lp-bg-card);
+    border-radius: var(--lp-r-lg);
+    padding: 36px 32px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: all var(--lp-ease);
+    position: relative;
+    overflow: hidden;
+  }
+  .ab-value-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--lp-sage);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .ab-value-card:hover::before {
+    transform: scaleX(1);
+  }
+  .ab-value-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--lp-shadow-hover);
+  }
+  .ab-value-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: var(--lp-text);
+  }
+  .ab-value-card p {
+    font-size: 0.88rem;
+    color: var(--lp-text-secondary);
+    line-height: 1.65;
+    font-family: 'DM Sans', sans-serif;
+    margin: 0;
+  }
+
+  /* ─── PRIVACY ─── */
+  .ab-privacy-section {
+    background: var(--lp-bg);
+    padding: 100px 40px;
+  }
+  .ab-privacy-card {
+    background: var(--lp-bg-card);
+    border-radius: var(--lp-r-xl);
+    padding: 64px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: var(--lp-shadow-md);
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
+  }
+  .ab-privacy-icon {
+    font-size: 3rem;
+    flex-shrink: 0;
+    width: 72px;
+    height: 72px;
+    background: var(--lp-sage-pale);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ab-privacy-content .lp-section-title {
+    font-size: 2rem;
+  }
+  .ab-privacy-features {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 28px;
+  }
+  .ab-privacy-feature {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--lp-text-secondary);
+    font-family: 'DM Sans', sans-serif;
+  }
+  .ab-check {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--lp-sage-pale);
+    color: var(--lp-sage);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ─── CRISIS ─── */
+  .ab-crisis-section {
+    padding: 60px 40px 80px;
+    text-align: center;
+  }
+  .ab-crisis-inner {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 48px;
+    background: var(--lp-sage-pale);
+    border-radius: var(--lp-r-lg);
+    border: 1px solid rgba(91, 123, 106, 0.12);
+  }
+  .ab-crisis-icon {
+    font-size: 1.8rem;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .ab-crisis-inner p {
+    font-size: 0.92rem;
+    color: var(--lp-text-secondary);
+    line-height: 1.75;
+    font-family: 'DM Sans', sans-serif;
+    margin: 0;
+  }
+  .ab-crisis-inner strong {
+    color: var(--lp-sage);
+    font-weight: 600;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .ab-hero {
+      padding: 60px 24px 80px;
+    }
+    .ab-section {
+      padding: 60px 24px;
+    }
+    .ab-mission-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .ab-values-section {
+      padding: 60px 24px;
+    }
+    .ab-values-grid {
+      grid-template-columns: 1fr;
+    }
+    .ab-privacy-section {
+      padding: 60px 24px;
+    }
+    .ab-privacy-card {
+      flex-direction: column;
+      gap: 24px;
+      padding: 36px 28px;
+    }
+    .ab-crisis-section {
+      padding: 40px 24px 60px;
+    }
+    .ab-crisis-inner {
+      padding: 28px 24px;
+    }
+  }
+</style>
