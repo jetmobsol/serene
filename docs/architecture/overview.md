@@ -123,8 +123,15 @@ graph LR
         Secrets["Worker Secrets"]
     end
 
-    style Terraform fill:#e8f5e9
-    style Manual fill:#fff3e0
+    style Terraform fill:#e8f5e9,color:#333,stroke:#4caf50
+    style Manual fill:#fff3e0,color:#333,stroke:#ff9800
+    style W1 fill:#c8e6c9,color:#1b5e20,stroke:#4caf50
+    style W2 fill:#c8e6c9,color:#1b5e20,stroke:#4caf50
+    style W3 fill:#c8e6c9,color:#1b5e20,stroke:#4caf50
+    style DNS fill:#c8e6c9,color:#1b5e20,stroke:#4caf50
+    style HD fill:#ffe0b2,color:#e65100,stroke:#ff9800
+    style KV fill:#ffe0b2,color:#e65100,stroke:#ff9800
+    style Secrets fill:#ffe0b2,color:#e65100,stroke:#ff9800
 ```
 
 | Component      | Purpose                                                                                                                                                                                                     |
@@ -180,37 +187,37 @@ erDiagram
     user {
         string id PK "usr_ prefix"
         string name
-        string email UK
+        string email UK "unique"
         boolean emailVerified
         string image
     }
 
     session {
         string id PK "ses_ prefix"
-        string userId FK
-        string token UK
+        string userId FK "references user"
+        string token UK "unique"
         timestamp expiresAt
     }
 
     identity {
         string id PK "idn_ prefix"
-        string userId FK
+        string userId FK "references user"
         string accountId
         string providerId
     }
 
     journal_entry {
         string id PK "jrn_ prefix"
-        string userId FK
+        string userId FK "references user"
         string mood
-        text[] tags
+        string tags "text array"
         text note
         timestamp createdAt
     }
 
     ai_response {
         string id PK "air_ prefix"
-        string entryId FK UK
+        string entryId UK "unique FK to journal_entry"
         text response
         boolean hasCrisisContent
         string model
