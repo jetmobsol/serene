@@ -76,16 +76,16 @@ bun install
 cp .env.example .env.local
 # Edit .env.local with your credentials (DATABASE_URL, BETTER_AUTH_SECRET, etc.)
 
+# Full Docker stack (all services containerized):
+./scripts/docker-start.sh   # Start all via Docker Compose
+./scripts/docker-stop.sh    # Stop all Docker services
+
 # Start everything (Docker DB + dev servers)
 just start
 
 # Without just installed:
 ./scripts/start-dev.sh      # Start DB + dev servers
 ./scripts/stop-dev.sh       # Stop everything
-
-# Full Docker stack (all services containerized):
-./scripts/docker-start.sh   # Start all via Docker Compose
-./scripts/docker-stop.sh    # Stop all Docker services
 ```
 
 ### Docker (Full Stack)
