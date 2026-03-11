@@ -15,9 +15,9 @@
   "vars": {
     "ENVIRONMENT": "production",
     "APP_NAME": "Serene",
-    "APP_ORIGIN": "https://serene.example.com",
-    "ALLOWED_ORIGINS": "https://serene.example.com",
-    "RESEND_EMAIL_FROM": "onboarding@resend.dev"
+    "APP_ORIGIN": "https://serene.linktalentsbot.work",
+    "ALLOWED_ORIGINS": "https://serene.linktalentsbot.work",
+    "RESEND_EMAIL_FROM": "noreply@linktalentsbot.work"
   },
   // prettier-ignore
   "hyperdrive": [

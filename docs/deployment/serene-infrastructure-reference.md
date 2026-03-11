@@ -74,7 +74,22 @@ Workers are named using the pattern `{project_slug}-{service}[-{environment}]`:
 
 Production workers have no environment suffix. This convention is enforced by the Terraform stack module and must match the `name` field in each `wrangler.jsonc`.
 
-## 5. Wrangler Environment Variable Reference
+## 5. Terraform Automation Gaps
+
+The following resources are **not** managed by Terraform and require manual setup:
+
+| Resource                       | Manual Step                                      | Why                                                           |
+| ------------------------------ | ------------------------------------------------ | ------------------------------------------------------------- |
+| KV namespace (`AI_RATE_LIMIT`) | `bun wrangler kv namespace create AI_RATE_LIMIT` | No `cloudflare_workers_kv_namespace` resource in stack        |
+| Worker secrets                 | `bun wrangler secret put <NAME>`                 | By design — Terraform handles infra, Wrangler handles secrets |
+| SSL/TLS zone settings          | Cloudflare dashboard                             | Not managed by Terraform provider                             |
+| Second Hyperdrive config       | Use same ID for both bindings                    | Stack creates 1 config; `wrangler.jsonc` expects 2 IDs        |
+
+::: info
+The edge stack creates one Hyperdrive config with caching disabled. The API worker expects two bindings (`HYPERDRIVE_CACHED` and `HYPERDRIVE_DIRECT`). Using the same Hyperdrive ID for both is safe — both function identically when caching is disabled. To enable read caching later, add a second `cloudflare_hyperdrive_config` resource with `caching.disabled = false`.
+:::
+
+## 6. Wrangler Environment Variable Reference
 
 Variables configured in `wrangler.jsonc` `vars` sections:
 
@@ -100,8 +115,10 @@ Variables configured in `wrangler.jsonc` `vars` sections:
 | `BETTER_AUTH_SECRET`   | Yes      | Session signing secret              |
 | `ANTHROPIC_API_KEY`    | Yes      | Anthropic API key for AI vibe check |
 | `RESEND_API_KEY`       | Yes      | Resend API key for email delivery   |
-| `GOOGLE_CLIENT_ID`     | No       | Google OAuth client ID              |
-| `GOOGLE_CLIENT_SECRET` | No       | Google OAuth client secret          |
+| `GOOGLE_CLIENT_ID`     | Yes\*    | Google OAuth client ID              |
+| `GOOGLE_CLIENT_SECRET` | Yes\*    | Google OAuth client secret          |
+
+\* Required by `apps/api/lib/env.ts` Zod schema (non-optional `z.string()`). The API worker will crash on startup without them. To make Google OAuth optional, change the schema to use `.optional()`.
 
 ### API Worker Bindings
 
@@ -125,7 +142,7 @@ Variables configured in `wrangler.jsonc` `vars` sections:
 | `API_SERVICE` | Service | Binding to the API worker |
 | `ASSETS`      | Assets  | Static asset serving      |
 
-## 6. Remote State Configuration
+## 7. Remote State Configuration
 
 For team collaboration, configure Terraform remote state:
 

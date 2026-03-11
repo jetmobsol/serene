@@ -32,7 +32,7 @@
   // Command: bun wrangler deploy
   // prettier-ignore
   "routes": [
-    { "pattern": "serene.example.com/*", "zone_name": "serene.example.com" }
+    { "pattern": "serene.linktalentsbot.work/*", "zone_name": "linktalentsbot.work" }
   ],
   "vars": {
     "ENVIRONMENT": "production"

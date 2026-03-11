@@ -19,7 +19,7 @@
   // Command: bun wrangler deploy
   "vars": {
     "ENVIRONMENT": "production",
-    "ALLOWED_ORIGINS": "https://serene.example.com"
+    "ALLOWED_ORIGINS": "https://serene.linktalentsbot.work"
   },
 
   "env": {
