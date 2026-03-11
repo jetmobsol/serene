@@ -1,0 +1,2781 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Serene — Your Private Mood Journal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f5f0e8;
+        --bg-warm: #ede7db;
+        --bg-card: #fffcf7;
+        --text-primary: #2c2c2c;
+        --text-secondary: #6b6560;
+        --text-muted: #9e958c;
+        --sage: #5b7b6a;
+        --sage-light: #7a9b89;
+        --sage-pale: #e8f0eb;
+        --terracotta: #c4785b;
+        --terracotta-light: #e8a88e;
+        --terracotta-pale: #fbf0eb;
+        --gold: #c9a84c;
+        --gold-pale: #f5edd4;
+        --lavender: #8b7ba8;
+        --lavender-pale: #ede8f5;
+        --rose: #b87a8a;
+        --rose-pale: #f5e8ec;
+        --sky: #6a8fa8;
+        --sky-pale: #e4eff5;
+        --shadow-sm: 0 1px 3px rgba(44, 44, 44, 0.04);
+        --shadow-md: 0 4px 20px rgba(44, 44, 44, 0.06);
+        --shadow-lg: 0 8px 40px rgba(44, 44, 44, 0.08);
+        --shadow-hover: 0 8px 30px rgba(44, 44, 44, 0.1);
+        --radius-sm: 8px;
+        --radius-md: 14px;
+        --radius-lg: 22px;
+        --radius-xl: 32px;
+        --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--bg);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ─── GRAIN OVERLAY ─── */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        pointer-events: none;
+        opacity: 0.025;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 400;
+        letter-spacing: -0.01em;
+      }
+
+      .serif {
+        font-family: "Cormorant Garamond", serif;
+      }
+      .serif-italic {
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+      }
+
+      /* ─── PAGE SYSTEM ─── */
+      .page {
+        display: none;
+        min-height: 100vh;
+        opacity: 0;
+        transform: translateY(8px);
+        transition:
+          opacity 0.5s ease,
+          transform 0.5s ease;
+      }
+      .page.active {
+        display: block;
+      }
+      .page.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* ─── BUTTONS ─── */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 28px;
+        border: none;
+        border-radius: 100px;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all var(--transition);
+        text-decoration: none;
+        letter-spacing: 0.02em;
+      }
+      .btn-primary {
+        background: var(--sage);
+        color: #fff;
+      }
+      .btn-primary:hover {
+        background: #4a6a59;
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-hover);
+      }
+      .btn-secondary {
+        background: transparent;
+        color: var(--sage);
+        border: 1.5px solid var(--sage);
+      }
+      .btn-secondary:hover {
+        background: var(--sage-pale);
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--text-secondary);
+        padding: 8px 16px;
+      }
+      .btn-ghost:hover {
+        color: var(--sage);
+        background: var(--sage-pale);
+      }
+      .btn-sm {
+        padding: 8px 18px;
+        font-size: 0.82rem;
+      }
+      .btn-lg {
+        padding: 16px 40px;
+        font-size: 1rem;
+      }
+      .btn-icon {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* ─── FORM ELEMENTS ─── */
+      .input-group {
+        margin-bottom: 20px;
+      }
+      .input-group label {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+        margin-bottom: 6px;
+        letter-spacing: 0.03em;
+      }
+      .input-field {
+        width: 100%;
+        padding: 13px 16px;
+        border: 1.5px solid #e0d9ce;
+        border-radius: var(--radius-sm);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.92rem;
+        background: var(--bg-card);
+        color: var(--text-primary);
+        transition: all var(--transition);
+        outline: none;
+      }
+      .input-field:focus {
+        border-color: var(--sage);
+        box-shadow: 0 0 0 3px var(--sage-pale);
+      }
+      textarea.input-field {
+        resize: vertical;
+        min-height: 120px;
+        line-height: 1.7;
+      }
+
+      /* ═══════════════════════════════════════════
+   LANDING PAGE
+   ═══════════════════════════════════════════ */
+
+      /* NAV */
+      .landing-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        padding: 20px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        backdrop-filter: blur(20px);
+        background: rgba(245, 240, 232, 0.8);
+        transition: all var(--transition);
+      }
+      .landing-nav.scrolled {
+        padding: 14px 40px;
+        box-shadow: 0 1px 10px rgba(44, 44, 44, 0.05);
+      }
+      .logo {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.6rem;
+        font-weight: 500;
+        color: var(--sage);
+        letter-spacing: 0.05em;
+        cursor: pointer;
+      }
+      .logo span {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--terracotta);
+        margin-left: 2px;
+        vertical-align: super;
+        font-size: 0;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      /* HERO */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        padding: 120px 40px 80px;
+      }
+      .hero-bg {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+      }
+      .hero-blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.4;
+        animation: blobFloat 20s ease-in-out infinite;
+      }
+      .hero-blob-1 {
+        width: 500px;
+        height: 500px;
+        background: var(--sage-pale);
+        top: -10%;
+        right: -5%;
+        animation-delay: 0s;
+      }
+      .hero-blob-2 {
+        width: 400px;
+        height: 400px;
+        background: var(--terracotta-pale);
+        bottom: -10%;
+        left: 10%;
+        animation-delay: -7s;
+      }
+      .hero-blob-3 {
+        width: 300px;
+        height: 300px;
+        background: var(--gold-pale);
+        top: 30%;
+        left: 50%;
+        animation-delay: -14s;
+      }
+
+      @keyframes blobFloat {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+        25% {
+          transform: translate(30px, -20px) scale(1.05);
+        }
+        50% {
+          transform: translate(-20px, 20px) scale(0.95);
+        }
+        75% {
+          transform: translate(20px, 10px) scale(1.02);
+        }
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 80px;
+        align-items: center;
+      }
+      .hero-text {
+        max-width: 560px;
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 16px;
+        background: var(--sage-pale);
+        border-radius: 100px;
+        font-size: 0.78rem;
+        font-weight: 500;
+        color: var(--sage);
+        margin-bottom: 28px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        animation: fadeInUp 0.8s ease both;
+      }
+      .hero-badge::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--sage);
+        animation: pulse 2s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+      }
+
+      .hero h1 {
+        font-size: clamp(2.8rem, 5vw, 4.2rem);
+        line-height: 1.1;
+        margin-bottom: 24px;
+        animation: fadeInUp 0.8s ease 0.1s both;
+      }
+      .hero h1 em {
+        font-style: italic;
+        color: var(--sage);
+      }
+      .hero-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+        line-height: 1.7;
+        margin-bottom: 36px;
+        max-width: 440px;
+        animation: fadeInUp 0.8s ease 0.2s both;
+      }
+      .hero-ctas {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        animation: fadeInUp 0.8s ease 0.3s both;
+      }
+      .hero-social-proof {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 48px;
+        animation: fadeInUp 0.8s ease 0.4s both;
+      }
+      .avatar-stack {
+        display: flex;
+      }
+      .avatar-stack .avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 2px solid var(--bg);
+        margin-left: -10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: #fff;
+      }
+      .avatar-stack .avatar:first-child {
+        margin-left: 0;
+      }
+      .hero-social-proof p {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        line-height: 1.4;
+      }
+      .hero-social-proof strong {
+        color: var(--text-primary);
+      }
+
+      /* Hero Preview Card */
+      .hero-preview {
+        position: relative;
+        animation: fadeInUp 0.8s ease 0.3s both;
+      }
+      .preview-card {
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        padding: 32px;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        transform: rotate(-1deg);
+        transition: transform var(--transition);
+      }
+      .preview-card:hover {
+        transform: rotate(0deg);
+      }
+      .preview-mood-row {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .preview-mood-pill {
+        padding: 8px 16px;
+        border-radius: 100px;
+        font-size: 0.82rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .preview-text {
+        font-size: 0.92rem;
+        color: var(--text-secondary);
+        line-height: 1.7;
+        margin-bottom: 20px;
+        padding: 16px;
+        background: var(--bg);
+        border-radius: var(--radius-sm);
+        border-left: 3px solid var(--sage-light);
+      }
+      .preview-ai {
+        display: flex;
+        gap: 12px;
+        padding: 16px;
+        background: var(--sage-pale);
+        border-radius: var(--radius-md);
+      }
+      .preview-ai-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--sage);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        color: #fff;
+        font-size: 0.8rem;
+      }
+      .preview-ai p {
+        font-size: 0.85rem;
+        color: var(--sage);
+        line-height: 1.6;
+        font-style: italic;
+      }
+      .preview-float-tag {
+        position: absolute;
+        background: var(--bg-card);
+        padding: 10px 18px;
+        border-radius: 100px;
+        box-shadow: var(--shadow-md);
+        font-size: 0.8rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        animation: float 6s ease-in-out infinite;
+      }
+      .preview-float-tag.tag-1 {
+        top: -10px;
+        right: -20px;
+        color: var(--terracotta);
+        animation-delay: -2s;
+      }
+      .preview-float-tag.tag-2 {
+        bottom: 30px;
+        left: -30px;
+        color: var(--sage);
+        animation-delay: -4s;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+
+      /* FEATURES */
+      .features {
+        padding: 120px 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .section-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--sage);
+        margin-bottom: 16px;
+      }
+      .section-title {
+        font-size: clamp(2rem, 3.5vw, 2.8rem);
+        margin-bottom: 16px;
+        line-height: 1.15;
+      }
+      .section-subtitle {
+        font-size: 1.05rem;
+        color: var(--text-secondary);
+        max-width: 520px;
+        line-height: 1.7;
+        margin-bottom: 60px;
+      }
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+      .feature-card {
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        padding: 36px 32px;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        transition: all var(--transition);
+        position: relative;
+        overflow: hidden;
+      }
+      .feature-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--sage);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.4s ease;
+      }
+      .feature-card:hover::before {
+        transform: scaleX(1);
+      }
+      .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-hover);
+      }
+      .feature-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+      }
+      .feature-card h3 {
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+      }
+      .feature-card p {
+        font-size: 0.88rem;
+        color: var(--text-secondary);
+        line-height: 1.65;
+      }
+
+      /* HOW IT WORKS */
+      .how-it-works {
+        padding: 120px 40px;
+        background: var(--bg-warm);
+        position: relative;
+      }
+      .how-it-works-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 40px;
+        position: relative;
+      }
+      .steps::before {
+        content: "";
+        position: absolute;
+        top: 36px;
+        left: 15%;
+        right: 15%;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--sage-light),
+          transparent
+        );
+      }
+      .step {
+        text-align: center;
+        position: relative;
+      }
+      .step-number {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: var(--bg-card);
+        border: 2px solid var(--sage-pale);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.5rem;
+        color: var(--sage);
+        position: relative;
+        z-index: 1;
+      }
+      .step h3 {
+        font-size: 1.25rem;
+        margin-bottom: 10px;
+      }
+      .step p {
+        font-size: 0.88rem;
+        color: var(--text-secondary);
+        line-height: 1.65;
+        max-width: 280px;
+        margin: 0 auto;
+      }
+
+      /* TESTIMONIALS */
+      .testimonials {
+        padding: 120px 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+      .testimonial-card {
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        padding: 32px;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+      }
+      .testimonial-card .stars {
+        color: var(--gold);
+        font-size: 0.85rem;
+        letter-spacing: 2px;
+        margin-bottom: 16px;
+      }
+      .testimonial-card blockquote {
+        font-size: 0.92rem;
+        color: var(--text-secondary);
+        line-height: 1.7;
+        margin-bottom: 20px;
+        font-style: italic;
+      }
+      .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .testimonial-author .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #fff;
+      }
+      .testimonial-author .name {
+        font-weight: 500;
+        font-size: 0.88rem;
+      }
+      .testimonial-author .role {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+      }
+
+      /* CTA SECTION */
+      .cta-section {
+        padding: 120px 40px;
+        text-align: center;
+      }
+      .cta-box {
+        max-width: 680px;
+        margin: 0 auto;
+        background: var(--sage);
+        border-radius: var(--radius-xl);
+        padding: 72px 60px;
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+      }
+      .cta-box::before {
+        content: "";
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.06);
+        top: -100px;
+        right: -80px;
+      }
+      .cta-box::after {
+        content: "";
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.04);
+        bottom: -60px;
+        left: -40px;
+      }
+      .cta-box h2 {
+        font-size: 2.4rem;
+        margin-bottom: 16px;
+        position: relative;
+        z-index: 1;
+      }
+      .cta-box p {
+        font-size: 1.05rem;
+        opacity: 0.85;
+        margin-bottom: 32px;
+        line-height: 1.7;
+        position: relative;
+        z-index: 1;
+      }
+      .cta-box .btn {
+        background: #fff;
+        color: var(--sage);
+        position: relative;
+        z-index: 1;
+      }
+      .cta-box .btn:hover {
+        background: var(--bg);
+        transform: translateY(-2px);
+      }
+
+      /* FOOTER */
+      .footer {
+        padding: 60px 40px 40px;
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+      }
+      .footer-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .footer p {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+      }
+      .footer-links {
+        display: flex;
+        gap: 24px;
+      }
+      .footer-links a {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: color var(--transition);
+      }
+      .footer-links a:hover {
+        color: var(--sage);
+      }
+
+      /* ═══════════════════════════════════════════
+   AUTH MODAL
+   ═══════════════════════════════════════════ */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(44, 44, 44, 0.3);
+        backdrop-filter: blur(8px);
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .modal-overlay.open {
+        display: flex;
+        opacity: 1;
+      }
+      .modal {
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        padding: 48px 44px;
+        width: 420px;
+        max-width: 90vw;
+        box-shadow: var(--shadow-lg);
+        position: relative;
+        transform: scale(0.95);
+        transition: transform 0.3s ease;
+      }
+      .modal-overlay.open .modal {
+        transform: scale(1);
+      }
+      .modal-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: none;
+        border: none;
+        font-size: 1.3rem;
+        cursor: pointer;
+        color: var(--text-muted);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all var(--transition);
+      }
+      .modal-close:hover {
+        background: var(--bg);
+        color: var(--text-primary);
+      }
+      .modal h2 {
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+      }
+      .modal .modal-sub {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin-bottom: 28px;
+      }
+      .social-auth {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      .social-btn {
+        flex: 1;
+        padding: 12px;
+        border: 1.5px solid #e0d9ce;
+        border-radius: var(--radius-sm);
+        background: var(--bg-card);
+        cursor: pointer;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all var(--transition);
+        color: var(--text-primary);
+      }
+      .social-btn:hover {
+        border-color: var(--sage);
+        background: var(--sage-pale);
+      }
+      .divider {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+        color: var(--text-muted);
+        font-size: 0.8rem;
+      }
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #e0d9ce;
+      }
+      .modal-switch {
+        text-align: center;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-top: 20px;
+      }
+      .modal-switch a {
+        color: var(--sage);
+        text-decoration: none;
+        font-weight: 500;
+        cursor: pointer;
+      }
+      .modal-switch a:hover {
+        text-decoration: underline;
+      }
+
+      /* ═══════════════════════════════════════════
+   APP SHELL (Dashboard, New Entry, Insights)
+   ═══════════════════════════════════════════ */
+      .app-shell {
+        min-height: 100vh;
+        position: relative;
+      }
+
+      /* SIDEBAR */
+      .sidebar {
+        background: var(--bg-card);
+        border-right: 1px solid rgba(0, 0, 0, 0.06);
+        padding: 28px 0;
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 260px;
+        z-index: 50;
+      }
+      .sidebar-logo {
+        padding: 0 28px;
+        margin-bottom: 36px;
+      }
+      .sidebar-nav {
+        flex: 1;
+      }
+
+      /* TOP BAR */
+      .topbar {
+        position: fixed;
+        top: 0;
+        left: 260px;
+        right: 0;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0 36px;
+        background: rgba(245, 240, 232, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        z-index: 40;
+      }
+      .topbar-user {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .topbar-user .user-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 0.7rem;
+        cursor: pointer;
+        transition: box-shadow var(--transition);
+      }
+      .topbar-user .user-avatar:hover {
+        box-shadow: 0 0 0 2px var(--sage-light);
+      }
+      .signout-btn {
+        background: none;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 100px;
+        padding: 6px 14px;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: all var(--transition);
+        letter-spacing: 0.02em;
+      }
+      .signout-btn:hover {
+        color: var(--terracotta);
+        border-color: var(--terracotta-light);
+        background: var(--terracotta-pale);
+      }
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 28px;
+        font-size: 0.88rem;
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all var(--transition);
+        border-left: 3px solid transparent;
+        text-decoration: none;
+      }
+      .nav-item:hover {
+        color: var(--text-primary);
+        background: var(--bg);
+      }
+      .nav-item.active {
+        color: var(--sage);
+        background: var(--sage-pale);
+        border-left-color: var(--sage);
+        font-weight: 500;
+      }
+      .nav-item .nav-icon {
+        width: 20px;
+        text-align: center;
+        font-size: 1rem;
+      }
+      .user-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: var(--sage);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      /* MAIN CONTENT */
+      .main-content {
+        margin-left: 260px;
+        padding: 36px 48px;
+        padding-top: 80px;
+        max-width: 960px;
+        width: calc(100% - 260px);
+      }
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+        margin-bottom: 36px;
+      }
+      .page-header h1 {
+        font-size: 2rem;
+        line-height: 1.2;
+      }
+      .greeting-sub {
+        font-size: 0.92rem;
+        color: var(--text-secondary);
+        margin-top: 4px;
+      }
+
+      /* ─── TIMELINE ─── */
+      .timeline-group {
+        margin-bottom: 36px;
+      }
+      .timeline-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 16px;
+        padding-left: 4px;
+      }
+      .entry-card {
+        background: var(--bg-card);
+        border-radius: var(--radius-md);
+        padding: 24px 28px;
+        margin-bottom: 14px;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        border-left: 4px solid var(--sage);
+        transition: all var(--transition);
+        cursor: pointer;
+        position: relative;
+      }
+      .entry-card:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateX(4px);
+      }
+      .entry-card.mood-happy {
+        border-left-color: var(--gold);
+      }
+      .entry-card.mood-calm {
+        border-left-color: var(--sage);
+      }
+      .entry-card.mood-anxious {
+        border-left-color: var(--terracotta);
+      }
+      .entry-card.mood-overwhelmed {
+        border-left-color: var(--rose);
+      }
+      .entry-card.mood-grateful {
+        border-left-color: var(--lavender);
+      }
+      .entry-card.mood-energetic {
+        border-left-color: var(--sky);
+      }
+
+      .entry-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+        margin-bottom: 12px;
+      }
+      .entry-mood {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+        font-size: 0.95rem;
+      }
+      .entry-mood-emoji {
+        font-size: 1.2rem;
+      }
+      .entry-time {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .entry-text {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        line-height: 1.65;
+        margin-bottom: 14px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .entry-tags {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+      }
+      .entry-tag {
+        padding: 4px 12px;
+        background: var(--bg);
+        border-radius: 100px;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+      .entry-ai-preview {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px 14px;
+        background: var(--sage-pale);
+        border-radius: var(--radius-sm);
+        font-size: 0.82rem;
+        color: var(--sage);
+        line-height: 1.55;
+      }
+      .entry-ai-preview .ai-dot {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--sage);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 0.55rem;
+        color: #fff;
+        margin-top: 1px;
+      }
+      .entry-actions {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        display: flex;
+        gap: 4px;
+        opacity: 0;
+        transition: opacity var(--transition);
+      }
+      .entry-card:hover .entry-actions {
+        opacity: 1;
+      }
+      .entry-action-btn {
+        width: 30px;
+        height: 30px;
+        border: none;
+        background: var(--bg);
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        transition: all var(--transition);
+      }
+      .entry-action-btn:hover {
+        background: var(--terracotta-pale);
+        color: var(--terracotta);
+      }
+
+      /* ─── NEW ENTRY PAGE ─── */
+      .mood-selector {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-bottom: 28px;
+      }
+      .mood-option {
+        background: var(--bg-card);
+        border: 2px solid rgba(0, 0, 0, 0.06);
+        border-radius: var(--radius-md);
+        padding: 20px 16px;
+        text-align: center;
+        cursor: pointer;
+        transition: all var(--transition);
+      }
+      .mood-option:hover {
+        border-color: var(--sage-light);
+        transform: translateY(-2px);
+      }
+      .mood-option.selected {
+        border-color: var(--sage);
+        background: var(--sage-pale);
+      }
+      .mood-option .mood-emoji {
+        font-size: 2rem;
+        margin-bottom: 8px;
+        display: block;
+        transition: transform var(--transition);
+      }
+      .mood-option:hover .mood-emoji {
+        transform: scale(1.15);
+      }
+      .mood-option .mood-name {
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+      }
+      .mood-option.selected .mood-name {
+        color: var(--sage);
+      }
+
+      .tag-chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 28px;
+      }
+      .tag-chip {
+        padding: 8px 18px;
+        border-radius: 100px;
+        border: 1.5px solid #e0d9ce;
+        background: var(--bg-card);
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all var(--transition);
+        user-select: none;
+      }
+      .tag-chip:hover {
+        border-color: var(--sage-light);
+      }
+      .tag-chip.selected {
+        background: var(--sage);
+        border-color: var(--sage);
+        color: #fff;
+      }
+      .char-count {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        text-align: right;
+        margin-top: 6px;
+      }
+      .char-count.enough {
+        color: var(--sage);
+      }
+
+      /* AI Response Box */
+      .ai-response-box {
+        background: var(--bg-card);
+        border-radius: var(--radius-md);
+        padding: 28px;
+        border: 1px solid var(--sage-pale);
+        margin-top: 24px;
+        display: none;
+      }
+      .ai-response-box.visible {
+        display: block;
+      }
+      .ai-response-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .ai-response-header .ai-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: var(--sage);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 0.85rem;
+      }
+      .ai-response-header h4 {
+        font-size: 1rem;
+        color: var(--sage);
+      }
+      .ai-response-text {
+        font-size: 0.92rem;
+        color: var(--text-secondary);
+        line-height: 1.75;
+        font-style: italic;
+      }
+      .ai-response-text .typing-cursor {
+        display: inline-block;
+        width: 2px;
+        height: 1em;
+        background: var(--sage);
+        animation: blink 0.8s step-end infinite;
+        vertical-align: text-bottom;
+        margin-left: 2px;
+      }
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+
+      /* ─── INSIGHTS PAGE ─── */
+      .insights-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        margin-bottom: 32px;
+      }
+      .stat-card {
+        background: var(--bg-card);
+        border-radius: var(--radius-md);
+        padding: 24px;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+      }
+      .stat-card .stat-label {
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+      }
+      .stat-card .stat-value {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 2.2rem;
+        color: var(--sage);
+      }
+      .stat-card .stat-change {
+        font-size: 0.78rem;
+        color: var(--sage);
+        margin-top: 4px;
+      }
+
+      .chart-container {
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        padding: 32px;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        margin-bottom: 24px;
+      }
+      .chart-container h3 {
+        font-size: 1.2rem;
+        margin-bottom: 24px;
+      }
+      .bar-chart {
+        display: flex;
+        align-items: flex-end;
+        gap: 16px;
+        height: 200px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        position: relative;
+      }
+      .bar-group {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+        justify-content: flex-end;
+      }
+      .bar {
+        width: 100%;
+        max-width: 48px;
+        border-radius: 6px 6px 0 0;
+        transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        cursor: pointer;
+      }
+      .bar:hover {
+        filter: brightness(1.1);
+        transform: scaleY(1.05);
+        transform-origin: bottom;
+      }
+      .bar-label {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-top: 10px;
+        position: absolute;
+        bottom: -28px;
+      }
+      .bar-value {
+        position: absolute;
+        top: -22px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        opacity: 0;
+        transition: opacity var(--transition);
+      }
+      .bar:hover .bar-value {
+        opacity: 1;
+      }
+
+      /* Mood Distribution */
+      .mood-distribution {
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        padding: 32px;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+      }
+      .mood-distribution h3 {
+        font-size: 1.2rem;
+        margin-bottom: 24px;
+      }
+      .mood-dist-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 16px;
+      }
+      .mood-dist-item:last-child {
+        margin-bottom: 0;
+      }
+      .mood-dist-emoji {
+        font-size: 1.2rem;
+        width: 28px;
+        text-align: center;
+      }
+      .mood-dist-name {
+        font-size: 0.85rem;
+        font-weight: 500;
+        width: 90px;
+      }
+      .mood-dist-bar-track {
+        flex: 1;
+        height: 10px;
+        background: var(--bg);
+        border-radius: 100px;
+        overflow: hidden;
+      }
+      .mood-dist-bar-fill {
+        height: 100%;
+        border-radius: 100px;
+        transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .mood-dist-pct {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        width: 36px;
+        text-align: right;
+      }
+
+      /* ENTRY DETAIL MODAL */
+      .detail-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(44, 44, 44, 0.3);
+        backdrop-filter: blur(8px);
+        z-index: 200;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+      }
+      .detail-overlay.open {
+        display: flex;
+      }
+      .detail-modal {
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        padding: 40px;
+        width: 580px;
+        max-width: 100%;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: var(--shadow-lg);
+        position: relative;
+      }
+      .detail-modal .entry-mood {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+      }
+      .detail-modal .entry-time {
+        margin-bottom: 20px;
+        display: block;
+      }
+      .detail-modal .entry-text {
+        -webkit-line-clamp: unset;
+        margin-bottom: 20px;
+        font-size: 0.95rem;
+      }
+      .detail-modal .entry-tags {
+        margin-bottom: 20px;
+      }
+      .detail-modal .detail-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+      }
+
+      /* ═══════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════ */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+      @media (max-width: 768px) {
+        .hero-content {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+        .hero-preview {
+          display: none;
+        }
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+        .steps {
+          grid-template-columns: 1fr;
+          gap: 32px;
+        }
+        .steps::before {
+          display: none;
+        }
+        .testimonials-grid {
+          grid-template-columns: 1fr;
+        }
+        .landing-nav {
+          padding: 16px 20px;
+        }
+        .hero,
+        .features,
+        .how-it-works,
+        .testimonials,
+        .cta-section {
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+        .topbar {
+          left: 0;
+        }
+        .main-content {
+          margin-left: 0;
+          width: 100%;
+        }
+        .sidebar {
+          transform: translateX(-100%);
+          transition: transform var(--transition);
+        }
+        .sidebar.mobile-open {
+          transform: translateX(0);
+        }
+        .main-content {
+          margin-left: 0;
+          padding: 24px 20px;
+        }
+        .mood-selector {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .insights-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ═══════════════════════════════════════════
+     PAGE: LANDING
+     ═══════════════════════════════════════════ -->
+    <div class="page active" id="page-landing">
+      <!-- NAV -->
+      <nav class="landing-nav" id="landing-nav">
+        <div class="logo">Serene<span>.</span></div>
+        <div class="nav-links">
+          <button class="btn btn-ghost btn-sm" onclick="openModal('login')">
+            Log in
+          </button>
+          <button class="btn btn-primary btn-sm" onclick="openModal('signup')">
+            Get started free
+          </button>
+        </div>
+      </nav>
+
+      <!-- HERO -->
+      <section class="hero">
+        <div class="hero-bg">
+          <div class="hero-blob hero-blob-1"></div>
+          <div class="hero-blob hero-blob-2"></div>
+          <div class="hero-blob hero-blob-3"></div>
+        </div>
+        <div class="hero-content">
+          <div class="hero-text">
+            <div class="hero-badge">Private & Secure</div>
+            <h1>Your mind deserves a <em>quiet place</em> to breathe</h1>
+            <p class="hero-subtitle">
+              Serene is a private mood journal with empathetic AI insights. Log
+              how you feel, discover patterns, and receive gentle encouragement
+              — all in a space that's entirely yours.
+            </p>
+            <div class="hero-ctas">
+              <button
+                class="btn btn-primary btn-lg"
+                onclick="openModal('signup')"
+              >
+                Start journaling free
+              </button>
+              <button class="btn btn-secondary" onclick="openModal('login')">
+                Log in
+              </button>
+            </div>
+            <div class="hero-social-proof">
+              <div class="avatar-stack">
+                <div class="avatar" style="background: var(--sage)">AL</div>
+                <div class="avatar" style="background: var(--terracotta)">
+                  MK
+                </div>
+                <div class="avatar" style="background: var(--lavender)">JS</div>
+                <div class="avatar" style="background: var(--gold)">RW</div>
+              </div>
+              <p>
+                <strong>2,400+</strong> people journaling<br />with Serene this
+                week
+              </p>
+            </div>
+          </div>
+          <div class="hero-preview">
+            <div class="preview-float-tag tag-1">🧘 Meditation</div>
+            <div class="preview-float-tag tag-2">✦ AI Insight</div>
+            <div class="preview-card">
+              <div class="preview-mood-row">
+                <div
+                  class="preview-mood-pill"
+                  style="background: var(--sage-pale); color: var(--sage)"
+                >
+                  😌 Calm
+                </div>
+                <div
+                  class="preview-mood-pill"
+                  style="background: var(--gold-pale); color: var(--gold)"
+                >
+                  🏃 Fitness
+                </div>
+              </div>
+              <div class="preview-text">
+                "Morning run helped clear my head. Feeling more focused than I
+                have in days. The fresh air and movement really shifted
+                something."
+              </div>
+              <div class="preview-ai">
+                <div class="preview-ai-icon">✦</div>
+                <p>
+                  Beautiful — you're noticing how movement shifts your inner
+                  landscape. That awareness is a superpower. Keep honoring what
+                  your body tells you.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FEATURES -->
+      <section class="features">
+        <p class="section-label">Why Serene</p>
+        <h2 class="section-title">Built for your inner world</h2>
+        <p class="section-subtitle">
+          A thoughtfully crafted space where reflection meets gentle insight —
+          no judgment, just understanding.
+        </p>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div
+              class="feature-icon"
+              style="background: var(--sage-pale); color: var(--sage)"
+            >
+              🎭
+            </div>
+            <h3>Mood Tracking</h3>
+            <p>
+              Choose from expressive mood cards that capture nuance — not just
+              "good" or "bad," but the full spectrum of your emotional world.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div
+              class="feature-icon"
+              style="
+                background: var(--terracotta-pale);
+                color: var(--terracotta);
+              "
+            >
+              ✦
+            </div>
+            <h3>AI Vibe Check</h3>
+            <p>
+              Receive an empathetic, real-time response after each entry. Like a
+              wise friend who always knows what to say — supportive, never
+              clinical.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div
+              class="feature-icon"
+              style="background: var(--lavender-pale); color: var(--lavender)"
+            >
+              📊
+            </div>
+            <h3>Visual Insights</h3>
+            <p>
+              See your emotional patterns unfold over weeks. Understand your
+              rhythms, discover triggers, and celebrate the moments of calm.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div
+              class="feature-icon"
+              style="background: var(--gold-pale); color: var(--gold)"
+            >
+              🏷️
+            </div>
+            <h3>Context Tags</h3>
+            <p>
+              Tag entries with activities like Work, Sleep, or Fitness. Over
+              time, see which activities correlate with your best moods.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div
+              class="feature-icon"
+              style="background: var(--rose-pale); color: var(--rose)"
+            >
+              🔒
+            </div>
+            <h3>Private by Design</h3>
+            <p>
+              Your journal is encrypted and accessible only to you. No sharing,
+              no social features — just your thoughts, protected.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div
+              class="feature-icon"
+              style="background: var(--sky-pale); color: var(--sky)"
+            >
+              📱
+            </div>
+            <h3>Beautiful Timeline</h3>
+            <p>
+              Browse past entries on a color-coded timeline. Each entry is a
+              brushstroke in the painting of your emotional journey.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- HOW IT WORKS -->
+      <section class="how-it-works">
+        <div class="how-it-works-inner">
+          <p class="section-label" style="text-align: center">How it works</p>
+          <h2
+            class="section-title"
+            style="text-align: center; margin-left: auto; margin-right: auto"
+          >
+            Three gentle steps
+          </h2>
+          <p
+            class="section-subtitle"
+            style="text-align: center; margin-left: auto; margin-right: auto"
+          >
+            No setup, no complexity. Just open, reflect, and grow.
+          </p>
+          <div class="steps">
+            <div class="step">
+              <div class="step-number">1</div>
+              <h3>Choose your mood</h3>
+              <p>
+                Select from beautifully crafted mood cards that capture exactly
+                how you're feeling right now.
+              </p>
+            </div>
+            <div class="step">
+              <div class="step-number">2</div>
+              <h3>Write & reflect</h3>
+              <p>
+                Add context tags and write freely. Your words are the seeds of
+                self-understanding.
+              </p>
+            </div>
+            <div class="step">
+              <div class="step-number">3</div>
+              <h3>Receive insight</h3>
+              <p>
+                Get an empathetic AI vibe check that validates your feelings and
+                offers gentle perspective.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TESTIMONIALS -->
+      <section class="testimonials">
+        <p class="section-label">What people say</p>
+        <h2 class="section-title">Voices from the quiet</h2>
+        <p class="section-subtitle">
+          Real experiences from people who've made Serene part of their daily
+          practice.
+        </p>
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <div class="stars">★★★★★</div>
+            <blockquote>
+              "I've tried a dozen journaling apps. Serene is the first one that
+              felt like it actually understood what I was trying to say. The AI
+              responses are surprisingly thoughtful."
+            </blockquote>
+            <div class="testimonial-author">
+              <div class="avatar" style="background: var(--sage)">AL</div>
+              <div>
+                <div class="name">Amara Lin</div>
+                <div class="role">Product designer</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="stars">★★★★★</div>
+            <blockquote>
+              "The mood patterns feature helped me realize my anxiety spikes on
+              Sundays. Now I plan calming activities and it's made a real
+              difference."
+            </blockquote>
+            <div class="testimonial-author">
+              <div class="avatar" style="background: var(--terracotta)">MK</div>
+              <div>
+                <div class="name">Marcus Keller</div>
+                <div class="role">Software engineer</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="stars">★★★★★</div>
+            <blockquote>
+              "It's the privacy for me. Knowing my thoughts are truly private
+              lets me be more honest. And that honesty has been transformative."
+            </blockquote>
+            <div class="testimonial-author">
+              <div class="avatar" style="background: var(--lavender)">JS</div>
+              <div>
+                <div class="name">Jade Sawyer</div>
+                <div class="role">Therapist</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="cta-section">
+        <div class="cta-box">
+          <h2>Your quiet place awaits</h2>
+          <p>
+            Start your free journaling practice today. No credit card required,
+            no limits on entries. Just you and your thoughts.
+          </p>
+          <button class="btn btn-lg" onclick="openModal('signup')">
+            Begin your journey
+          </button>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="footer">
+        <div class="footer-inner">
+          <p>&copy; 2026 Serene. Made with quietude.</p>
+          <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Support</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+     AUTH MODALS
+     ═══════════════════════════════════════════ -->
+    <div class="modal-overlay" id="modal-login">
+      <div class="modal">
+        <button class="modal-close" onclick="closeModals()">&times;</button>
+        <h2>Welcome back</h2>
+        <p class="modal-sub">Continue your journaling practice</p>
+        <div class="social-auth">
+          <button class="social-btn" onclick="loginDemo()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
+                fill="#4285F4"
+              />
+              <path
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                fill="#34A853"
+              />
+              <path
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                fill="#FBBC05"
+              />
+              <path
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                fill="#EA4335"
+              />
+            </svg>
+            Google
+          </button>
+          <button class="social-btn" onclick="loginDemo()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"
+              />
+            </svg>
+            GitHub
+          </button>
+        </div>
+        <div class="divider">or continue with email</div>
+        <div class="input-group">
+          <label>Email</label>
+          <input
+            type="email"
+            class="input-field"
+            placeholder="you@example.com"
+            value="demo@serene.app"
+          />
+        </div>
+        <div class="input-group">
+          <label>Password</label>
+          <input
+            type="password"
+            class="input-field"
+            placeholder="••••••••"
+            value="demopassword"
+          />
+        </div>
+        <button
+          class="btn btn-primary"
+          style="width: 100%; justify-content: center"
+          onclick="loginDemo()"
+        >
+          Log in
+        </button>
+        <p class="modal-switch">
+          Don't have an account? <a onclick="switchModal('signup')">Sign up</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-signup">
+      <div class="modal">
+        <button class="modal-close" onclick="closeModals()">&times;</button>
+        <h2>Create your space</h2>
+        <p class="modal-sub">Begin your private journaling journey</p>
+        <div class="social-auth">
+          <button class="social-btn" onclick="loginDemo()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
+                fill="#4285F4"
+              />
+              <path
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                fill="#34A853"
+              />
+              <path
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                fill="#FBBC05"
+              />
+              <path
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                fill="#EA4335"
+              />
+            </svg>
+            Google
+          </button>
+          <button class="social-btn" onclick="loginDemo()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"
+              />
+            </svg>
+            GitHub
+          </button>
+        </div>
+        <div class="divider">or continue with email</div>
+        <div class="input-group">
+          <label>Full name</label>
+          <input
+            type="text"
+            class="input-field"
+            placeholder="Your name"
+            value="Alex Rivera"
+          />
+        </div>
+        <div class="input-group">
+          <label>Email</label>
+          <input
+            type="email"
+            class="input-field"
+            placeholder="you@example.com"
+            value="demo@serene.app"
+          />
+        </div>
+        <div class="input-group">
+          <label>Password</label>
+          <input
+            type="password"
+            class="input-field"
+            placeholder="At least 8 characters"
+            value="demopassword"
+          />
+        </div>
+        <button
+          class="btn btn-primary"
+          style="width: 100%; justify-content: center"
+          onclick="loginDemo()"
+        >
+          Create account
+        </button>
+        <p class="modal-switch">
+          Already have an account? <a onclick="switchModal('login')">Log in</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+     PAGE: DASHBOARD
+     ═══════════════════════════════════════════ -->
+    <div class="page" id="page-dashboard">
+      <div class="app-shell">
+        <aside class="sidebar" id="sidebar">
+          <div class="sidebar-logo">
+            <div class="logo">Serene<span>.</span></div>
+          </div>
+          <nav class="sidebar-nav">
+            <a
+              class="nav-item active"
+              data-page="dashboard"
+              onclick="navigateApp('dashboard')"
+            >
+              <span class="nav-icon">📓</span> Journal
+            </a>
+            <a
+              class="nav-item"
+              data-page="new-entry"
+              onclick="navigateApp('new-entry')"
+            >
+              <span class="nav-icon">✏️</span> New Entry
+            </a>
+            <a
+              class="nav-item"
+              data-page="insights"
+              onclick="navigateApp('insights')"
+            >
+              <span class="nav-icon">📊</span> Insights
+            </a>
+          </nav>
+        </aside>
+        <div class="topbar">
+          <div class="topbar-user">
+            <button class="signout-btn" onclick="logout()">Sign out</button>
+            <div class="user-avatar" title="Alex Rivera">AR</div>
+          </div>
+        </div>
+        <main class="main-content" id="main-content">
+          <!-- Content inserted by JS -->
+        </main>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+     ENTRY DETAIL OVERLAY
+     ═══════════════════════════════════════════ -->
+    <div
+      class="detail-overlay"
+      id="detail-overlay"
+      onclick="closeDetail(event)"
+    >
+      <div class="detail-modal" id="detail-modal">
+        <button class="modal-close" onclick="closeDetailModal()">
+          &times;
+        </button>
+        <div id="detail-content"></div>
+      </div>
+    </div>
+
+    <script>
+      // ═══════════════════════════════════════════
+      // DEMO DATA
+      // ═══════════════════════════════════════════
+      const MOODS = {
+        happy: {
+          emoji: "😊",
+          label: "Happy",
+          color: "var(--gold)",
+          bg: "var(--gold-pale)",
+        },
+        calm: {
+          emoji: "😌",
+          label: "Calm",
+          color: "var(--sage)",
+          bg: "var(--sage-pale)",
+        },
+        anxious: {
+          emoji: "😰",
+          label: "Anxious",
+          color: "var(--terracotta)",
+          bg: "var(--terracotta-pale)",
+        },
+        overwhelmed: {
+          emoji: "😩",
+          label: "Overwhelmed",
+          color: "var(--rose)",
+          bg: "var(--rose-pale)",
+        },
+        grateful: {
+          emoji: "🙏",
+          label: "Grateful",
+          color: "var(--lavender)",
+          bg: "var(--lavender-pale)",
+        },
+        energetic: {
+          emoji: "⚡",
+          label: "Energetic",
+          color: "var(--sky)",
+          bg: "var(--sky-pale)",
+        },
+      };
+
+      const TAGS = [
+        "Work",
+        "Sleep",
+        "Relationships",
+        "Fitness",
+        "Hobbies",
+        "Nature",
+        "Meditation",
+        "Reading",
+        "Social",
+        "Creative",
+      ];
+
+      const demoEntries = [
+        {
+          id: 1,
+          mood: "calm",
+          tags: ["Meditation", "Nature"],
+          text: "Morning walk through the park was exactly what I needed. The fog was lifting off the pond and there was this heron just standing perfectly still. Felt like the world was holding its breath with me.",
+          ai: "You're describing a moment of true presence — finding stillness in nature's quiet theater. These small rituals of attention are how we anchor ourselves.",
+          time: "Today, 8:45 AM",
+        },
+        {
+          id: 2,
+          mood: "happy",
+          tags: ["Work", "Creative"],
+          text: "Finally cracked that design problem I've been wrestling with for days. The solution was simpler than I thought — sometimes stepping away is the answer. Celebrated with a coffee from the good place.",
+          ai: "The breakthrough after struggle hits different, doesn't it? You trusted the process and let your subconscious do its work. That patience is a skill worth celebrating.",
+          time: "Today, 2:30 PM",
+        },
+        {
+          id: 3,
+          mood: "anxious",
+          tags: ["Work", "Relationships"],
+          text: "Big presentation tomorrow and I can feel the tension building. Practiced it three times but keep second-guessing myself. Called Mom and she reminded me I always feel this way before things go well.",
+          ai: 'Pre-performance nerves are your body\'s way of saying "this matters to me." Your preparation is real. And your mom sounds wise — trust the pattern she sees in you.',
+          time: "Yesterday, 9:15 PM",
+        },
+        {
+          id: 4,
+          mood: "grateful",
+          tags: ["Relationships", "Social"],
+          text: "Dinner with old college friends. We picked up right where we left off even though it's been months. Laughed until my face hurt. These people know the real me and love me anyway.",
+          ai: "Those friendships that survive time and distance are rare gems. The laughter you shared tonight is medicine for the soul. You're rich in the ways that matter most.",
+          time: "Yesterday, 11:00 PM",
+        },
+        {
+          id: 5,
+          mood: "overwhelmed",
+          tags: ["Work", "Sleep"],
+          text: "Too many deadlines converging at once. Slept poorly, woke up with a racing mind at 4am. Made a list of everything that needs doing and it's... a lot. But at least it's on paper now instead of spinning in my head.",
+          ai: "Getting it out of your head and onto paper is the first act of reclaiming control. You don't have to solve everything today — just the next thing. Rest when you can.",
+          time: "2 days ago",
+        },
+        {
+          id: 6,
+          mood: "energetic",
+          tags: ["Fitness", "Hobbies"],
+          text: "Ran my first 10K! Legs are jelly but the endorphin rush is incredible. Six months ago I could barely run a mile. Every morning I showed up for myself, even when it was hard. Especially when it was hard.",
+          ai: "From one mile to ten — that's not just physical growth, it's proof of your commitment to yourself. Every hard morning was a vote for the person you're becoming.",
+          time: "3 days ago",
+        },
+        {
+          id: 7,
+          mood: "calm",
+          tags: ["Reading", "Meditation"],
+          text: "Rainy Sunday. Spent the afternoon reading with tea and candles. No agenda, no screen time, just the sound of rain and pages turning. I need to protect these quiet days more fiercely.",
+          ai: "Protecting your quiet days is an act of self-respect. In a world that rewards busyness, choosing stillness takes real courage. Your soul needed this.",
+          time: "4 days ago",
+        },
+        {
+          id: 8,
+          mood: "happy",
+          tags: ["Nature", "Creative"],
+          text: "Took my sketchbook to the botanical garden. Drew the most beautiful orchid — or at least tried to. It's not perfect but I love how the watercolors bled into each other. Happy accidents.",
+          ai: 'The beauty in imperfection — you\'re practicing wabi-sabi without even naming it. Your willingness to let go of "perfect" is exactly what makes your art alive.',
+          time: "5 days ago",
+        },
+      ];
+
+      let entries = [...demoEntries];
+      let currentAppPage = "dashboard";
+
+      // ═══════════════════════════════════════════
+      // PAGE NAVIGATION
+      // ═══════════════════════════════════════════
+      function showPage(pageId) {
+        document.querySelectorAll(".page").forEach((p) => {
+          p.classList.remove("active", "visible");
+        });
+        const page = document.getElementById("page-" + pageId);
+        page.classList.add("active");
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            page.classList.add("visible");
+          });
+        });
+      }
+
+      // ═══════════════════════════════════════════
+      // AUTH MODALS
+      // ═══════════════════════════════════════════
+      function openModal(type) {
+        closeModals();
+        const modal = document.getElementById("modal-" + type);
+        modal.classList.add("open");
+      }
+      function closeModals() {
+        document
+          .querySelectorAll(".modal-overlay")
+          .forEach((m) => m.classList.remove("open"));
+      }
+      function switchModal(type) {
+        closeModals();
+        setTimeout(() => openModal(type), 200);
+      }
+      function loginDemo() {
+        closeModals();
+        showPage("dashboard");
+        navigateApp("dashboard");
+      }
+      function logout() {
+        showPage("landing");
+      }
+
+      // Close modal on overlay click
+      document.querySelectorAll(".modal-overlay").forEach((overlay) => {
+        overlay.addEventListener("click", (e) => {
+          if (e.target === overlay) closeModals();
+        });
+      });
+
+      // ═══════════════════════════════════════════
+      // APP NAVIGATION
+      // ═══════════════════════════════════════════
+      function navigateApp(page) {
+        currentAppPage = page;
+        document
+          .querySelectorAll(".nav-item")
+          .forEach((n) => n.classList.remove("active"));
+        document
+          .querySelector(`.nav-item[data-page="${page}"]`)
+          ?.classList.add("active");
+
+        const main = document.getElementById("main-content");
+        main.style.opacity = "0";
+        main.style.transform = "translateY(8px)";
+
+        setTimeout(() => {
+          switch (page) {
+            case "dashboard":
+              renderDashboard();
+              break;
+            case "new-entry":
+              renderNewEntry();
+              break;
+            case "insights":
+              renderInsights();
+              break;
+          }
+          requestAnimationFrame(() => {
+            main.style.opacity = "1";
+            main.style.transform = "translateY(0)";
+            main.style.transition = "opacity 0.4s ease, transform 0.4s ease";
+          });
+        }, 200);
+      }
+
+      // ═══════════════════════════════════════════
+      // DASHBOARD
+      // ═══════════════════════════════════════════
+      function renderDashboard() {
+        const main = document.getElementById("main-content");
+        const grouped = {
+          Today: entries.filter((e) => e.time.startsWith("Today")),
+          Yesterday: entries.filter((e) => e.time.startsWith("Yesterday")),
+          "Earlier This Week": entries.filter(
+            (e) =>
+              !e.time.startsWith("Today") && !e.time.startsWith("Yesterday"),
+          ),
+        };
+
+        let html = `
+    <div class="page-header">
+      <div>
+        <h1>Good morning, Alex</h1>
+        <p class="greeting-sub">How are you feeling today?</p>
+      </div>
+      <button class="btn btn-primary" onclick="navigateApp('new-entry')">
+        <span>+</span> New Entry
+      </button>
+    </div>
+  `;
+
+        for (const [label, items] of Object.entries(grouped)) {
+          if (items.length === 0) continue;
+          html += `<div class="timeline-group"><div class="timeline-label">${label}</div>`;
+          items.forEach((entry) => {
+            const mood = MOODS[entry.mood];
+            html += `
+        <div class="entry-card mood-${entry.mood}" onclick="openDetail(${entry.id})">
+          <div class="entry-actions">
+            <button class="entry-action-btn" onclick="event.stopPropagation();editEntry(${entry.id})" title="Edit">✎</button>
+            <button class="entry-action-btn" onclick="event.stopPropagation();deleteEntry(${entry.id})" title="Delete">✕</button>
+          </div>
+          <div class="entry-header">
+            <div class="entry-mood">
+              <span class="entry-mood-emoji">${mood.emoji}</span>
+              ${mood.label}
+            </div>
+            <span class="entry-time">${entry.time}</span>
+          </div>
+          <p class="entry-text">${entry.text}</p>
+          <div class="entry-tags">
+            ${entry.tags.map((t) => `<span class="entry-tag">${t}</span>`).join("")}
+          </div>
+          <div class="entry-ai-preview">
+            <span class="ai-dot">✦</span>
+            <span>${entry.ai}</span>
+          </div>
+        </div>
+      `;
+          });
+          html += "</div>";
+        }
+        main.innerHTML = html;
+      }
+
+      // ═══════════════════════════════════════════
+      // ENTRY DETAIL
+      // ═══════════════════════════════════════════
+      function openDetail(id) {
+        const entry = entries.find((e) => e.id === id);
+        if (!entry) return;
+        const mood = MOODS[entry.mood];
+        const dc = document.getElementById("detail-content");
+        dc.innerHTML = `
+    <div class="entry-mood" style="font-size:1.3rem;margin-bottom:8px">
+      <span class="entry-mood-emoji" style="font-size:1.6rem">${mood.emoji}</span>
+      ${mood.label}
+    </div>
+    <span class="entry-time" style="display:block;margin-bottom:20px">${entry.time}</span>
+    <p class="entry-text" style="-webkit-line-clamp:unset;font-size:0.95rem;margin-bottom:20px;line-height:1.75">${entry.text}</p>
+    <div class="entry-tags" style="margin-bottom:20px">
+      ${entry.tags.map((t) => `<span class="entry-tag">${t}</span>`).join("")}
+    </div>
+    <div class="entry-ai-preview" style="padding:16px 18px;font-size:0.88rem">
+      <span class="ai-dot" style="width:24px;height:24px;font-size:0.65rem">✦</span>
+      <span>${entry.ai}</span>
+    </div>
+    <div class="detail-actions">
+      <button class="btn btn-secondary btn-sm" onclick="editEntry(${entry.id});closeDetailModal()">Edit</button>
+      <button class="btn btn-ghost btn-sm" style="color:var(--terracotta)" onclick="deleteEntry(${entry.id});closeDetailModal()">Delete</button>
+    </div>
+  `;
+        document.getElementById("detail-overlay").classList.add("open");
+      }
+      function closeDetail(e) {
+        if (e.target.id === "detail-overlay") closeDetailModal();
+      }
+      function closeDetailModal() {
+        document.getElementById("detail-overlay").classList.remove("open");
+      }
+
+      // ═══════════════════════════════════════════
+      // DELETE / EDIT
+      // ═══════════════════════════════════════════
+      function deleteEntry(id) {
+        entries = entries.filter((e) => e.id !== id);
+        renderDashboard();
+      }
+      function editEntry(id) {
+        const entry = entries.find((e) => e.id === id);
+        if (!entry) return;
+        navigateApp("new-entry");
+        setTimeout(() => {
+          // Pre-fill the form
+          document
+            .querySelector(`.mood-option[data-mood="${entry.mood}"]`)
+            ?.click();
+          entry.tags.forEach((tag) => {
+            document.querySelector(`.tag-chip[data-tag="${tag}"]`)?.click();
+          });
+          const textarea = document.getElementById("reflection-text");
+          if (textarea) {
+            textarea.value = entry.text;
+            updateCharCount();
+          }
+          // Store editing state
+          window._editingId = id;
+          const saveBtn = document.getElementById("save-entry-btn");
+          if (saveBtn) saveBtn.textContent = "Update Entry";
+        }, 300);
+      }
+
+      // ═══════════════════════════════════════════
+      // NEW ENTRY
+      // ═══════════════════════════════════════════
+      function renderNewEntry() {
+        window._editingId = null;
+        const main = document.getElementById("main-content");
+        let html = `
+    <div class="page-header">
+      <div>
+        <h1>New Entry</h1>
+        <p class="greeting-sub">Take a moment to check in with yourself</p>
+      </div>
+    </div>
+
+    <div style="margin-bottom:32px">
+      <label style="display:block;font-size:0.82rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px">How are you feeling?</label>
+      <div class="mood-selector">
+        ${Object.entries(MOODS)
+          .map(
+            ([key, m]) => `
+          <div class="mood-option" data-mood="${key}" onclick="selectMood('${key}')">
+            <span class="mood-emoji">${m.emoji}</span>
+            <span class="mood-name">${m.label}</span>
+          </div>
+        `,
+          )
+          .join("")}
+      </div>
+    </div>
+
+    <div style="margin-bottom:32px">
+      <label style="display:block;font-size:0.82rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px">What's on your mind?</label>
+      <div class="tag-chips">
+        ${TAGS.map((t) => `<div class="tag-chip" data-tag="${t}" onclick="toggleTag(this)">${t}</div>`).join("")}
+      </div>
+    </div>
+
+    <div style="margin-bottom:8px">
+      <label style="display:block;font-size:0.82rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px">Your reflection</label>
+      <textarea class="input-field" id="reflection-text" placeholder="Write freely about how you're feeling, what happened today, or anything on your mind..." oninput="updateCharCount()"></textarea>
+      <div class="char-count" id="char-count">0 / 50 characters minimum</div>
+    </div>
+
+    <div style="display:flex;gap:12px;margin-top:24px">
+      <button class="btn btn-primary" id="save-entry-btn" onclick="saveEntry()">Save Entry</button>
+      <button class="btn btn-ghost" onclick="navigateApp('dashboard')">Cancel</button>
+    </div>
+
+    <div class="ai-response-box" id="ai-response-box">
+      <div class="ai-response-header">
+        <div class="ai-icon">✦</div>
+        <h4>Vibe Check</h4>
+      </div>
+      <div class="ai-response-text" id="ai-response-text"></div>
+    </div>
+  `;
+        main.innerHTML = html;
+      }
+
+      let selectedMood = null;
+      function selectMood(mood) {
+        selectedMood = mood;
+        document
+          .querySelectorAll(".mood-option")
+          .forEach((m) => m.classList.remove("selected"));
+        document
+          .querySelector(`.mood-option[data-mood="${mood}"]`)
+          .classList.add("selected");
+      }
+
+      function toggleTag(el) {
+        el.classList.toggle("selected");
+      }
+
+      function updateCharCount() {
+        const text = document.getElementById("reflection-text").value;
+        const count = document.getElementById("char-count");
+        count.textContent = `${text.length} / 50 characters minimum`;
+        count.classList.toggle("enough", text.length >= 50);
+      }
+
+      function saveEntry() {
+        const text = document.getElementById("reflection-text").value;
+        if (!selectedMood) {
+          alert("Please select a mood");
+          return;
+        }
+        if (text.length < 50) {
+          alert(
+            "Please write at least 50 characters to receive your vibe check",
+          );
+          return;
+        }
+
+        const tags = Array.from(
+          document.querySelectorAll(".tag-chip.selected"),
+        ).map((c) => c.dataset.tag);
+
+        // AI Response (simulated streaming)
+        const aiResponses = {
+          happy:
+            "Your joy is radiating through your words. Whatever sparked this feeling, lean into it — you deserve these bright moments.",
+          calm: "There's a beautiful steadiness in what you've written. You're finding your center, and that groundedness will carry you forward.",
+          anxious:
+            "I hear the tension in your words, and I want you to know: feeling anxious doesn't mean something is wrong with you. It means something matters to you. Breathe.",
+          overwhelmed:
+            "When everything feels like too much, remember: you don't have to carry it all at once. Put one thing down. Then another. You'll find your footing.",
+          grateful:
+            "Gratitude is a practice, and you're getting good at it. The things you're noticing — they've always been there. You're just learning to see them.",
+          energetic:
+            "That energy you're feeling? It's you coming alive. Channel it wisely and watch what unfolds. You have more power than you know.",
+        };
+
+        const aiText =
+          aiResponses[selectedMood] ||
+          "Thank you for sharing. Every entry is a step toward understanding yourself better.";
+
+        // Show AI response with streaming effect
+        const box = document.getElementById("ai-response-box");
+        const textEl = document.getElementById("ai-response-text");
+        box.classList.add("visible");
+        textEl.innerHTML = '<span class="typing-cursor"></span>';
+
+        let i = 0;
+        const stream = setInterval(() => {
+          if (i < aiText.length) {
+            textEl.innerHTML =
+              aiText.substring(0, i + 1) +
+              '<span class="typing-cursor"></span>';
+            i++;
+          } else {
+            textEl.innerHTML = aiText;
+            clearInterval(stream);
+
+            // Save the entry
+            if (window._editingId) {
+              const idx = entries.findIndex((e) => e.id === window._editingId);
+              if (idx !== -1) {
+                entries[idx] = {
+                  ...entries[idx],
+                  mood: selectedMood,
+                  tags,
+                  text,
+                  ai: aiText,
+                };
+              }
+              window._editingId = null;
+            } else {
+              entries.unshift({
+                id: Date.now(),
+                mood: selectedMood,
+                tags,
+                text,
+                ai: aiText,
+                time: "Today, just now",
+              });
+            }
+          }
+        }, 18);
+      }
+
+      // ═══════════════════════════════════════════
+      // INSIGHTS
+      // ═══════════════════════════════════════════
+      function renderInsights() {
+        const main = document.getElementById("main-content");
+
+        // Count moods
+        const moodCounts = {};
+        Object.keys(MOODS).forEach((k) => (moodCounts[k] = 0));
+        entries.forEach((e) => moodCounts[e.mood]++);
+        const total = entries.length;
+        const topMood = Object.entries(moodCounts).sort(
+          (a, b) => b[1] - a[1],
+        )[0];
+
+        // Weekly data (simulated)
+        const weekData = [
+          { day: "Mon", value: 3, color: "var(--sage)" },
+          { day: "Tue", value: 5, color: "var(--gold)" },
+          { day: "Wed", value: 2, color: "var(--terracotta)" },
+          { day: "Thu", value: 4, color: "var(--sage)" },
+          { day: "Fri", value: 6, color: "var(--gold)" },
+          { day: "Sat", value: 4, color: "var(--lavender)" },
+          { day: "Sun", value: 3, color: "var(--sage)" },
+        ];
+        const maxVal = Math.max(...weekData.map((d) => d.value));
+
+        let html = `
+    <div class="page-header">
+      <div>
+        <h1>Insights</h1>
+        <p class="greeting-sub">Patterns from your emotional landscape</p>
+      </div>
+    </div>
+
+    <div class="insights-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Entries</div>
+        <div class="stat-value">${total}</div>
+        <div class="stat-change">+3 this week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Most Common Mood</div>
+        <div class="stat-value">${MOODS[topMood[0]].emoji} ${MOODS[topMood[0]].label}</div>
+        <div class="stat-change">${topMood[1]} entries</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Current Streak</div>
+        <div class="stat-value">5 days</div>
+        <div class="stat-change">Your best: 12 days</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Top Activity</div>
+        <div class="stat-value">🏷️ Work</div>
+        <div class="stat-change">Tagged 4 times</div>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <h3>Weekly Mood Activity</h3>
+      <div class="bar-chart">
+        ${weekData
+          .map((d) => {
+            const height = (d.value / maxVal) * 100;
+            return `
+            <div class="bar-group">
+              <div class="bar" style="height:${height}%;background:${d.color}">
+                <span class="bar-value">${d.value}</span>
+                <span class="bar-label">${d.day}</span>
+              </div>
+            </div>
+          `;
+          })
+          .join("")}
+      </div>
+    </div>
+
+    <div class="mood-distribution">
+      <h3>Mood Distribution</h3>
+      ${Object.entries(moodCounts)
+        .sort((a, b) => b[1] - a[1])
+        .map(([mood, count]) => {
+          const m = MOODS[mood];
+          const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+          return `
+            <div class="mood-dist-item">
+              <span class="mood-dist-emoji">${m.emoji}</span>
+              <span class="mood-dist-name">${m.label}</span>
+              <div class="mood-dist-bar-track">
+                <div class="mood-dist-bar-fill" style="width:${pct}%;background:${m.color}"></div>
+              </div>
+              <span class="mood-dist-pct">${pct}%</span>
+            </div>
+          `;
+        })
+        .join("")}
+    </div>
+  `;
+        main.innerHTML = html;
+
+        // Animate bars
+        setTimeout(() => {
+          document.querySelectorAll(".bar").forEach((bar) => {
+            bar.style.height = bar.style.height;
+          });
+        }, 100);
+      }
+
+      // ═══════════════════════════════════════════
+      // LANDING NAV SCROLL
+      // ═══════════════════════════════════════════
+      window.addEventListener("scroll", () => {
+        const nav = document.getElementById("landing-nav");
+        if (nav) nav.classList.toggle("scrolled", window.scrollY > 20);
+      });
+
+      // ═══════════════════════════════════════════
+      // INIT
+      // ═══════════════════════════════════════════
+      showPage("landing");
+    </script>
+  </body>
+</html>
