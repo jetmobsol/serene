@@ -13,6 +13,7 @@ x-shared: &shared
     dockerfile: Dockerfile.dev
   volumes:
     - .:/app
+    - /app/node_modules
   environment: &shared-env
     HUSKY: "0"
 
