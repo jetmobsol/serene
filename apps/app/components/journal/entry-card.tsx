@@ -3,7 +3,6 @@ import { getMoodIcon } from "@/lib/utils/mood-icons";
 import { truncate } from "@/lib/utils/text";
 import { MOOD_COLORS, type MoodType } from "@repo/core";
 import {
-  Badge,
   Button,
   Card,
   CardContent,
@@ -56,7 +55,7 @@ export function EntryCard({
 
   return (
     <Card
-      className="relative overflow-hidden transition-shadow hover:shadow-md"
+      className="relative overflow-hidden group hover:translate-x-1 hover:shadow-[0_4px_20px_oklch(0.22_0.003_250/6%)] transition-all duration-200 cursor-pointer"
       style={{ borderLeftWidth: "4px", borderLeftColor: moodColor }}
     >
       <Link
@@ -78,9 +77,12 @@ export function EntryCard({
           {entry.tags.length > 0 && (
             <div className="flex flex-wrap gap-1">
               {entry.tags.map((tag) => (
-                <Badge key={tag} variant="secondary" className="text-xs">
+                <span
+                  key={tag}
+                  className="px-3 py-0.5 rounded-full bg-background border border-border text-xs text-muted-foreground font-medium"
+                >
                   {tag}
-                </Badge>
+                </span>
               ))}
             </div>
           )}
@@ -115,7 +117,7 @@ export function EntryCard({
         )}
       </AnimatePresence>
 
-      <div className="absolute right-4 top-4">
+      <div className="absolute right-4 top-4 opacity-0 group-hover:opacity-100 transition-opacity">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button

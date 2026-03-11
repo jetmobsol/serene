@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Header } from "./header";
 import { Sidebar } from "./sidebar";
 
@@ -7,22 +7,23 @@ interface LayoutProps {
 }
 
 export function Layout({ children }: LayoutProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const closeSidebar = useCallback(() => setSidebarOpen(false), []);
 
   return (
-    <div className="h-screen flex bg-background">
-      <Sidebar isOpen={sidebarOpen} />
+    <>
+      <Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
 
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Header
-          isSidebarOpen={sidebarOpen}
-          onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
-        />
+      <Header
+        isSidebarOpen={sidebarOpen}
+        onMenuToggle={() => setSidebarOpen((prev) => !prev)}
+      />
 
-        <main className="flex-1 overflow-auto">
-          <div className="h-full">{children}</div>
-        </main>
-      </div>
-    </div>
+      {/* Main content — offset by fixed sidebar (lg) and fixed header */}
+      <main className="lg:pl-64 pt-14 min-h-screen bg-background">
+        <div className="h-full">{children}</div>
+      </main>
+    </>
   );
 }

@@ -49,10 +49,10 @@ export function TagChips({ value, onChange }: TagChipsProps) {
             type="button"
             aria-pressed={isSelected}
             onClick={() => handleToggle(tag)}
-            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+            className={`inline-flex items-center gap-1.5 rounded-full px-[18px] py-2 text-sm font-medium transition-all ${
               isSelected
-                ? "bg-primary text-primary-foreground"
-                : "border border-input bg-background text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                ? "bg-primary border-2 border-primary text-primary-foreground"
+                : "border border-border bg-card text-muted-foreground hover:border-primary/40"
             }`}
           >
             {isSelected && <Check className="h-3.5 w-3.5" />}

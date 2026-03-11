@@ -76,7 +76,9 @@ export function AiResponse({
         <div
           className={cn(
             "relative flex items-start border border-primary/10",
-            variant === "compact" ? "gap-2.5 p-2.5" : "gap-3 p-4",
+            variant === "compact"
+              ? "gap-2.5 p-2.5 bg-secondary/30"
+              : "gap-3 p-4",
           )}
         >
           {/* Sparkle icon with glow */}

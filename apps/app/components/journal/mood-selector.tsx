@@ -79,12 +79,14 @@ export function MoodSelector({ value, onChange }: MoodSelectorProps) {
               focusedIndexRef.current = index;
               setFocusedIndex(index);
             }}
-            className={`flex flex-col items-center justify-center gap-2 rounded-xl p-4 cursor-pointer transition-all duration-150 select-none ${
+            className={`flex flex-col items-center justify-center gap-2 rounded-[14px] p-5 cursor-pointer transition-all duration-150 select-none border-2 ${
               isSelected
-                ? "ring-2 ring-primary shadow-lg scale-[1.02] border-2 border-primary"
-                : "border border-border hover:shadow-md"
+                ? "border-primary bg-secondary"
+                : "border-border bg-card hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md"
             }`}
-            style={{ backgroundColor: colors.light }}
+            style={{
+              backgroundColor: isSelected ? undefined : colors.light,
+            }}
           >
             {Icon && <Icon className="h-12 w-12 text-foreground/80" />}
             <span className="text-sm font-medium text-foreground/90">
