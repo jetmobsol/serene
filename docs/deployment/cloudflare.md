@@ -78,8 +78,6 @@ wrangler secret put ANTHROPIC_API_KEY
 wrangler secret put GOOGLE_CLIENT_ID
 wrangler secret put GOOGLE_CLIENT_SECRET
 wrangler secret put RESEND_API_KEY
-wrangler secret put STRIPE_SECRET_KEY
-wrangler secret put STRIPE_WEBHOOK_SECRET
 ```
 
 ::: warning

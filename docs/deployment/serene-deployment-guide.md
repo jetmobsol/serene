@@ -50,12 +50,6 @@ bun wrangler secret put RESEND_API_KEY --config apps/api/wrangler.jsonc
 # Google OAuth (if using Google sign-in)
 bun wrangler secret put GOOGLE_CLIENT_ID --config apps/api/wrangler.jsonc
 bun wrangler secret put GOOGLE_CLIENT_SECRET --config apps/api/wrangler.jsonc
-
-# Stripe billing (optional)
-bun wrangler secret put STRIPE_SECRET_KEY --config apps/api/wrangler.jsonc
-bun wrangler secret put STRIPE_WEBHOOK_SECRET --config apps/api/wrangler.jsonc
-bun wrangler secret put STRIPE_STARTER_PRICE_ID --config apps/api/wrangler.jsonc
-bun wrangler secret put STRIPE_PRO_PRICE_ID --config apps/api/wrangler.jsonc
 ```
 
 For non-production environments, append `--env staging` or `--env preview`.

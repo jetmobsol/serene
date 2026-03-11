@@ -57,6 +57,7 @@ check-all:
     bun run test --run
     bun typecheck
     bun lint
+    bun prettier --write .
     bun prettier --check .
 
 # ============================================

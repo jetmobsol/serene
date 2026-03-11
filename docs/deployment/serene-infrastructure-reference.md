@@ -95,15 +95,13 @@ Variables configured in `wrangler.jsonc` `vars` sections:
 
 ### API Worker Secrets (set via `wrangler secret put`)
 
-| Secret                  | Required | Description                         |
-| ----------------------- | -------- | ----------------------------------- |
-| `BETTER_AUTH_SECRET`    | Yes      | Session signing secret              |
-| `ANTHROPIC_API_KEY`     | Yes      | Anthropic API key for AI vibe check |
-| `RESEND_API_KEY`        | Yes      | Resend API key for email delivery   |
-| `GOOGLE_CLIENT_ID`      | No       | Google OAuth client ID              |
-| `GOOGLE_CLIENT_SECRET`  | No       | Google OAuth client secret          |
-| `STRIPE_SECRET_KEY`     | No       | Stripe secret key (billing)         |
-| `STRIPE_WEBHOOK_SECRET` | No       | Stripe webhook signing secret       |
+| Secret                 | Required | Description                         |
+| ---------------------- | -------- | ----------------------------------- |
+| `BETTER_AUTH_SECRET`   | Yes      | Session signing secret              |
+| `ANTHROPIC_API_KEY`    | Yes      | Anthropic API key for AI vibe check |
+| `RESEND_API_KEY`       | Yes      | Resend API key for email delivery   |
+| `GOOGLE_CLIENT_ID`     | No       | Google OAuth client ID              |
+| `GOOGLE_CLIENT_SECRET` | No       | Google OAuth client secret          |
 
 ### API Worker Bindings
 
