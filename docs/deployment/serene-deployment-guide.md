@@ -274,19 +274,31 @@ The wrangler configs have already been updated with the `serene.linktalentsbot.w
 
 Use the **same Hyperdrive ID** for both bindings — both function identically when Hyperdrive caching is disabled (default). To enable read caching later, create a second Hyperdrive config.
 
+::: info Safe to Commit
+Hyperdrive IDs and KV namespace IDs are **resource identifiers, not secrets**. They are safe to commit to a public repository. Anyone with the ID alone cannot access your data without Cloudflare account credentials.
+:::
+
 ### 3.2 Set Worker Secrets
 
-All secrets are set on the API worker. Run from the repository root:
+All secrets are set on the API worker. Run from the repository root.
+
+::: tip Multi-Environment Warning
+Wrangler warns about multiple environments when no `--env` flag is specified. Add `--env=""` to explicitly target the top-level (production) environment and suppress the warning.
+:::
 
 ```bash
-echo "<your-better-auth-secret>" | bun wrangler secret put BETTER_AUTH_SECRET --config apps/api/wrangler.jsonc
-echo "<your-resend-api-key>" | bun wrangler secret put RESEND_API_KEY --config apps/api/wrangler.jsonc
-echo "<your-google-client-id>" | bun wrangler secret put GOOGLE_CLIENT_ID --config apps/api/wrangler.jsonc
-echo "<your-google-client-secret>" | bun wrangler secret put GOOGLE_CLIENT_SECRET --config apps/api/wrangler.jsonc
-echo "<your-anthropic-api-key>" | bun wrangler secret put ANTHROPIC_API_KEY --config apps/api/wrangler.jsonc
+echo "<your-better-auth-secret>" | bun wrangler secret put BETTER_AUTH_SECRET --config apps/api/wrangler.jsonc --env=""
+echo "<your-resend-api-key>" | bun wrangler secret put RESEND_API_KEY --config apps/api/wrangler.jsonc --env=""
+echo "<your-google-client-id>" | bun wrangler secret put GOOGLE_CLIENT_ID --config apps/api/wrangler.jsonc --env=""
+echo "<your-google-client-secret>" | bun wrangler secret put GOOGLE_CLIENT_SECRET --config apps/api/wrangler.jsonc --env=""
+echo "<your-anthropic-api-key>" | bun wrangler secret put ANTHROPIC_API_KEY --config apps/api/wrangler.jsonc --env=""
 ```
 
-For non-production environments, append `--env staging` or `--env preview`.
+::: info Worker Auto-Creation
+If the worker hasn't been deployed yet, Wrangler may prompt to create it. This is normal — Terraform creates worker metadata but Wrangler may not recognize it until code is deployed. The secret will be uploaded successfully.
+:::
+
+For non-production environments, use `--env staging` or `--env preview`.
 
 ---
 
@@ -298,13 +310,9 @@ Push the Drizzle schema to your production Neon database. Use the **full connect
 DATABASE_URL="postgresql://<user>:<pass>@<host>:5432/<db>?sslmode=require" bun db:push
 ```
 
-Optionally seed with demo data:
+Seeding is **not needed** for a fresh production database — real users will create their own data.
 
-```bash
-DATABASE_URL="postgresql://<user>:<pass>@<host>:5432/<db>?sslmode=require" bun db:seed
-```
-
-For subsequent updates, use migrations instead:
+For subsequent schema updates, use migrations instead of `db:push`:
 
 ```bash
 DATABASE_URL="postgresql://<user>:<pass>@<host>:5432/<db>?sslmode=require" bun db:migrate
@@ -329,18 +337,26 @@ bun install --force
 Build order matters — email templates must compile before the API worker bundles them:
 
 ```bash
-bun build    # email → web → api → app
+bun run build    # email → web → api → app
 ```
+
+::: danger `bun build` vs `bun run build`
+`bun build` invokes Bun's native bundler (requires entrypoints). `bun run build` runs the workspace `build` script from `package.json`, which builds all workspaces in the correct order. Always use `bun run build`.
+:::
 
 ### 5.3 Deploy Workers
 
 Deploy order matters — `api` and `app` must exist before `web` (service bindings):
 
 ```bash
-bun api:deploy    # Deploy API worker first
-bun app:deploy    # Then App worker
-bun web:deploy    # Web last (references the other two via service bindings)
+bun run api:deploy    # Deploy API worker first
+bun run app:deploy    # Then App worker
+bun run web:deploy    # Web last (references the other two via service bindings)
 ```
+
+::: tip `bun run` vs `bun`
+Always use `bun run <script>` for package.json scripts. `bun <script>` without `run` may invoke Bun built-in commands instead of your workspace scripts.
+:::
 
 For specific environments:
 
@@ -357,18 +373,18 @@ bun wrangler deploy --config apps/web/wrangler.jsonc --env staging
 ### 6.1 Health Checks
 
 ```bash
-# Health endpoint
-curl -i https://serene.linktalentsbot.work/health
-# Expected: 200 OK
-
-# API info
+# API info (verifies API worker + service binding)
 curl -i https://serene.linktalentsbot.work/api
 # Expected: 200 OK with JSON
 
-# Landing page
+# Landing page (verifies web worker + static assets)
 curl -i https://serene.linktalentsbot.work/
 # Expected: 200 OK with HTML
 ```
+
+::: warning No `/health` at the Edge
+The `/health` endpoint exists on the API worker but is **not exposed** through the web router. The web worker only proxies `/api/*` to the API service. Use `/api` as the health check endpoint instead.
+:::
 
 ### 6.2 Auth Flow
 
