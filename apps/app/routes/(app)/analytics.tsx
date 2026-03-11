@@ -1,30 +1,11 @@
 import { MoodBarChart } from "@/components/analytics/mood-bar-chart";
 import { useWeeklyMoodQuery } from "@/lib/queries/analytics";
 import { getMonday } from "@/lib/utils/date-groups";
-import {
-  MOOD_COLORS,
-  MOOD_ICONS,
-  MOOD_SCORES,
-  MOODS,
-  type MoodType,
-} from "@repo/core";
+import { getMoodIcon } from "@/lib/utils/mood-icons";
+import { MOOD_COLORS, MOOD_SCORES, MOODS, type MoodType } from "@repo/core";
 import { Card, CardContent, Skeleton } from "@repo/ui";
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  BookOpen,
-  Smile,
-  CloudSun,
-  Zap,
-  CloudRain,
-  Waves,
-  Flame,
-  TrendingUp,
-} from "lucide-react";
-
-const MOOD_ICON_MAP: Record<
-  string,
-  React.ComponentType<{ className?: string }>
-> = { Smile, CloudSun, Zap, CloudRain, Waves, Flame };
+import { BookOpen, Smile, TrendingUp } from "lucide-react";
 
 export const Route = createFileRoute("/(app)/analytics")({
   component: Analytics,
@@ -38,14 +19,12 @@ function Analytics() {
   const weekStart = getMonday(new Date());
   const { data, isLoading } = useWeeklyMoodQuery(toISODate(weekStart));
 
-  // Derive summary stats from current week
   const totalEntries = data?.totalEntries ?? 0;
 
   const dominantMood = data?.distribution.length
     ? data.distribution.reduce((max, d) => (d.count > max.count ? d : max))
     : null;
 
-  // Weighted well-being score (0-5 scale)
   const wellbeingScore =
     totalEntries > 0 && data?.distribution
       ? data.distribution.reduce(
@@ -55,7 +34,7 @@ function Analytics() {
       : null;
 
   const DominantIcon = dominantMood
-    ? MOOD_ICON_MAP[MOOD_ICONS[dominantMood.mood as MoodType]]
+    ? getMoodIcon(dominantMood.mood as MoodType)
     : null;
 
   return (
@@ -71,7 +50,6 @@ function Analytics() {
 
       {/* Summary cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {/* Total entries this week */}
         <Card className="relative overflow-hidden">
           <CardContent className="pt-5 pb-4">
             {isLoading ? (
@@ -97,7 +75,6 @@ function Analytics() {
           </CardContent>
         </Card>
 
-        {/* Dominant mood */}
         <Card className="relative overflow-hidden">
           <CardContent className="pt-5 pb-4">
             {isLoading ? (
@@ -123,8 +100,10 @@ function Analytics() {
                       MOOD_COLORS[dominantMood.mood as MoodType]?.light + "33",
                   }}
                 >
-                  {DominantIcon && (
+                  {DominantIcon ? (
                     <DominantIcon className="h-4 w-4 text-foreground/70" />
+                  ) : (
+                    <Smile className="h-4 w-4 text-foreground/70" />
                   )}
                 </div>
               </div>
@@ -146,7 +125,6 @@ function Analytics() {
           </CardContent>
         </Card>
 
-        {/* Well-being score */}
         <Card className="relative overflow-hidden">
           <CardContent className="pt-5 pb-4">
             {isLoading ? (
@@ -208,8 +186,7 @@ function Analytics() {
                 data?.distribution.find((d) => d.mood === mood)?.count ?? 0;
               const pct =
                 totalEntries > 0 ? Math.round((count / totalEntries) * 100) : 0;
-              const iconName = MOOD_ICONS[mood];
-              const IconComp = MOOD_ICON_MAP[iconName];
+              const MoodIcon = getMoodIcon(mood);
               return (
                 <Card key={mood} className="overflow-hidden">
                   <CardContent className="p-3 text-center">
@@ -219,8 +196,8 @@ function Analytics() {
                         backgroundColor: MOOD_COLORS[mood].light + "33",
                       }}
                     >
-                      {IconComp && (
-                        <IconComp className="h-4 w-4 text-foreground/70" />
+                      {MoodIcon && (
+                        <MoodIcon className="h-4 w-4 text-foreground/70" />
                       )}
                     </div>
                     <p className="text-xs font-medium">{mood}</p>

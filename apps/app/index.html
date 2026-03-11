@@ -23,10 +23,7 @@
     <script>
       (function () {
         var t = localStorage.getItem("theme");
-        var d =
-          t === "dark" ||
-          (!t && matchMedia("(prefers-color-scheme:dark)").matches);
-        if (d) document.documentElement.classList.add("dark");
+        if (t === "dark") document.documentElement.classList.add("dark");
       })();
     </script>
   </head>

@@ -1,6 +1,7 @@
 import { useWeeklyMoodQuery } from "@/lib/queries/analytics";
 import { getMonday } from "@/lib/utils/date-groups";
-import { MOOD_COLORS, MOOD_ICONS, MOODS, type MoodType } from "@repo/core";
+import { getMoodIcon } from "@/lib/utils/mood-icons";
+import { MOOD_COLORS, MOODS, type MoodType } from "@repo/core";
 import {
   Button,
   Card,
@@ -13,31 +14,9 @@ import {
   Skeleton,
   type ChartConfig,
 } from "@repo/ui";
-import {
-  ChevronLeft,
-  ChevronRight,
-  BarChart3,
-  Smile,
-  CloudSun,
-  Zap,
-  CloudRain,
-  Waves,
-  Flame,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, BarChart3 } from "lucide-react";
 import { useState } from "react";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
-
-const MOOD_ICON_MAP: Record<
-  string,
-  React.ComponentType<{ className?: string }>
-> = {
-  Smile,
-  CloudSun,
-  Zap,
-  CloudRain,
-  Waves,
-  Flame,
-};
 
 function formatWeekLabel(weekStart: Date): string {
   const weekEnd = new Date(weekStart);
@@ -86,7 +65,6 @@ export function MoodBarChart() {
     fill: `var(--color-${mood})`,
   }));
 
-  // Dominant mood for the week
   const dominantMood = data?.distribution.length
     ? data.distribution.reduce((max, d) => (d.count > max.count ? d : max))
     : null;
@@ -165,10 +143,6 @@ export function MoodBarChart() {
                   axisLine={false}
                   tick={{ fontSize: 12 }}
                   tickMargin={8}
-                  tickFormatter={(value: string) => {
-                    const icon = MOOD_ICONS[value as MoodType];
-                    return icon ? value : value;
-                  }}
                 />
                 <YAxis
                   allowDecimals={false}
@@ -183,10 +157,7 @@ export function MoodBarChart() {
                     <ChartTooltipContent
                       nameKey="mood"
                       formatter={(value, name) => {
-                        const iconName = MOOD_ICONS[name as MoodType];
-                        const IconComp = iconName
-                          ? MOOD_ICON_MAP[iconName]
-                          : null;
+                        const IconComp = getMoodIcon(name as MoodType);
                         return (
                           <div className="flex items-center gap-2">
                             {IconComp && (
@@ -222,8 +193,7 @@ export function MoodBarChart() {
             {/* Mood legend with icons */}
             <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 mt-4 pt-4 border-t border-border/50">
               {MOODS.map((mood) => {
-                const iconName = MOOD_ICONS[mood];
-                const IconComp = MOOD_ICON_MAP[iconName];
+                const MoodIcon = getMoodIcon(mood);
                 const count =
                   chartData.find((d) => d.mood === mood)?.count ?? 0;
                 return (
@@ -237,7 +207,7 @@ export function MoodBarChart() {
                         backgroundColor: MOOD_COLORS[mood].light,
                       }}
                     />
-                    {IconComp && <IconComp className="h-3 w-3" />}
+                    {MoodIcon && <MoodIcon className="h-3 w-3" />}
                     <span>
                       {mood}
                       {count > 0 && (

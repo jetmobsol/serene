@@ -4,10 +4,7 @@ import { useEffect, useState } from "react";
 export function DarkModeToggle() {
   const [dark, setDark] = useState<boolean | null>(() => {
     const saved = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)",
-    ).matches;
-    return saved ? saved === "dark" : prefersDark;
+    return saved === "dark";
   });
 
   useEffect(() => {
