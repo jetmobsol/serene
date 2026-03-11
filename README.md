@@ -98,6 +98,18 @@ docker-compose up
 | 4321 | Web -- Astro edge router | http://localhost:4321 |
 | 5434 | PostgreSQL (Docker)      | --                    |
 
+### Dev Auth (Auto-Login)
+
+In development mode, email OTP login is fully automatic — no manual code entry needed:
+
+- The API returns the OTP in the response body (`devOtp` field) and logs it to the server console.
+- The frontend auto-fills and auto-submits the OTP code.
+- **For browser automation (Playwright, Chrome MCP, bowser QA):** after clicking "Continue with email" and submitting an email address, wait a few seconds for the auto-login to complete. The OTP screen will appear briefly then auto-submit and redirect to the dashboard. Do not try to manually enter an OTP code — it happens automatically.
+- Any email address works (e.g., `test@test.com`) — the email OTP flow auto-creates accounts for unknown addresses.
+- Email delivery is not required (Resend errors are swallowed in dev).
+
+**Note:** Auto-login is a dev-only convenience feature. Production deployments require users to manually enter OTP codes.
+
 ## Environment Variables
 
 | Variable               | Required | Description                                                                      |

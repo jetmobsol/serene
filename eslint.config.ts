@@ -22,6 +22,7 @@ export default defineConfig(
       "**/node_modules",
       "docs/.vitepress/cache",
       "docs/.vitepress/dist",
+      "screenshots/**/*",
     ],
   },
 

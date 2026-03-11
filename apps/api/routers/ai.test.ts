@@ -5,20 +5,22 @@ import { aiRouter } from "./ai";
 
 // Mock the Anthropic SDK
 vi.mock("@anthropic-ai/sdk", () => {
+  const mockFn = vi.fn().mockImplementation(() => ({
+    messages: {
+      create: vi.fn().mockResolvedValue({
+        content: [
+          {
+            type: "text",
+            text: "It sounds like you had a wonderful day!",
+          },
+        ],
+      }),
+      stream: vi.fn(),
+    },
+  }));
+
   return {
-    default: vi.fn().mockImplementation(() => ({
-      messages: {
-        create: vi.fn().mockResolvedValue({
-          content: [
-            {
-              type: "text",
-              text: "It sounds like you had a wonderful day!",
-            },
-          ],
-        }),
-        stream: vi.fn(),
-      },
-    })),
+    default: mockFn,
   };
 });
 
