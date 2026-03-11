@@ -1,5 +1,14 @@
+import { atom } from "jotai";
 import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
+
+export const darkModeAtom = atom(localStorage.getItem("theme") === "dark");
+
+export function toggleDarkMode() {
+  const next = !document.documentElement.classList.contains("dark");
+  document.documentElement.classList.toggle("dark", next);
+  localStorage.setItem("theme", next ? "dark" : "light");
+}
 
 export function DarkModeToggle() {
   const [dark, setDark] = useState<boolean | null>(() => {
@@ -16,7 +25,6 @@ export function DarkModeToggle() {
   const toggle = () => {
     const next = !dark;
     setDark(next);
-    document.documentElement.classList.toggle("dark", next);
     localStorage.setItem("theme", next ? "dark" : "light");
   };
 

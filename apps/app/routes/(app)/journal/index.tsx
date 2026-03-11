@@ -16,13 +16,7 @@ function Journal() {
     <div className="max-w-4xl mx-auto px-6 lg:px-10 py-6 lg:py-10 space-y-6 lg:space-y-8">
       {/* Page header */}
       <div>
-        <h1
-          className="text-4xl lg:text-5xl text-foreground"
-          style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontWeight: 400,
-          }}
-        >
+        <h1 className="text-4xl lg:text-5xl text-foreground">
           {firstName ? `${greeting}, ${firstName}` : greeting}
         </h1>
         <p className="text-base text-muted-foreground mt-2">

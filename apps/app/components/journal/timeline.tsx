@@ -149,12 +149,7 @@ function EmptyState({ onNewEntry }: { onNewEntry: () => void }) {
         </div>
       </div>
 
-      <h3
-        className="text-2xl text-foreground/80"
-        style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400 }}
-      >
-        Your journal awaits
-      </h3>
+      <h3 className="text-2xl text-foreground/80">Your journal awaits</h3>
       <p className="text-sm text-muted-foreground/60 mt-2 max-w-sm leading-relaxed">
         This is your private space to reflect, understand your emotions, and
         track your well-being over time.

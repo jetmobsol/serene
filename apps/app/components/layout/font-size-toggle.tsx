@@ -32,7 +32,6 @@ export function FontSizeToggle() {
     const idx = FONT_SIZES.indexOf(size);
     const next = FONT_SIZES[(idx + 1) % FONT_SIZES.length];
     setSize(next);
-    document.documentElement.style.fontSize = SCALE_MAP[next];
     localStorage.setItem("font-size", next);
   };
 

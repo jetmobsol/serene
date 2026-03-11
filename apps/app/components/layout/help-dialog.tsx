@@ -50,13 +50,7 @@ export function HelpDialog() {
       <DialogContent className="sm:max-w-xl max-h-[90vh] overflow-y-auto p-0 gap-0">
         {/* Header */}
         <DialogHeader className="px-6 lg:px-8 pt-6 lg:pt-8 pb-0">
-          <DialogTitle
-            className="text-2xl lg:text-3xl text-foreground"
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontWeight: 400,
-            }}
-          >
+          <DialogTitle className="text-2xl lg:text-3xl text-foreground">
             Welcome to Serene
           </DialogTitle>
           <p className="text-sm text-muted-foreground mt-1">

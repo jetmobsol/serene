@@ -1,6 +1,6 @@
 import { MoodBarChart } from "@/components/analytics/mood-bar-chart";
 import { useWeeklyMoodQuery } from "@/lib/queries/analytics";
-import { getMonday } from "@/lib/utils/date-groups";
+import { getMonday, toISODate } from "@/lib/utils/date-groups";
 import { getMoodIcon } from "@/lib/utils/mood-icons";
 import { MOOD_COLORS, MOOD_SCORES, MOODS, type MoodType } from "@repo/core";
 import { Card, CardContent, Skeleton } from "@repo/ui";
@@ -10,10 +10,6 @@ import { BookOpen, Smile, TrendingUp } from "lucide-react";
 export const Route = createFileRoute("/(app)/analytics")({
   component: Analytics,
 });
-
-function toISODate(date: Date): string {
-  return date.toISOString().split("T")[0];
-}
 
 function Analytics() {
   const weekStart = getMonday(new Date());

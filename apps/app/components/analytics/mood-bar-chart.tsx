@@ -1,5 +1,5 @@
 import { useWeeklyMoodQuery } from "@/lib/queries/analytics";
-import { getMonday } from "@/lib/utils/date-groups";
+import { getMonday, toISODate } from "@/lib/utils/date-groups";
 import { getMoodIcon } from "@/lib/utils/mood-icons";
 import { MOOD_COLORS, MOODS, type MoodType } from "@repo/core";
 import {
@@ -23,10 +23,6 @@ function formatWeekLabel(weekStart: Date): string {
   weekEnd.setDate(weekEnd.getDate() + 6);
   const opts: Intl.DateTimeFormatOptions = { month: "short", day: "numeric" };
   return `${weekStart.toLocaleDateString("en-US", opts)} \u2013 ${weekEnd.toLocaleDateString("en-US", opts)}`;
-}
-
-function toISODate(date: Date): string {
-  return date.toISOString().split("T")[0];
 }
 
 const chartConfig = MOODS.reduce(

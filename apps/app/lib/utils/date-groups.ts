@@ -1,3 +1,7 @@
+export function toISODate(date: Date): string {
+  return date.toISOString().split("T")[0];
+}
+
 export interface DateGroup<T> {
   label: string;
   entries: T[];

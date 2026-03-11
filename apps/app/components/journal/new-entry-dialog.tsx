@@ -10,6 +10,8 @@ import {
   journalQueryKeys,
 } from "@/lib/queries/journal";
 import { useSseStream } from "@/lib/hooks/use-sse-stream";
+import { getMoodEmoji } from "@/lib/utils/mood-icons";
+import { truncate } from "@/lib/utils/text";
 import { useQueryClient } from "@tanstack/react-query";
 import type { MoodType, TagType } from "@repo/core";
 import {
@@ -140,13 +142,7 @@ export function NewEntryDialog() {
       >
         {/* Header */}
         <DialogHeader className="px-6 lg:px-8 pt-6 lg:pt-8 pb-0">
-          <DialogTitle
-            className="text-2xl lg:text-3xl text-foreground"
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontWeight: 400,
-            }}
-          >
+          <DialogTitle className="text-2xl lg:text-3xl text-foreground">
             {currentPhase === "form" || currentPhase === "saving"
               ? "New Entry"
               : "Your Insight"}
@@ -249,7 +245,7 @@ export function NewEntryDialog() {
                     </p>
                     {note && (
                       <p className="text-xs text-muted-foreground truncate mt-0.5">
-                        {note.length > 80 ? `${note.slice(0, 80)}...` : note}
+                        {truncate(note, 80)}
                       </p>
                     )}
                   </div>
@@ -293,16 +289,4 @@ export function NewEntryDialog() {
       </DialogContent>
     </Dialog>
   );
-}
-
-function getMoodEmoji(mood: MoodType | null): string {
-  const map: Record<string, string> = {
-    Happy: "\u{1F60A}",
-    Calm: "\u{1F60C}",
-    Anxious: "\u{1F630}",
-    Sad: "\u{1F622}",
-    Overwhelmed: "\u{1F629}",
-    Angry: "\u{1F620}",
-  };
-  return mood ? (map[mood] ?? "\u{1F60A}") : "\u{1F60A}";
 }

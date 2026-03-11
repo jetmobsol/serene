@@ -1,3 +1,4 @@
+import { toggleDarkMode } from "@/components/layout/dark-mode-toggle";
 import { helpDialogOpenAtom } from "@/components/layout/help-dialog";
 import { newEntryDialogOpenAtom } from "@/components/journal/new-entry-dialog";
 import { useSetAtom } from "jotai";
@@ -34,9 +35,7 @@ export function useKeyboardShortcuts() {
           break;
         case "d":
           e.preventDefault();
-          document
-            .querySelector<HTMLButtonElement>('button[aria-label*="Switch to"]')
-            ?.click();
+          toggleDarkMode();
           break;
         case "?":
           e.preventDefault();

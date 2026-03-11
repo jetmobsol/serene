@@ -80,12 +80,7 @@ function EntryDetail() {
   if (!entry) {
     return (
       <div className="max-w-2xl mx-auto px-6 py-16 text-center space-y-4">
-        <h2
-          className="text-2xl text-foreground/70"
-          style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400 }}
-        >
-          Entry not found
-        </h2>
+        <h2 className="text-2xl text-foreground/70">Entry not found</h2>
         <p className="text-sm text-muted-foreground">
           This entry may have been deleted.
         </p>
@@ -153,15 +148,7 @@ function EntryDetail() {
               <MoodIcon className="h-5 w-5 text-muted-foreground/60 shrink-0" />
             )}
             <div>
-              <h1
-                className="text-2xl text-foreground leading-none"
-                style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontWeight: 400,
-                }}
-              >
-                {mood}
-              </h1>
+              <h1 className="text-2xl text-foreground leading-none">{mood}</h1>
               <p className="text-xs text-muted-foreground/60 mt-1">
                 {formatRelativeTime(new Date(entry.createdAt))}
               </p>

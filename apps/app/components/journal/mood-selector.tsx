@@ -1,14 +1,6 @@
+import { MOOD_EMOJIS } from "@/lib/utils/mood-icons";
 import { MOODS, MOOD_COLORS, type MoodType } from "@repo/core";
 import { useCallback, useRef, useState } from "react";
-
-const MOOD_EMOJIS: Record<MoodType, string> = {
-  Happy: "😊",
-  Calm: "😌",
-  Anxious: "😰",
-  Sad: "😢",
-  Overwhelmed: "😩",
-  Angry: "😠",
-};
 
 interface MoodSelectorProps {
   value: MoodType | null;
