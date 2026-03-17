@@ -27,30 +27,13 @@ A private, AI-powered wellness journal that helps you track your mood, reflect o
 
 ## Architecture
 
-```mermaid
-graph TB
-    Internet((Internet))
-    Internet --> Web
-
-    subgraph Cloudflare["Cloudflare Edge"]
-        Web["serene-web<br/><i>Hono edge router</i>"]
-        App["serene-app<br/><i>React 19 SPA</i>"]
-        API["serene-api<br/><i>Hono + tRPC + Better Auth</i>"]
-        HD["Hyperdrive<br/><i>Connection pooler</i>"]
-        KV["KV Namespace<br/><i>AI rate limiting</i>"]
-
-        Web -- "/api/*" --> API
-        Web -- "app routes" --> App
-        Web -- "static/*" --> Assets["Astro Assets<br/><i>Marketing pages</i>"]
-        API --> HD
-        API --> KV
-    end
-
-    HD --> Neon["Neon PostgreSQL"]
-    API -. "OTP emails" .-> Resend["Resend"]
-    API -. "vibe check" .-> Anthropic["Anthropic Claude"]
-    App -. "OAuth" .-> Google["Google OAuth"]
-```
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="images/architecture.svg">
+    <source media="(prefers-color-scheme: light)" srcset="images/architecture.svg">
+    <img alt="Serene Architecture Diagram" src="images/architecture.svg" width="1100">
+  </picture>
+</p>
 
 Three Cloudflare Workers connected via [service bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/service-bindings/) (no public cross-worker URLs). The web worker is the only public-facing endpoint -- it routes all traffic internally.
 
