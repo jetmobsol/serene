@@ -3,7 +3,7 @@ import { newEntryDialogOpenAtom } from "@/components/journal/new-entry-dialog";
 import { signOut, useSessionQuery } from "@/lib/queries/session";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
-import { HelpCircle, Menu, PenLine, X } from "lucide-react";
+import { Github, HelpCircle, Menu, PenLine, X } from "lucide-react";
 import { DarkModeToggle } from "./dark-mode-toggle";
 import { FontSizeToggle } from "./font-size-toggle";
 
@@ -70,6 +70,21 @@ export function Header({ isSidebarOpen, onMenuToggle }: HeaderProps) {
             Sign out
           </button>
         )}
+
+        <a
+          href="https://github.com/jetmobsol/serene"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-8 h-8 rounded-full border border-border/50
+            flex items-center justify-center shrink-0
+            text-muted-foreground hover:text-accent-foreground
+            hover:border-accent-foreground/30 hover:bg-accent
+            transition-all"
+          aria-label="GitHub"
+          title="GitHub"
+        >
+          <Github className="h-4 w-4" />
+        </a>
 
         <button
           onClick={() => setHelpOpen(true)}

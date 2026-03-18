@@ -82,7 +82,11 @@ export async function signOut(
     queryClient.setQueryData(sessionQueryKey, null);
 
     if (options?.redirect !== false) {
-      window.location.href = "/login";
+      // In production, "/" routes to the Astro landing page for unauthenticated users.
+      // In dev, the Astro site runs on a separate port.
+      window.location.href = import.meta.env.DEV
+        ? "http://localhost:4321"
+        : "/";
     }
   }
 }

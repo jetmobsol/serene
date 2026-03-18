@@ -156,6 +156,21 @@ body::before {
   align-items: center;
   gap: 6px;
 }
+.nav-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: #6b6560;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.nav-icon-btn:hover {
+  color: #5b7b6a;
+  background: #e8f0eb;
+}
 .nav-ghost-btn {
   display: inline-flex;
   align-items: center;
